@@ -33,7 +33,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function users(): BelongsToMany
+    public function reservations(): BelongsToMany
     {
         return $this->belongsToMany(Reservation::class);
     }

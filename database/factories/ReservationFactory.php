@@ -19,7 +19,7 @@ class ReservationFactory extends Factory
     {
         return [
             'comment' => fake()->text(),
-            'date' => $this->faker->time(),
+            'date' => $this->faker->date(),
             'hours' => $this->faker->numberBetween(1, 12),
         ];
     }
