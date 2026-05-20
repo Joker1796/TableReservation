@@ -4,8 +4,6 @@ namespace Feature\Model;
 
 use App\Models\Reservation;
 use App\Models\Table;
-use App\Models\Weapon;
-use App\Models\WeaponProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -18,6 +16,7 @@ class TableTest extends TestCase
         'description' => 'test description',
         'status' => '1',
     ];
+
     const array UPDATED_BASIC_ATTRIBUTES = [
         'name' => 'test table name updated',
         'description' => 'test description updated',

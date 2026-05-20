@@ -17,4 +17,9 @@ class Table extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function reservationRequests(): HasMany
+    {
+        return $this->hasMany(ReservationRequest::class);
+    }
 }

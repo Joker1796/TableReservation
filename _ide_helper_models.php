@@ -49,9 +49,48 @@ namespace App\Models{
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property \Carbon\CarbonImmutable|null $deleted_at
+ * @property int $user_id
+ * @property int|null $table_id
+ * @property string|null $comment
+ * @property \Carbon\CarbonImmutable $date
+ * @property int|null $hours
+ * @property int $status
+ * @property-read \App\Models\Table|null $table
+ * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read int|null $users_count
+ * @method static \Database\Factories\ReservationRequestFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereHours($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereTableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ReservationRequest withoutTrashed()
+ */
+	class ReservationRequest extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property string $name
  * @property string|null $description
  * @property int $status
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReservationRequest> $reservationRequests
+ * @property-read int|null $reservation_requests_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reservation> $reservations
  * @property-read int|null $reservations_count
  * @method static \Database\Factories\TableFactory factory($count = null, $state = [])
@@ -87,6 +126,8 @@ namespace App\Models{
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReservationRequest> $reservationRequests
+ * @property-read int|null $reservation_requests_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reservation> $reservations
  * @property-read int|null $reservations_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])

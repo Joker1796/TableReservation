@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use App\Models\ReservationRequest;
 use App\Models\Table;
 use App\Services\TableService;
 use Illuminate\Http\Request;
@@ -37,5 +38,15 @@ class TableController extends Controller
     public function deleteReservation(Table $table, Reservation $reservation)
     {
         return TableService::deleteReservation($table, $reservation);
+    }
+
+    public function addReservationRequest(Table $table, ReservationRequest $reservationRequest)
+    {
+        return TableService::addReservationRequest($table, $reservationRequest);
+    }
+
+    public function deleteReservationRequest(Table $table, ReservationRequest $reservationRequest)
+    {
+        return TableService::deleteReservationRequest($table, $reservationRequest);
     }
 }

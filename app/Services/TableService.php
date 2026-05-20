@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Reservation;
+use App\Models\ReservationRequest;
 use App\Models\Table;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -44,6 +45,20 @@ class TableService
     public static function deleteReservation(Table $table, Reservation $reservation): Response
     {
         $table->reservations()->delete($reservation->id);
+
+        return response($table, 200);
+    }
+
+    public static function addReservationRequest(Table $table, ReservationRequest $reservationRequest): Response
+    {
+        $table->reservationRequests()->save($reservationRequest);
+
+        return response($table, 200);
+    }
+
+    public static function deleteReservationRequest(Table $table, ReservationRequest $reservationRequest): Response
+    {
+        $table->reservationRequests()->delete($reservationRequest->id);
 
         return response($table, 200);
     }
