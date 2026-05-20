@@ -5,7 +5,6 @@ namespace Feature\Model;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class ReservationTest extends TestCase
@@ -23,8 +22,17 @@ class ReservationTest extends TestCase
         'hours' => '4',
     ];
 
+    public function acting(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->withSession(['banned' => false])
+            ->get('/');
+    }
+
     public function test_reservation_created_successfully(): void
     {
+        $this->acting();
+
         $response = $this->call('GET', '/api-V1/reservation/create', self::BASE_ATTRIBUTES);
 
         $response->assertOk();
@@ -32,6 +40,8 @@ class ReservationTest extends TestCase
 
     public function test_reservation_with_one_user_created_successfully(): void
     {
+        $this->acting();
+
         $user = User::factory()->create();
 
         $arguments = self::BASE_ATTRIBUTES;
@@ -44,6 +54,8 @@ class ReservationTest extends TestCase
 
     public function test_reservation_with_two_users_created_successfully(): void
     {
+        $this->acting();
+
         $users = User::factory()
             ->count(2)
             ->create();
@@ -58,6 +70,8 @@ class ReservationTest extends TestCase
 
     public function test_reservation_updated_successfully(): void
     {
+        $this->acting();
+
         $reservation = Reservation::factory()->create();
 
         $response = $this->call('PUT', '/api-V1/reservation/'.$reservation->id, self::UPDATED_BASIC_ATTRIBUTES);
@@ -68,6 +82,8 @@ class ReservationTest extends TestCase
 
     public function test_reservation_showed_successfully(): void
     {
+        $this->acting();
+
         $reservation = Reservation::factory()->create();
 
         $response = $this->call('GET', '/api-V1/reservation/'.$reservation->id);
@@ -77,6 +93,8 @@ class ReservationTest extends TestCase
 
     public function test_reservation_soft_delete_successfully(): void
     {
+        $this->acting();
+
         $reservation = Reservation::factory()->create();
 
         $response = $this->call('DELETE', '/api-V1/reservation/'.$reservation->id);
@@ -90,30 +108,29 @@ class ReservationTest extends TestCase
 
     public function test_reservation_attach_user_successfully(): void
     {
+        $this->acting();
+
         $reservation = Reservation::factory()->create();
         $user = User::factory()->create();
 
-        $response = $this->attachUser($reservation->id, $user->id);
+        $response = $this->call('PUT', '/api-V1/reservation/'.$reservation->id.'/user/'.$user->id);
 
         $response->assertOk();
     }
 
     public function test_reservation_detach_user_successfully(): void
     {
-        $reservation = Reservation::factory()->create();
-        $user = User::factory()->create();
+        $this->acting();
 
-        $responseAttach = $this->attachUser($reservation->id, $user->id);
+        $reservation = Reservation::factory()
+            ->has(User::factory())
+            ->create();
 
-        $responseAttach->assertOk();
-
-        $responseDetach = $this->call('DELETE', '/api-V1/reservation/'.$reservation->id.'/user/'.$user->id);
+        $responseDetach = $this->call(
+            'DELETE',
+            '/api-V1/reservation/'.$reservation->id.'/user/'.$reservation->users()->first()->id
+        );
 
         $responseDetach->assertOk();
-    }
-
-    private function attachUser($reservationId, $userId): TestResponse
-    {
-        return $this->call('PUT', '/api-V1/reservation/'.$reservationId.'/user/'.$userId);
     }
 }

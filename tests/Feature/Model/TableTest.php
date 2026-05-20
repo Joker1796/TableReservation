@@ -4,6 +4,7 @@ namespace Feature\Model;
 
 use App\Models\Reservation;
 use App\Models\Table;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,8 +24,17 @@ class TableTest extends TestCase
         'status' => '0',
     ];
 
+    public function acting(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->withSession(['banned' => false])
+            ->get('/');
+    }
+
     public function test_table_created_successfully(): void
     {
+        $this->acting();
+
         $response = $this->call('GET', '/api-V1/table/create', self::BASE_ATTRIBUTES);
 
         $response->assertOk();
@@ -32,6 +42,8 @@ class TableTest extends TestCase
 
     public function test_table_updated_successfully(): void
     {
+        $this->acting();
+
         $weapon = Table::factory()->create();
 
         $response = $this->call(
@@ -46,6 +58,8 @@ class TableTest extends TestCase
 
     public function test_table_showed_successfully(): void
     {
+        $this->acting();
+
         $table = Table::factory()->create();
 
         $response = $this->call('GET', '/api-V1/table/'.$table->id);
@@ -55,6 +69,8 @@ class TableTest extends TestCase
 
     public function test_table_soft_delete_successfully(): void
     {
+        $this->acting();
+
         $table = Table::factory()->create();
 
         $response = $this->call('DELETE', '/api-V1/table/'.$table->id);
@@ -68,6 +84,8 @@ class TableTest extends TestCase
 
     public function test_table_add_reservation_successfully(): void
     {
+        $this->acting();
+
         $table = Table::factory()->create();
         $reservation = Reservation::factory()->create();
 
@@ -81,7 +99,11 @@ class TableTest extends TestCase
 
     public function test_table_delete_reservation_successfully(): void
     {
-        $table = Table::factory()->has(Reservation::factory())->create();
+        $this->acting();
+
+        $table = Table::factory()
+            ->has(Reservation::factory())
+            ->create();
 
         $responseDetach = $this->call(
             'DELETE',
