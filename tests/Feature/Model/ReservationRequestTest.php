@@ -26,7 +26,7 @@ class ReservationRequestTest extends TestCase
         'status' => 1,
     ];
 
-    public function acting()
+    public function acting(): User
     {
         $user = User::factory()->create();
 
