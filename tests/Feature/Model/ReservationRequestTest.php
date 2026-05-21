@@ -47,11 +47,10 @@ class ReservationRequestTest extends TestCase
             self::BASE_ARGUMENTS
         );
 
-        $content = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('author_id', $content);
-        $this->assertEquals($user->id, $content['author_id']);
-
         $response->assertOk();
+
+        $this->assertArrayHasKey('author_id', $response->json());
+        $this->assertEquals($user->id, $response->json('author_id'));
     }
 
     public function test_reservation_request_created_not_successfully_code_302(): void
@@ -82,9 +81,8 @@ class ReservationRequestTest extends TestCase
 
         $response->assertOk();
 
-        $content = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('table_id', $content);
-        $this->assertEquals($table->id, $content['table_id']);
+        $this->assertArrayHasKey('table_id', $response->json());
+        $this->assertEquals($table->id, $response->json('table_id'));
     }
 
     public function test_reservation_request_with_author_created_successfully(): void
@@ -104,9 +102,8 @@ class ReservationRequestTest extends TestCase
 
         $response->assertOk();
 
-        $content = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('author_id', $content);
-        $this->assertEquals($user->id, $content['author_id']);
+        $this->assertArrayHasKey('author_id', $response->json());
+        $this->assertEquals($user->id, $response->json('author_id'));
     }
 
     public function test_reservation_request_with_users_created_successfully(): void
@@ -170,6 +167,8 @@ class ReservationRequestTest extends TestCase
         );
 
         $response->assertOk();
+
+        $this->assertEquals($reservationRequest->id, $response->json('id'));
     }
 
     public function test_reservation_request_showed_not_successfully_code_302(): void
@@ -197,9 +196,8 @@ class ReservationRequestTest extends TestCase
 
         $response->assertOk();
 
-        $content = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('deleted_at', $content);
-        $this->assertNotNull($content['deleted_at']);
+        $this->assertArrayHasKey('deleted_at', $response->json());
+        $this->assertNotNull($response->json('deleted_at'));
     }
 
     public function test_reservation_request_soft_delete_not_successfully_code_302(): void
@@ -298,12 +296,11 @@ class ReservationRequestTest extends TestCase
 
         $response->assertOk();
 
-        $content = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('table_id', $content);
-        $this->assertEquals($content['table_id'], $table->id);
-        $this->assertArrayHasKey('table', $content);
-        $this->assertNotNull($content['table']);
-        $this->assertEquals($content['table']['id'], $table->id);
+        $this->assertArrayHasKey('table_id', $response->json());
+        $this->assertEquals($response->json('table_id'), $table->id);
+        $this->assertArrayHasKey('table', $response->json());
+        $this->assertNotNull($response->json('table'));
+        $this->assertEquals($response->json('table.id'), $table->id);
     }
 
     public function test_reservation_request_associate_table_not_successfully_code_302(): void
@@ -334,11 +331,10 @@ class ReservationRequestTest extends TestCase
 
         $response->assertOk();
 
-        $content = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('table_id', $content);
-        $this->assertNull($content['table_id']);
-        $this->assertArrayHasKey('table', $content);
-        $this->assertNull($content['table']);
+        $this->assertArrayHasKey('table_id', $response->json());
+        $this->assertNull($response->json('table_id'));
+        $this->assertArrayHasKey('table', $response->json());
+        $this->assertNull($response->json('table'));
     }
 
     public function test_reservation_request_delete_table_not_successfully_code_302(): void

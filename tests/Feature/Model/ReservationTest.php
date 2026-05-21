@@ -91,12 +91,10 @@ class ReservationTest extends TestCase
 
         $response->assertOk();
 
-        $content = json_decode($response->getContent(), true);
-
-        $this->assertArrayHasKey('table_id', $content);
-        $this->assertEquals($table->id, $content['table_id']);
-        $this->assertArrayHasKey('table', $content);
-        $this->assertEquals($table->id, $content['table']['id']);
+        $this->assertArrayHasKey('table_id', $response->json());
+        $this->assertEquals($table->id, $response->json('table_id'));
+        $this->assertArrayHasKey('table', $response->json());
+        $this->assertEquals($table->id, $response->json('table.id'));
     }
 
     public function test_reservation_updated_successfully(): void
@@ -140,6 +138,8 @@ class ReservationTest extends TestCase
         );
 
         $response->assertOk();
+
+        $this->assertEquals($reservation->id, $response->json('id'));
     }
 
     public function test_reservation_showed_not_successfully_code_302(): void
@@ -167,9 +167,8 @@ class ReservationTest extends TestCase
 
         $response->assertOk();
 
-        $content = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('deleted_at', $content);
-        $this->assertNotNull($content['deleted_at']);
+        $this->assertNotNull($response->json('deleted_at'));
+        $this->assertDatabaseHas('reservations', ['id' => $reservation->id]);
     }
 
     public function test_reservation_soft_delete_not_successfully_code_302(): void
@@ -182,6 +181,8 @@ class ReservationTest extends TestCase
         );
 
         $response->assertStatus(302);
+
+        $this->assertDatabaseHas('reservations', ['id' => $reservation->id]);
     }
 
     public function test_reservation_attach_user_successfully(): void
@@ -215,6 +216,11 @@ class ReservationTest extends TestCase
         );
 
         $response->assertStatus(302);
+
+        $this->assertDatabaseMissing('reservation_user', [
+            'user_id' => $user->id,
+            'reservation_id' => $reservation->id,
+        ]);
     }
 
     public function test_reservation_detach_user_successfully(): void
@@ -254,5 +260,10 @@ class ReservationTest extends TestCase
         );
 
         $response->assertStatus(302);
+
+        $this->assertDatabaseHas('reservation_user', [
+            'user_id' => $userId,
+            'reservation_id' => $reservation->id,
+        ]);
     }
 }
