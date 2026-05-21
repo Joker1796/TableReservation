@@ -13,13 +13,13 @@ class TableTest extends TestCase
 {
     use RefreshDatabase;
 
-    const array BASE_ATTRIBUTES = [
+    const array BASE_ARGUMENTS = [
         'name' => 'test table name',
         'description' => 'test description',
         'status' => '1',
     ];
 
-    const array UPDATED_BASIC_ATTRIBUTES = [
+    const array UPDATED_BASIC_ARGUMENTS = [
         'name' => 'test table name updated',
         'description' => 'test description updated',
         'status' => '0',
@@ -39,7 +39,7 @@ class TableTest extends TestCase
         $response = $this->call(
             'GET',
             '/api/V1/table/create',
-            self::BASE_ATTRIBUTES
+            self::BASE_ARGUMENTS
         );
 
         $response->assertOk();
@@ -50,7 +50,7 @@ class TableTest extends TestCase
         $response = $this->call(
             'GET',
             '/api/V1/table/create',
-            self::BASE_ATTRIBUTES
+            self::BASE_ARGUMENTS
         );
 
         $response->assertStatus(302);
@@ -64,11 +64,11 @@ class TableTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api/V1/table/'.$weapon->id, self::UPDATED_BASIC_ATTRIBUTES
+            '/api/V1/table/'.$weapon->id, self::UPDATED_BASIC_ARGUMENTS
         );
 
         $response->assertOk();
-        $response->assertJsonFragment(self::UPDATED_BASIC_ATTRIBUTES);
+        $response->assertJsonFragment(self::UPDATED_BASIC_ARGUMENTS);
     }
 
     public function test_table_updated_not_successfully_code_302(): void
@@ -77,7 +77,7 @@ class TableTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api/V1/table/'.$weapon->id, self::UPDATED_BASIC_ATTRIBUTES
+            '/api/V1/table/'.$weapon->id, self::UPDATED_BASIC_ARGUMENTS
         );
 
         $response->assertStatus(302);
