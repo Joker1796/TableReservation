@@ -16,6 +16,6 @@ class ReservationRequestSeeder extends Seeder
         $user = User::factory()->create();
         $reservationRequest = ReservationRequest::factory()->make();
 
-        $reservationRequest->user()->associate($user);
+        $reservationRequest->author()->associate($user);
     }
 }

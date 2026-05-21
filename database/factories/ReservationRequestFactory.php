@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\ReservationRequest;
+use App\Models\Table;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +24,8 @@ class ReservationRequestFactory extends Factory
             'date' => $this->faker->date(),
             'hours' => $this->faker->numberBetween(1, 12),
             'status' => $this->faker->numberBetween(1, 4),
-            'user_id' => User::factory(),
+            'author_id' => User::factory(),
+            'table_id' => Table::factory(),
         ];
     }
 }

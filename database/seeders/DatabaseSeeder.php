@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\Table;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -29,9 +27,5 @@ class DatabaseSeeder extends Seeder
         User::factory()
             ->has(Reservation::factory()->count(5))
             ->create();
-
-//        ReservationRequest::factory()
-//            ->has(User::factory(), 'user_id')
-//            ->create();
     }
 }

@@ -32,6 +32,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         '/reservation-request/{reservationRequest}/user/{user}',
         [ReservationRequestController::class, 'detachUser']
     );
+    Route::put(
+        '/reservation-request/{reservationRequest}/table/{table}',
+        [ReservationRequestController::class, 'associateTable']
+    );
+    Route::delete(
+        '/reservation-request/{reservationRequest}/table',
+        [ReservationRequestController::class, 'deleteTable']
+    );
 
     Route::get('/table/create', [TableController::class, 'create']);
     Route::get('/table/{table}', [TableController::class, 'show']);

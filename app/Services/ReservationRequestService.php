@@ -29,13 +29,9 @@ class ReservationRequestService
         if (! $reservationRequest->author) {
             if ($request->author) {
                 $author = User::find($request->author);
-                $reservationRequest->user()->associate($author);
-            } elseif ($request->user()) {
-                $reservationRequest->user()->associate($request->user());
+                $reservationRequest->author()->associate($author);
             } else {
-                //TODO костыль исправить добавив авторизацию
-                $author = User::find(1);
-                $reservationRequest->user()->associate($author);
+                $reservationRequest->author()->associate($request->user());
             }
         }
 
@@ -51,34 +47,55 @@ class ReservationRequestService
             $reservationRequest->users()->attach($users);
         }
 
-        $reservationRequest = ReservationRequest::find($reservationRequest->id);
+        $reservationRequest->load('author', 'table', 'users');
 
         return response($reservationRequest, ResponseAlias::HTTP_OK);
     }
 
     public static function show(ReservationRequest $reservationRequest): Response
     {
-        return response($reservationRequest, 200);
+        return response($reservationRequest, ResponseAlias::HTTP_OK);
     }
 
     public static function softDelete(ReservationRequest $reservationRequest): Response
     {
         $reservationRequest->delete();
 
-        return response($reservationRequest, 200);
+        return response($reservationRequest, ResponseAlias::HTTP_OK);
     }
 
     public static function attachUser(ReservationRequest $reservationRequest, User $user): Response
     {
         $reservationRequest->users()->attach($user);
 
-        return response($reservationRequest, 200);
+        return response($reservationRequest, ResponseAlias::HTTP_OK);
     }
 
     public static function detachUser(ReservationRequest $reservationRequest, User $user): Response
     {
         $reservationRequest->users()->detach($user);
 
-        return response($reservationRequest, 200);
+        return response($reservationRequest, ResponseAlias::HTTP_OK);
+    }
+
+    public static function associateTable(ReservationRequest $reservationRequest, Table $table): Response
+    {
+        $reservationRequest->table()->associate($table);
+        $reservationRequest->save();
+
+        $reservationRequest->load('table');
+
+        return response($reservationRequest, ResponseAlias::HTTP_OK);
+    }
+
+    public static function deleteTable(ReservationRequest $reservationRequest): Response
+    {
+        $reservationRequest->table()->dissociate();
+        $reservationRequest->table()->delete();
+        $reservationRequest->save();
+
+        $reservationRequest->load('table');
+
+        return response($reservationRequest, ResponseAlias::HTTP_OK);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReservationRequest;
+use App\Models\Table;
 use App\Models\User;
 use App\Services\ReservationRequestService;
 use Illuminate\Http\Request;
@@ -37,5 +38,15 @@ class ReservationRequestController extends Controller
     public function detachUser(ReservationRequest $reservationRequest, User $user)
     {
         return ReservationRequestService::detachUser($reservationRequest, $user);
+    }
+
+    public function associateTable(ReservationRequest $reservationRequest, Table $table)
+    {
+        return ReservationRequestService::associateTable($reservationRequest, $table);
+    }
+
+    public function deleteTable(ReservationRequest $reservationRequest)
+    {
+        return ReservationRequestService::deleteTable($reservationRequest);
     }
 }

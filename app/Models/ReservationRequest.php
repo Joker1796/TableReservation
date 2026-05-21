@@ -28,8 +28,8 @@ class ReservationRequest extends Model
         return $this->belongsTo(Table::class, 'table_id');
     }
 
-    public function user(): BelongsTo
+    public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'author_id');
     }
 }
