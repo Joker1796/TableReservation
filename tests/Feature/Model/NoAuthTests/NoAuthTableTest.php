@@ -1,42 +1,30 @@
 <?php
 
-namespace Feature\Model;
+namespace Feature\Model\NoAuthTests;
 
 use App\Models\Reservation;
 use App\Models\ReservationRequest;
 use App\Models\Table;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class TableTest extends TestCase
+class NoAuthTableTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function acting(): void
+    public function test_table_dont_created_without_auth(): void
     {
-        $this->actingAs(User::factory()->create())
-            ->withSession(['banned' => false])
-            ->get('/');
-    }
-
-    public function test_table_created_successfully(): void
-    {
-        $this->acting();
-
         $response = $this->call(
             'GET',
             '/api/V1/table/create',
             Table::factory()::ARGUMENTS,
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
     }
 
-    public function test_table_updated_successfully(): void
+    public function test_table_dont_updated_without_auth(): void
     {
-        $this->acting();
-
         $weapon = Table::factory()->create();
 
         $response = $this->call(
@@ -45,14 +33,11 @@ class TableTest extends TestCase
             Table::factory()::UPDATED_ARGUMENTS,
         );
 
-        $response->assertOk();
-        $response->assertJsonFragment(Table::factory()::UPDATED_ARGUMENTS);
+        $response->assertStatus(302);
     }
 
-    public function test_table_showed_successfully(): void
+    public function test_table_dont_showed_without_auth(): void
     {
-        $this->acting();
-
         $table = Table::factory()->create();
 
         $response = $this->call(
@@ -60,15 +45,11 @@ class TableTest extends TestCase
             '/api/V1/table/'.$table->id
         );
 
-        $response->assertOk();
-
-        $this->assertEquals($table->id, $response->json('id'));
+        $response->assertStatus(302);
     }
 
-    public function test_table_soft_delete_successfully(): void
+    public function test_table_dont_delete_without_auth(): void
     {
-        $this->acting();
-
         $table = Table::factory()->create();
 
         $response = $this->call(
@@ -76,16 +57,11 @@ class TableTest extends TestCase
             '/api/V1/table/'.$table->id
         );
 
-        $response->assertOk();
-
-        $this->assertNotNull($response->json('deleted_at'));
-        $this->assertDatabaseHas('tables', ['id' => $table->id]);
+        $response->assertStatus(302);
     }
 
-    public function test_table_add_reservation_successfully(): void
+    public function test_table_dont_add_reservation_without_auth(): void
     {
-        $this->acting();
-
         $table = Table::factory()->create();
         $reservation = Reservation::factory()->create();
 
@@ -94,15 +70,13 @@ class TableTest extends TestCase
             '/api/V1/table/'.$table->id.'/reservation/'.$reservation->id
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
 
-        $this->assertNotEmpty($table->fresh()->reservations->where('id', $reservation->id));
+        $this->assertEmpty($table->fresh()->reservations->where('id', $reservation->id));
     }
 
-    public function test_table_delete_reservation_successfully(): void
+    public function test_table_dont_delete_reservation_without_auth(): void
     {
-        $this->acting();
-
         $table = Table::factory()
             ->has(Reservation::factory()->count(3))
             ->create();
@@ -114,15 +88,13 @@ class TableTest extends TestCase
             '/api/V1/table/'.$table->id.'/reservation/'.$reservationId
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
 
-        $this->assertEmpty($table->fresh()->reservations->where('id', $reservationId));
+        $this->assertNotEmpty($table->fresh()->reservations->where('id', $reservationId));
     }
 
-    public function test_table_add_reservation_request_successfully(): void
+    public function test_table_dont_add_reservation_request_without_auth(): void
     {
-        $this->acting();
-
         $table = Table::factory()->create();
         $reservationRequest = ReservationRequest::factory()->create();
 
@@ -131,15 +103,13 @@ class TableTest extends TestCase
             '/api/V1/table/'.$table->id.'/reservation-request/'.$reservationRequest->id
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
 
-        $this->assertNotEmpty($table->fresh()->reservationRequests->where('id', $reservationRequest->id));
+        $this->assertEmpty($table->fresh()->reservationRequests->where('id', $reservationRequest->id));
     }
 
-    public function test_table_delete_reservation_request_successfully(): void
+    public function test_table_dont_delete_reservation_request_without_auth(): void
     {
-        $this->acting();
-
         $table = Table::factory()
             ->has(ReservationRequest::factory()->count(3))
             ->create();
@@ -151,8 +121,8 @@ class TableTest extends TestCase
             '/api/V1/table/'.$table->id.'/reservation-request/'.$reservationRequestId
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
 
-        $this->assertEmpty($table->fresh()->reservationRequests->where('id', $reservationRequestId));
+        $this->assertNotEmpty($table->fresh()->reservationRequests->where('id', $reservationRequestId));
     }
 }

@@ -10,9 +10,19 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ReservationFactory extends Factory
 {
+    const array ARGUMENTS = [
+        'comment' => 'test comment',
+        'date' => '01.01.2026 00:00:00',
+        'hours' => '1',
+    ];
+
+    const array UPDATED_ARGUMENTS = [
+        'comment' => 'test comment updated',
+        'date' => '02.01.2026 10:00:00',
+        'hours' => '4',
+    ];
+
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array

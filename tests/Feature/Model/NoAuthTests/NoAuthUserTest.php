@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Model;
+namespace Feature\Model\NoAuthTests;
 
 use App\Models\Reservation;
 use App\Models\ReservationRequest;
@@ -8,21 +8,12 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UserTest extends TestCase
+class NoAuthUserTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function acting(): void
+    public function test_user_dont_attach_reservation_without_auth(): void
     {
-        $this->actingAs(User::factory()->create())
-            ->withSession(['banned' => false])
-            ->get('/');
-    }
-
-    public function test_user_attach_reservation_successfully(): void
-    {
-        $this->acting();
-
         $user = User::factory()->create();
         $reservation = Reservation::factory()->create();
 
@@ -31,18 +22,16 @@ class UserTest extends TestCase
             '/api/V1/user/'.$user->id.'/reservation/'.$reservation->id
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
 
-        $this->assertDatabaseHas('reservation_user', [
+        $this->assertDatabaseMissing('reservation_user', [
             'user_id' => $user->id,
             'reservation_id' => $reservation->id,
         ]);
     }
 
-    public function test_reservation_detach_user_successfully(): void
+    public function test_user_dont_detach_reservation_without_auth(): void
     {
-        $this->acting();
-
         $user = User::factory()
             ->has(Reservation::factory())
             ->create();
@@ -54,18 +43,16 @@ class UserTest extends TestCase
             '/api/V1/user/'.$user->id.'/reservation/'.$reservationId
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
 
-        $this->assertDatabaseMissing('reservation_user', [
+        $this->assertDatabaseHas('reservation_user', [
             'user_id' => $user->id,
             'reservation_id' => $reservationId,
         ]);
     }
 
-    public function test_user_attach_reservation_request_successfully(): void
+    public function test_user_dont_attach_reservation_request_without_auth(): void
     {
-        $this->acting();
-
         $user = User::factory()->create();
         $reservationRequest = ReservationRequest::factory()->create();
 
@@ -74,18 +61,16 @@ class UserTest extends TestCase
             '/api/V1/user/'.$user->id.'/reservation-request/'.$reservationRequest->id
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
 
-        $this->assertDatabaseHas('reservation_request_user', [
+        $this->assertDatabaseMissing('reservation_request_user', [
             'user_id' => $user->id,
             'reservation_request_id' => $reservationRequest->id,
         ]);
     }
 
-    public function test_reservation_request_detach_user_successfully(): void
+    public function test_user_dont_detach_reservation_request_without_auth(): void
     {
-        $this->acting();
-
         $user = User::factory()
             ->has(ReservationRequest::factory())
             ->create();
@@ -97,9 +82,9 @@ class UserTest extends TestCase
             '/api/V1/user/'.$user->id.'/reservation-request/'.$reservationRequestId
         );
 
-        $response->assertOk();
+        $response->assertStatus(302);
 
-        $this->assertDatabaseMissing('reservation_request_user', [
+        $this->assertDatabaseHas('reservation_request_user', [
             'user_id' => $user->id,
             'reservation_request_id' => $reservationRequestId,
         ]);
