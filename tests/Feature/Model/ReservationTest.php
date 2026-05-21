@@ -33,7 +33,7 @@ class ReservationTest extends TestCase
     {
         $this->acting();
 
-        $response = $this->call('GET', '/api-V1/reservation/create', self::BASE_ATTRIBUTES);
+        $response = $this->call('GET', '/api/V1/reservation/create', self::BASE_ATTRIBUTES);
 
         $response->assertOk();
     }
@@ -47,7 +47,7 @@ class ReservationTest extends TestCase
         $arguments = self::BASE_ATTRIBUTES;
         $arguments['users'] = [$user->id];
 
-        $response = $this->call('GET', '/api-V1/reservation/create', $arguments);
+        $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
 
         $response->assertOk();
     }
@@ -63,7 +63,7 @@ class ReservationTest extends TestCase
         $arguments = self::BASE_ATTRIBUTES;
         $arguments['users'] = [$users->pluck('id')->toArray()];
 
-        $response = $this->call('GET', '/api-V1/reservation/create', $arguments);
+        $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
 
         $response->assertOk();
     }
@@ -74,7 +74,7 @@ class ReservationTest extends TestCase
 
         $reservation = Reservation::factory()->create();
 
-        $response = $this->call('PUT', '/api-V1/reservation/'.$reservation->id, self::UPDATED_BASIC_ATTRIBUTES);
+        $response = $this->call('PUT', '/api/V1/reservation/'.$reservation->id, self::UPDATED_BASIC_ATTRIBUTES);
 
         $response->assertOk();
         $response->assertJsonFragment(self::UPDATED_BASIC_ATTRIBUTES);
@@ -86,7 +86,7 @@ class ReservationTest extends TestCase
 
         $reservation = Reservation::factory()->create();
 
-        $response = $this->call('GET', '/api-V1/reservation/'.$reservation->id);
+        $response = $this->call('GET', '/api/V1/reservation/'.$reservation->id);
 
         $response->assertOk();
     }
@@ -97,7 +97,7 @@ class ReservationTest extends TestCase
 
         $reservation = Reservation::factory()->create();
 
-        $response = $this->call('DELETE', '/api-V1/reservation/'.$reservation->id);
+        $response = $this->call('DELETE', '/api/V1/reservation/'.$reservation->id);
 
         $response->assertOk();
 
@@ -113,7 +113,7 @@ class ReservationTest extends TestCase
         $reservation = Reservation::factory()->create();
         $user = User::factory()->create();
 
-        $response = $this->call('PUT', '/api-V1/reservation/'.$reservation->id.'/user/'.$user->id);
+        $response = $this->call('PUT', '/api/V1/reservation/'.$reservation->id.'/user/'.$user->id);
 
         $response->assertOk();
     }
@@ -128,7 +128,7 @@ class ReservationTest extends TestCase
 
         $responseDetach = $this->call(
             'DELETE',
-            '/api-V1/reservation/'.$reservation->id.'/user/'.$reservation->users()->first()->id
+            '/api/V1/reservation/'.$reservation->id.'/user/'.$reservation->users()->first()->id
         );
 
         $responseDetach->assertOk();

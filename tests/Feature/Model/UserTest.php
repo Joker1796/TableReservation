@@ -25,7 +25,7 @@ class UserTest extends TestCase
         $user = User::factory()->create();
         $reservation = Reservation::factory()->create();
 
-        $response = $this->call('PUT', '/api-V1/user/'.$user->id.'/reservation/'.$reservation->id);
+        $response = $this->call('PUT', '/api/V1/user/'.$user->id.'/reservation/'.$reservation->id);
 
         $response->assertOk();
     }
@@ -40,7 +40,7 @@ class UserTest extends TestCase
 
         $responseDetach = $this->call(
             'DELETE',
-            '/api-V1/user/'.$user->id.'/reservation/'.$user->reservations()->first()->id
+            '/api/V1/user/'.$user->id.'/reservation/'.$user->reservations()->first()->id
         );
 
         $responseDetach->assertOk();

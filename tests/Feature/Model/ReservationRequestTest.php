@@ -43,7 +43,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'GET',
-            '/api-V1/reservation-request/create',
+            '/api/V1/reservation-request/create',
             self::BASE_ARGUMENTS
         );
 
@@ -58,7 +58,7 @@ class ReservationRequestTest extends TestCase
     {
         $response = $this->call(
             'GET',
-            '/api-V1/reservation-request/create',
+            '/api/V1/reservation-request/create',
             self::BASE_ARGUMENTS
         );
 
@@ -76,7 +76,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'GET',
-            '/api-V1/reservation-request/create',
+            '/api/V1/reservation-request/create',
             $arguments
         );
 
@@ -98,7 +98,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'GET',
-            '/api-V1/reservation-request/create',
+            '/api/V1/reservation-request/create',
             $arguments
         );
 
@@ -122,7 +122,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'GET',
-            '/api-V1/reservation-request/create',
+            '/api/V1/reservation-request/create',
             $arguments
         );
 
@@ -137,7 +137,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api-V1/reservation-request/'.$reservationRequest->id,
+            '/api/V1/reservation-request/'.$reservationRequest->id,
             self::UPDATED_BASIC_ARGUMENTS
         );
 
@@ -151,7 +151,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api-V1/reservation-request/'.$reservationRequest->id,
+            '/api/V1/reservation-request/'.$reservationRequest->id,
             self::UPDATED_BASIC_ARGUMENTS
         );
 
@@ -166,7 +166,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'GET',
-            '/api-V1/reservation-request/'.$reservationRequest->id
+            '/api/V1/reservation-request/'.$reservationRequest->id
         );
 
         $response->assertOk();
@@ -178,7 +178,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'GET',
-            '/api-V1/reservation-request/'.$reservationRequest->id
+            '/api/V1/reservation-request/'.$reservationRequest->id
         );
 
         $response->assertStatus(302);
@@ -192,7 +192,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'DELETE',
-            '/api-V1/reservation-request/'.$reservationRequest->id
+            '/api/V1/reservation-request/'.$reservationRequest->id
         );
 
         $response->assertOk();
@@ -208,7 +208,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'DELETE',
-            '/api-V1/reservation-request/'.$reservationRequest->id
+            '/api/V1/reservation-request/'.$reservationRequest->id
         );
 
         $response->assertStatus(302);
@@ -223,7 +223,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api-V1/reservation-request/'.$reservationRequest->id.'/user/'.$user->id
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/user/'.$user->id
         );
 
         $response->assertOk();
@@ -236,7 +236,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api-V1/reservation-request/'.$reservationRequest->id.'/user/'.$user->id
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/user/'.$user->id
         );
 
         $response->assertStatus(302);
@@ -252,7 +252,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'DELETE',
-            '/api-V1/reservation-request/'.$reservationRequest->id.'/user/'.$reservationRequest->users()->first()->id
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/user/'.$reservationRequest->users()->first()->id
         );
 
         $response->assertOk();
@@ -266,7 +266,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'DELETE',
-            '/api-V1/reservation-request/'.$reservationRequest->id.'/user/'.$reservationRequest->users()->first()->id
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/user/'.$reservationRequest->users()->first()->id
         );
 
         $response->assertStatus(302);
@@ -281,7 +281,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api-V1/reservation-request/'.$reservationRequest->id.'/table/'.$table->id
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/table/'.$table->id
         );
 
         $response->assertOk();
@@ -301,7 +301,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api-V1/reservation-request/'.$reservationRequest->id.'/table/'.$table->id
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/table/'.$table->id
         );
 
         $response->assertStatus(302);
@@ -317,7 +317,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'DELETE',
-            '/api-V1/reservation-request/'.$reservationRequest->id.'/table',
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/table',
         );
 
         $response->assertOk();
@@ -335,7 +335,7 @@ class ReservationRequestTest extends TestCase
 
         $response = $this->call(
             'DELETE',
-            '/api-V1/reservation-request/'.$reservationRequest->id
+            '/api/V1/reservation-request/'.$reservationRequest->id
         );
 
         $response->assertStatus(302);

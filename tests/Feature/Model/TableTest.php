@@ -35,7 +35,7 @@ class TableTest extends TestCase
     {
         $this->acting();
 
-        $response = $this->call('GET', '/api-V1/table/create', self::BASE_ATTRIBUTES);
+        $response = $this->call('GET', '/api/V1/table/create', self::BASE_ATTRIBUTES);
 
         $response->assertOk();
     }
@@ -48,7 +48,7 @@ class TableTest extends TestCase
 
         $response = $this->call(
             'PUT',
-            '/api-V1/table/'.$weapon->id, self::UPDATED_BASIC_ATTRIBUTES
+            '/api/V1/table/'.$weapon->id, self::UPDATED_BASIC_ATTRIBUTES
         );
 
         $response->assertOk();
@@ -62,7 +62,7 @@ class TableTest extends TestCase
 
         $table = Table::factory()->create();
 
-        $response = $this->call('GET', '/api-V1/table/'.$table->id);
+        $response = $this->call('GET', '/api/V1/table/'.$table->id);
 
         $response->assertOk();
     }
@@ -73,7 +73,7 @@ class TableTest extends TestCase
 
         $table = Table::factory()->create();
 
-        $response = $this->call('DELETE', '/api-V1/table/'.$table->id);
+        $response = $this->call('DELETE', '/api/V1/table/'.$table->id);
 
         $response->assertOk();
 
@@ -91,7 +91,7 @@ class TableTest extends TestCase
 
         $responseDetach = $this->call(
             'PUT',
-            '/api-V1/table/'.$table->id.'/reservation/'.$reservation->id
+            '/api/V1/table/'.$table->id.'/reservation/'.$reservation->id
         );
 
         $responseDetach->assertOk();
@@ -107,7 +107,7 @@ class TableTest extends TestCase
 
         $responseDetach = $this->call(
             'DELETE',
-            '/api-V1/table/'.$table->id.'/reservation/'.$table->reservations()->first()->id
+            '/api/V1/table/'.$table->id.'/reservation/'.$table->reservations()->first()->id
         );
 
         $responseDetach->assertOk();
