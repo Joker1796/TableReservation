@@ -227,6 +227,11 @@ class ReservationRequestTest extends TestCase
         );
 
         $response->assertOk();
+
+        $this->assertDatabaseHas('reservation_request_user', [
+            'user_id' => $user->id,
+            'reservation_request_id' => $reservationRequest->id,
+        ]);
     }
 
     public function test_reservation_request_attach_user_not_successfully_code_302(): void
@@ -250,12 +255,19 @@ class ReservationRequestTest extends TestCase
             ->has(User::factory(), 'users')
             ->create();
 
+        $userId = $reservationRequest->users()->first()->id;
+
         $response = $this->call(
             'DELETE',
-            '/api/V1/reservation-request/'.$reservationRequest->id.'/user/'.$reservationRequest->users()->first()->id
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/user/'.$userId
         );
 
         $response->assertOk();
+
+        $this->assertDatabaseMissing('reservation_request_user', [
+            'user_id' => $userId,
+            'reservation_request_id' => $reservationRequest->id,
+        ]);
     }
 
     public function test_reservation_request_detach_user_not_successfully_code_302(): void

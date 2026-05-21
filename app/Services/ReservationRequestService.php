@@ -67,6 +67,7 @@ class ReservationRequestService
     public static function attachUser(ReservationRequest $reservationRequest, User $user): Response
     {
         $reservationRequest->users()->attach($user);
+        $reservationRequest->load('users');
 
         return response($reservationRequest, ResponseAlias::HTTP_OK);
     }
@@ -74,6 +75,7 @@ class ReservationRequestService
     public static function detachUser(ReservationRequest $reservationRequest, User $user): Response
     {
         $reservationRequest->users()->detach($user);
+        $reservationRequest->load('users');
 
         return response($reservationRequest, ResponseAlias::HTTP_OK);
     }
