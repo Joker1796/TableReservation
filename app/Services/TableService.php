@@ -38,13 +38,15 @@ class TableService
     public static function addReservation(Table $table, Reservation $reservation): Response
     {
         $table->reservations()->save($reservation);
+        $table->load('reservations');
 
         return response($table, 200);
     }
 
     public static function deleteReservation(Table $table, Reservation $reservation): Response
     {
-        $table->reservations()->delete($reservation->id);
+        $table->reservations()->where('id', $reservation->id)->delete();
+        $table->load('reservations');
 
         return response($table, 200);
     }
@@ -52,13 +54,15 @@ class TableService
     public static function addReservationRequest(Table $table, ReservationRequest $reservationRequest): Response
     {
         $table->reservationRequests()->save($reservationRequest);
+        $table->load('reservationRequests');
 
         return response($table, 200);
     }
 
     public static function deleteReservationRequest(Table $table, ReservationRequest $reservationRequest): Response
     {
-        $table->reservationRequests()->delete($reservationRequest->id);
+        $table->reservationRequests()->where('id', $reservationRequest->id)->delete();
+        $table->load('reservationRequests');
 
         return response($table, 200);
     }
