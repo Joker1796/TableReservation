@@ -3,6 +3,7 @@
 namespace Feature\Model;
 
 use App\Models\Reservation;
+use App\Models\ReservationRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -25,9 +26,35 @@ class UserTest extends TestCase
         $user = User::factory()->create();
         $reservation = Reservation::factory()->create();
 
-        $response = $this->call('PUT', '/api/V1/user/'.$user->id.'/reservation/'.$reservation->id);
+        $response = $this->call(
+            'PUT',
+            '/api/V1/user/'.$user->id.'/reservation/'.$reservation->id
+        );
 
         $response->assertOk();
+
+        $this->assertDatabaseHas('reservation_user', [
+            'user_id' => $user->id,
+            'reservation_id' => $reservation->id,
+        ]);
+    }
+
+    public function test_user_attach_reservation_not_successfully_code_302(): void
+    {
+        $user = User::factory()->create();
+        $reservation = Reservation::factory()->create();
+
+        $response = $this->call(
+            'PUT',
+            '/api/V1/user/'.$user->id.'/reservation/'.$reservation->id
+        );
+
+        $response->assertStatus(302);
+
+        $this->assertDatabaseMissing('reservation_user', [
+            'user_id' => $user->id,
+            'reservation_id' => $reservation->id,
+        ]);
     }
 
     public function test_reservation_detach_user_successfully(): void
@@ -38,11 +65,121 @@ class UserTest extends TestCase
             ->has(Reservation::factory())
             ->create();
 
-        $responseDetach = $this->call(
+        $reservationId = $user->reservations()->first()->id;
+
+        $response = $this->call(
             'DELETE',
-            '/api/V1/user/'.$user->id.'/reservation/'.$user->reservations()->first()->id
+            '/api/V1/user/'.$user->id.'/reservation/'.$reservationId
         );
 
-        $responseDetach->assertOk();
+        $response->assertOk();
+
+        $this->assertDatabaseMissing('reservation_user', [
+            'user_id' => $user->id,
+            'reservation_id' => $reservationId,
+        ]);
+    }
+
+    public function test_reservation_detach_user_not_successfully_code_302(): void
+    {
+        $user = User::factory()
+            ->has(Reservation::factory())
+            ->create();
+
+        $reservationId = $user->reservations()->first()->id;
+
+        $response = $this->call(
+            'DELETE',
+            '/api/V1/user/'.$user->id.'/reservation/'.$reservationId
+        );
+
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('reservation_user', [
+            'user_id' => $user->id,
+            'reservation_id' => $reservationId,
+        ]);
+    }
+
+    public function test_user_attach_reservation_request_successfully(): void
+    {
+        $this->acting();
+
+        $user = User::factory()->create();
+        $reservationRequest = ReservationRequest::factory()->create();
+
+        $response = $this->call(
+            'PUT',
+            '/api/V1/user/'.$user->id.'/reservation-request/'.$reservationRequest->id
+        );
+
+        $response->assertOk();
+
+        $this->assertDatabaseHas('reservation_request_user', [
+            'user_id' => $user->id,
+            'reservation_request_id' => $reservationRequest->id,
+        ]);
+    }
+
+    public function test_user_attach_reservation_request_not_successfully_code_302(): void
+    {
+        $user = User::factory()->create();
+        $reservationRequest = ReservationRequest::factory()->create();
+
+        $response = $this->call(
+            'PUT',
+            '/api/V1/user/'.$user->id.'/reservation-request/'.$reservationRequest->id
+        );
+
+        $response->assertStatus(302);
+
+        $this->assertDatabaseMissing('reservation_request_user', [
+            'user_id' => $user->id,
+            'reservation_request_id' => $reservationRequest->id,
+        ]);
+    }
+
+    public function test_reservation_request_detach_user_successfully(): void
+    {
+        $this->acting();
+
+        $user = User::factory()
+            ->has(ReservationRequest::factory())
+            ->create();
+
+        $reservationRequestId = $user->reservationRequests()->first()->id;
+
+        $response = $this->call(
+            'DELETE',
+            '/api/V1/user/'.$user->id.'/reservation-request/'.$reservationRequestId
+        );
+
+        $response->assertOk();
+
+        $this->assertDatabaseMissing('reservation_request_user', [
+            'user_id' => $user->id,
+            'reservation_request_id' => $reservationRequestId,
+        ]);
+    }
+
+    public function test_reservation_request_detach_user_not_successfully_code_302(): void
+    {
+        $user = User::factory()
+            ->has(ReservationRequest::factory())
+            ->create();
+
+        $reservationRequestId = $user->reservationRequests()->first()->id;
+
+        $response = $this->call(
+            'DELETE',
+            '/api/V1/user/'.$user->id.'/reservation-request/'.$reservationRequestId
+        );
+
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('reservation_request_user', [
+            'user_id' => $user->id,
+            'reservation_request_id' => $reservationRequestId,
+        ]);
     }
 }

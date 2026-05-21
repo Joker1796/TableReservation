@@ -12,6 +12,7 @@ class UserService
     public static function attachReservation(User $user, Reservation $reservation): Response
     {
         $user->reservations()->attach($reservation);
+        $user->load('reservations');
 
         return response($user, 200);
     }
@@ -19,6 +20,7 @@ class UserService
     public static function detachReservation(User $user, Reservation $reservation): Response
     {
         $user->reservations()->detach($reservation);
+        $user->load('reservations');
 
         return response($user, 200);
     }
@@ -26,6 +28,7 @@ class UserService
     public static function attachReservationRequest(User $user, ReservationRequest $reservationRequest): Response
     {
         $user->reservationRequests()->attach($reservationRequest);
+        $user->load('reservationRequests');
 
         return response($user, 200);
     }
@@ -33,6 +36,7 @@ class UserService
     public static function detachReservationRequest(User $user, ReservationRequest $reservationRequest): Response
     {
         $user->reservationRequests()->detach($reservationRequest);
+        $user->load('reservationRequests');
 
         return response($user, 200);
     }
