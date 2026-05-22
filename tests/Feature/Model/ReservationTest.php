@@ -41,7 +41,7 @@ class ReservationTest extends TestCase
             ->create();
 
         $arguments = Reservation::factory()::ARGUMENTS;
-        $arguments['users'] = [$users->pluck('id')->toArray()];
+        $arguments['users'] = $users->pluck('id')->toArray();
 
         $response = $this->call(
             'GET',
@@ -50,6 +50,13 @@ class ReservationTest extends TestCase
         );
 
         $response->assertOk();
+
+        $users->each(function (User $user) use ($response) {
+            $this->assertDatabaseHas('reservation_user', [
+                'reservation_id' => $response->json('id'),
+                'user_id' => $user->id,
+            ]);
+        });
     }
 
     public function test_reservation_created_with_table_successfully(): void
@@ -59,7 +66,7 @@ class ReservationTest extends TestCase
         $table = Table::factory()->create();
 
         $arguments = Reservation::factory()::ARGUMENTS;
-        $arguments['table'] = $table->id;
+        $arguments['table_id'] = $table->id;
 
         $response = $this->call(
             'GET',
@@ -71,8 +78,10 @@ class ReservationTest extends TestCase
 
         $this->assertArrayHasKey('table_id', $response->json());
         $this->assertEquals($table->id, $response->json('table_id'));
-        $this->assertArrayHasKey('table', $response->json());
-        $this->assertEquals($table->id, $response->json('table.id'));
+        $this->assertDatabaseHas('reservations', [
+            'id' => $response->json('id'),
+            'table_id' => $response->json('table_id'),
+        ]);
     }
 
     public function test_reservation_updated_successfully(): void

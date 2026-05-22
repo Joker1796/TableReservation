@@ -19,19 +19,27 @@ class ReservationService
 
     public static function update(Request $request, Reservation $reservation): Response
     {
-        $reservation->comment = $request->comment ?? null;
-        $reservation->date = $request->date;
-        $reservation->hours = $request->hours ?? null;
+        $validated = $request->validate([
+            'comment' => ['nullable', 'string'],
+            'date' => ['required', 'date'],
+            'hours' => ['nullable', 'integer'],
+            'table_id' => ['sometimes', 'nullable', 'exists:tables,id'],
+            'users' => ['sometimes', 'nullable', 'exists:users,id'],
+        ]);
 
-        if ($request->table) {
-            $table = Table::find($request->table);
+        $reservation->comment = $validated['comment'];
+        $reservation->date = $validated['date'];
+        $reservation->hours = $validated['hours'];
+
+        if (! empty($validated['table_id'])) {
+            $table = Table::find($validated['table_id']);
             $reservation->table()->associate($table);
         }
 
         $reservation->save();
 
-        if ($request->users) {
-            $users = User::find($request->users);
+        if (! empty($validated['users'])) {
+            $users = User::find($validated['users']);
             $reservation->users()->attach($users);
         }
 
