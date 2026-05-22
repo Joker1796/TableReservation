@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableStatus;
 use Database\Factories\TableFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,10 @@ class Table extends Model
 {
     /** @use HasFactory<TableFactory> */
     use HasFactory, SoftDeletes;
+
+    protected $casts = [
+        'status' => TableStatus::class,
+    ];
 
     public function reservations(): HasMany
     {

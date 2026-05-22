@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TableStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->char('name', 100);
             $table->text('description')->nullable();
-            $table->tinyInteger('status')->default(0);
+            $table->char('status', 10)->default(TableStatus::NOT_READY);
         });
 
         Schema::table('reservations', function (Blueprint $table) {

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\TableStatus;
 use App\Models\Table;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -13,13 +14,13 @@ class TableFactory extends Factory
     const array ARGUMENTS = [
         'name' => 'test table name',
         'description' => 'test description',
-        'status' => '1',
+        'status' => TableStatus::READY->value,
     ];
 
     const array UPDATED_ARGUMENTS = [
         'name' => 'test table name updated',
         'description' => 'test description updated',
-        'status' => '0',
+        'status' => TableStatus::NOT_READY->value,
     ];
 
     /**
@@ -28,9 +29,9 @@ class TableFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->sentence(),
             'description' => $this->faker->text(),
-            'status' => $this->faker->randomElement([1, 0]),
+            'status' => $this->faker->randomElement(TableStatus::cases()),
         ];
     }
 }

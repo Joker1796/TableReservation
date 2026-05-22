@@ -33,6 +33,34 @@ class TableTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_table_created_with_nullable_description_successfully(): void
+    {
+        $this->acting();
+
+        $arguments = Table::factory()::ARGUMENTS;
+        $arguments['description'] = null;
+
+        $response = $this->call(
+            'GET',
+            '/api/V1/table/create',
+            $arguments,
+        );
+
+        $response->assertOk();
+    }
+
+    public function test_table_dont_created_with_incorrect_status(): void
+    {
+        $this->acting();
+
+        $arguments = Table::factory()::ARGUMENTS;
+        $arguments['status'] = 'incorrect';
+
+        $response = $this->get('/api/V1/table/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
     public function test_table_updated_successfully(): void
     {
         $this->acting();
@@ -47,6 +75,23 @@ class TableTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonFragment(Table::factory()::UPDATED_ARGUMENTS);
+    }
+
+    public function test_table_dont_updated_with_incorrect_status(): void
+    {
+        $this->acting();
+
+        $weapon = Table::factory()->create();
+        $arguments = Table::factory()::ARGUMENTS;
+        $arguments['status'] = 'incorrect';
+
+        $response = $this->call(
+            'PUT',
+            '/api/V1/table/'.$weapon->id,
+            $arguments,
+        );
+
+        $response->assertStatus(302);
     }
 
     public function test_table_showed_successfully(): void

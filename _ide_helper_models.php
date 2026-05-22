@@ -88,7 +88,7 @@ namespace App\Models{
  * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property string $name
  * @property string|null $description
- * @property int $status
+ * @property \App\Enums\TableStatus $status
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReservationRequest> $reservationRequests
  * @property-read int|null $reservation_requests_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reservation> $reservations

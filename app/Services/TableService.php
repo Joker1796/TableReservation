@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Enums\TableStatus;
 use App\Models\Reservation;
 use App\Models\ReservationRequest;
 use App\Models\Table;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rules\Enum;
 
 class TableService
 {
@@ -19,9 +21,15 @@ class TableService
 
     public static function update(Request $request, Table $table): Response
     {
-        $table->name = $request->name;
-        $table->description = $request->description ?? null;
-        $table->status = $request->status ?? 0;
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'description' => ['nullable', 'string', 'max:5000'],
+            'status' => ['required', new Enum(TableStatus::class)],
+        ]);
+
+        $table->name = $validated['name'];
+        $table->description = $validated['description'];
+        $table->status = $validated['status'];
 
         $table->save();
 
