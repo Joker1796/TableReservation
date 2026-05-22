@@ -17,6 +17,38 @@ namespace App\Models{
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property \Carbon\CarbonImmutable|null $deleted_at
+ * @property \App\Enums\InviteStatus $status
+ * @property int $author_id
+ * @property int $target_id
+ * @property int $reservation_id
+ * @property-read \App\Models\User $author
+ * @property-read \App\Models\Reservation|null $reservation
+ * @property-read \App\Models\User $target
+ * @method static \Database\Factories\InviteFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereReservationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereTargetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Invite withoutTrashed()
+ */
+	class Invite extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property string|null $comment
  * @property string $date
  * @property int|null $hours
@@ -56,6 +88,8 @@ namespace App\Models{
  * @property int|null $hours
  * @property int $status
  * @property-read \App\Models\User $author
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Invite> $invites
+ * @property-read int|null $invites_count
  * @property-read \App\Models\Table|null $table
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count

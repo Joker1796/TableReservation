@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InviteController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationRequestController;
 use App\Http\Controllers\TableController;
@@ -119,5 +120,30 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete(
         '/user/{user}/reservation-request/{reservationRequest}',
         [UserController::class, 'detachReservationRequest']
+    );
+
+    Route::get(
+        '/invite/create',
+        [InviteController::class, 'create']
+    );
+    Route::get(
+        '/invite/{invite}',
+        [InviteController::class, 'show']
+    );
+    Route::put(
+        '/invite/{invite}/status/{status}',
+        [InviteController::class, 'setStatus']
+    );
+    Route::put(
+        '/invite/{invite}/accept',
+        [InviteController::class, 'accept']
+    );
+    Route::put(
+        '/invite/{invite}/revoke',
+        [InviteController::class, 'revoke']
+    );
+    Route::delete(
+        '/invite/{invite}',
+        [InviteController::class, 'softDelete']
     );
 });

@@ -23,6 +23,11 @@ class ReservationRequest extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function invites(): BelongsToMany
+    {
+        return $this->belongsToMany(Invite::class);
+    }
+
     public function table(): BelongsTo
     {
         return $this->belongsTo(Table::class, 'table_id');
