@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Model\NoAuthTests;
+namespace Feature\API\NoAuthTests;
 
 use App\Models\ReservationRequest;
 use App\Models\Table;

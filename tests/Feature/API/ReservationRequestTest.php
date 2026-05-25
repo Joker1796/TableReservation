@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Model;
+namespace Feature\API;
 
 use App\Models\ReservationRequest;
 use App\Models\Table;

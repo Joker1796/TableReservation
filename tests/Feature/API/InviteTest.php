@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Model;
+namespace Feature\API;
 
 use App\Enums\InviteStatus;
 use App\Models\Invite;

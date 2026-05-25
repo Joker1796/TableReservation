@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Model\NoAuthTests;
+namespace Feature\API\NoAuthTests;
 
 use App\Enums\InviteStatus;
 use App\Models\Invite;
