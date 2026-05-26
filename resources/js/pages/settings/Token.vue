@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import { editToken } from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import Heading from '@/components/Heading.vue';
 
 defineOptions({
@@ -7,7 +8,7 @@ defineOptions({
         breadcrumbs: [
             {
                 title: 'Токен',
-                // href: edit(),
+                href: editToken(),
             },
         ],
     },
