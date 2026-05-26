@@ -22,7 +22,7 @@ defineOptions({
     layout: {
         breadcrumbs: [
             {
-                title: 'Profile settings',
+                title: 'Настройки профиля',
                 href: edit(),
             },
         ],
@@ -34,15 +34,14 @@ const user = computed(() => page.props.auth.user);
 </script>
 
 <template>
-    <Head title="Profile settings" />
+    <Head title="Настройки профиля" />
 
-    <h1 class="sr-only">Profile settings</h1>
+    <h1 class="sr-only">Настройки профиля</h1>
 
     <div class="flex flex-col space-y-6">
         <Heading
             variant="small"
-            title="Profile information"
-            description="Update your name and email address"
+            title="Общая информация"
         />
 
         <Form
@@ -51,7 +50,7 @@ const user = computed(() => page.props.auth.user);
             v-slot="{ errors, processing }"
         >
             <div class="grid gap-2">
-                <Label for="name">Name</Label>
+                <Label for="name">Имя</Label>
                 <Input
                     id="name"
                     class="mt-1 block w-full"
@@ -59,13 +58,13 @@ const user = computed(() => page.props.auth.user);
                     :default-value="user.name"
                     required
                     autocomplete="name"
-                    placeholder="Full name"
+                    placeholder="Полное имя"
                 />
                 <InputError class="mt-2" :message="errors.name" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="email">Email address</Label>
+                <Label for="email">Email</Label>
                 <Input
                     id="email"
                     type="email"
@@ -74,20 +73,21 @@ const user = computed(() => page.props.auth.user);
                     :default-value="user.email"
                     required
                     autocomplete="username"
-                    placeholder="Email address"
+                    placeholder="Email"
                 />
                 <InputError class="mt-2" :message="errors.email" />
             </div>
 
             <div v-if="mustVerifyEmail && !user.email_verified_at">
                 <p class="-mt-4 text-sm text-muted-foreground">
-                    Your email address is unverified.
+                    Ваш адрес электронной почты не подтвержден.
                     <Link
                         :href="send()"
                         as="button"
                         class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                     >
-                        Click here to resend the verification email.
+                        Нажмите здесь, чтобы повторно отправить письмо с
+                        подтверждением.
                     </Link>
                 </p>
 
@@ -95,13 +95,14 @@ const user = computed(() => page.props.auth.user);
                     v-if="status === 'verification-link-sent'"
                     class="mt-2 text-sm font-medium text-green-600"
                 >
-                    A new verification link has been sent to your email address.
+                    На ваш электронный адрес отправлена новая ссылка для
+                    подтверждения.
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
                 <Button :disabled="processing" data-test="update-profile-button"
-                    >Save</Button
+                    >Сохранить</Button
                 >
             </div>
         </Form>

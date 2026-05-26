@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
@@ -12,17 +11,21 @@ import type { NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [
     {
-        title: 'Profile',
+        title: 'Профиль',
         href: editProfile(),
     },
     {
-        title: 'Security',
+        title: 'Безопасность',
         href: editSecurity(),
     },
     {
-        title: 'Appearance',
+        title: 'Внешний вид',
         href: editAppearance(),
     },
+    // {
+    //     title: 'API Токен',
+    //     href: editToken(),
+    // },
 ];
 
 const { isCurrentOrParentUrl } = useCurrentUrl();
@@ -30,11 +33,6 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
 
 <template>
     <div class="px-4 py-6">
-        <Heading
-            title="Settings"
-            description="Manage your profile and account settings"
-        />
-
         <div class="flex flex-col lg:flex-row lg:space-x-12">
             <aside class="w-full max-w-xl lg:w-48">
                 <nav
