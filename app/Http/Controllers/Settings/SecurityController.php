@@ -47,7 +47,19 @@ class SecurityController extends Controller implements HasMiddleware
 
     public function editToken(): Response
     {
-        return Inertia::render('settings/Token');
+        return Inertia::render('settings/Token', [
+            'token' => session('token'),
+        ]);
+    }
+
+    public function generateToken(Request $request): RedirectResponse
+    {
+        $request->user()->tokens()->delete();
+        $newToken = $request->user()->createToken('api-token');
+
+        session()->flash('token', $newToken->plainTextToken);
+
+        return redirect()->route('api-token.edit');
     }
 
     /**

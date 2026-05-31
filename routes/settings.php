@@ -17,6 +17,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('settings/api-token', [SecurityController::class, 'editToken'])
         ->name('api-token.edit');
 
+    Route::post('settings/api-token', [SecurityController::class, 'generateToken'])
+        ->name('api-token.generate');
+
     Route::delete('settings/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
