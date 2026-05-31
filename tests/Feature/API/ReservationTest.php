@@ -175,4 +175,114 @@ class ReservationTest extends TestCase
             'reservation_id' => $reservation->id,
         ]);
     }
+
+    public function test_reservation_dont_created_without_required_date(): void
+    {
+        $this->acting();
+
+        $arguments = Reservation::factory()::ARGUMENTS;
+        unset($arguments['date']);
+
+        $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_reservation_dont_created_with_invalid_hours(): void
+    {
+        $this->acting();
+
+        $arguments = Reservation::factory()::ARGUMENTS;
+        $arguments['hours'] = -1;
+
+        $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_reservation_dont_created_with_hours_over_max(): void
+    {
+        $this->acting();
+
+        $arguments = Reservation::factory()::ARGUMENTS;
+        $arguments['hours'] = 13;
+
+        $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_reservation_created_with_zero_hours_successfully(): void
+    {
+        $this->acting();
+
+        $arguments = Reservation::factory()::ARGUMENTS;
+        $arguments['hours'] = 0;
+
+        $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
+
+        $response->assertOk();
+        $this->assertEquals(0, $response->json('hours'));
+    }
+
+    public function test_reservation_created_with_null_hours_successfully(): void
+    {
+        $this->acting();
+
+        $arguments = Reservation::factory()::ARGUMENTS;
+        $arguments['hours'] = null;
+
+        $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
+
+        $response->assertOk();
+        $this->assertNull($response->json('hours'));
+    }
+
+    public function test_reservation_created_with_multiple_users_successfully(): void
+    {
+        $this->acting();
+
+        $users = User::factory()->count(3)->create();
+
+        $arguments = Reservation::factory()::ARGUMENTS;
+        $arguments['users'] = $users->pluck('id')->toArray();
+
+        $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
+
+        $response->assertOk();
+
+        $users->each(function (User $user) use ($response) {
+            $this->assertDatabaseHas('reservation_user', [
+                'reservation_id' => $response->json('id'),
+                'user_id' => $user->id,
+            ]);
+        });
+    }
+
+    public function test_reservation_show_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('GET', '/api/V1/reservation/99999');
+
+        $response->assertNotFound();
+    }
+
+    public function test_reservation_update_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('PUT', '/api/V1/reservation/99999', Reservation::factory()::UPDATED_ARGUMENTS);
+
+        $response->assertNotFound();
+    }
+
+    public function test_reservation_soft_delete_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('DELETE', '/api/V1/reservation/99999');
+
+        $response->assertNotFound();
+    }
 }

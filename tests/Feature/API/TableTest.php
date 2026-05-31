@@ -200,4 +200,43 @@ class TableTest extends TestCase
 
         $this->assertEmpty($table->fresh()->reservationRequests->where('id', $reservationRequestId));
     }
+
+    public function test_table_dont_created_without_required_name(): void
+    {
+        $this->acting();
+
+        $arguments = Table::factory()::ARGUMENTS;
+        unset($arguments['name']);
+
+        $response = $this->call('GET', '/api/V1/table/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_table_show_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('GET', '/api/V1/table/99999');
+
+        $response->assertNotFound();
+    }
+
+    public function test_table_update_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('PUT', '/api/V1/table/99999', Table::factory()::UPDATED_ARGUMENTS);
+
+        $response->assertNotFound();
+    }
+
+    public function test_table_soft_delete_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('DELETE', '/api/V1/table/99999');
+
+        $response->assertNotFound();
+    }
 }

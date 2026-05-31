@@ -89,4 +89,11 @@ class NoAuthUserTest extends TestCase
             'reservation_request_id' => $reservationRequestId,
         ]);
     }
+
+    public function test_current_user_dont_returned_without_auth(): void
+    {
+        $response = $this->call('GET', '/api/V1/user');
+
+        $response->assertStatus(302);
+    }
 }

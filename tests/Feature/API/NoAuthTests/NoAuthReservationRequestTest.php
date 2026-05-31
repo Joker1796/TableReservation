@@ -106,7 +106,7 @@ class NoAuthReservationRequestTest extends TestCase
 
         $response = $this->call(
             'DELETE',
-            '/api/V1/reservation-request/'.$reservationRequest->id
+            '/api/V1/reservation-request/'.$reservationRequest->id.'/table'
         );
 
         $response->assertStatus(302);

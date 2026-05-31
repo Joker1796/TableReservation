@@ -104,4 +104,18 @@ class UserTest extends TestCase
             'reservation_request_id' => $reservationRequestId,
         ]);
     }
+
+    public function test_current_user_returned_successfully(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->withSession(['banned' => false])
+            ->get('/');
+
+        $response = $this->call('GET', '/api/V1/user');
+
+        $response->assertOk();
+        $this->assertEquals($user->id, $response->json('id'));
+    }
 }

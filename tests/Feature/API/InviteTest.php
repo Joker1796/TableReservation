@@ -178,4 +178,67 @@ class InviteTest extends TestCase
         $this->assertNotNull($response->json('deleted_at'));
         $this->assertDatabaseHas('invites', ['id' => $invite->id]);
     }
+
+    public function test_invite_dont_created_without_required_author_id(): void
+    {
+        $this->acting();
+
+        $target = User::factory()->create();
+        $reservation = Reservation::factory()->create();
+
+        $response = $this->call('GET', '/api/V1/invite/create', [
+            'target_id' => $target->id,
+            'reservation_id' => $reservation->id,
+        ]);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_invite_dont_created_without_required_target_id(): void
+    {
+        $this->acting();
+
+        $author = User::factory()->create();
+        $reservation = Reservation::factory()->create();
+
+        $response = $this->call('GET', '/api/V1/invite/create', [
+            'author_id' => $author->id,
+            'reservation_id' => $reservation->id,
+        ]);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_invite_dont_created_without_required_reservation_id(): void
+    {
+        $this->acting();
+
+        $author = User::factory()->create();
+        $target = User::factory()->create();
+
+        $response = $this->call('GET', '/api/V1/invite/create', [
+            'author_id' => $author->id,
+            'target_id' => $target->id,
+        ]);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_invite_show_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('GET', '/api/V1/invite/99999');
+
+        $response->assertNotFound();
+    }
+
+    public function test_invite_soft_delete_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('DELETE', '/api/V1/invite/99999');
+
+        $response->assertNotFound();
+    }
 }

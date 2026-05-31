@@ -234,4 +234,105 @@ class ReservationRequestTest extends TestCase
         $this->assertArrayHasKey('table', $response->json());
         $this->assertNull($response->json('table'));
     }
+
+    public function test_reservation_request_dont_created_without_required_date(): void
+    {
+        $this->acting();
+
+        $arguments = ReservationRequest::factory()::ARGUMENTS;
+        unset($arguments['date']);
+
+        $response = $this->call('GET', '/api/V1/reservation-request/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_reservation_request_dont_created_with_invalid_hours(): void
+    {
+        $this->acting();
+
+        $arguments = ReservationRequest::factory()::ARGUMENTS;
+        $arguments['hours'] = -1;
+
+        $response = $this->call('GET', '/api/V1/reservation-request/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_reservation_request_dont_created_with_hours_over_max(): void
+    {
+        $this->acting();
+
+        $arguments = ReservationRequest::factory()::ARGUMENTS;
+        $arguments['hours'] = 13;
+
+        $response = $this->call('GET', '/api/V1/reservation-request/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_reservation_request_created_with_zero_hours_successfully(): void
+    {
+        $this->acting();
+
+        $arguments = ReservationRequest::factory()::ARGUMENTS;
+        $arguments['hours'] = 0;
+
+        $response = $this->call('GET', '/api/V1/reservation-request/create', $arguments);
+
+        $response->assertOk();
+        $this->assertEquals(0, $response->json('hours'));
+    }
+
+    public function test_reservation_request_created_with_null_hours_successfully(): void
+    {
+        $this->acting();
+
+        $arguments = ReservationRequest::factory()::ARGUMENTS;
+        $arguments['hours'] = null;
+
+        $response = $this->call('GET', '/api/V1/reservation-request/create', $arguments);
+
+        $response->assertOk();
+        $this->assertNull($response->json('hours'));
+    }
+
+    public function test_reservation_request_dont_created_with_nonexistent_table_id(): void
+    {
+        $this->acting();
+
+        $arguments = ReservationRequest::factory()::ARGUMENTS;
+        $arguments['table_id'] = 99999;
+
+        $response = $this->call('GET', '/api/V1/reservation-request/create', $arguments);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_reservation_request_show_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('GET', '/api/V1/reservation-request/99999');
+
+        $response->assertNotFound();
+    }
+
+    public function test_reservation_request_update_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('PUT', '/api/V1/reservation-request/99999', ReservationRequest::factory()::UPDATED_ARGUMENTS);
+
+        $response->assertNotFound();
+    }
+
+    public function test_reservation_request_soft_delete_returns_404_for_nonexistent(): void
+    {
+        $this->acting();
+
+        $response = $this->call('DELETE', '/api/V1/reservation-request/99999');
+
+        $response->assertNotFound();
+    }
 }
