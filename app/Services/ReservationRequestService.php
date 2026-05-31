@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\ReservationRequest;
 use App\Models\Table;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -21,30 +20,38 @@ class ReservationRequestService
 
     public static function update(Request $request, ReservationRequest $reservationRequest): Response
     {
-        $reservationRequest->comment = $request->comment ?? null;
-        $reservationRequest->date = Carbon::parse($request->date);
-        $reservationRequest->hours = $request->hours ?? null;
-        $reservationRequest->status = $request->status ?? 0;
+        $validated = $request->validate([
+            'comment' => ['nullable', 'string'],
+            'date' => ['required', 'date'],
+            'hours' => ['nullable', 'integer', 'min:0', 'max:12'],
+            'status' => ['nullable', 'integer', 'min:0'],
+            'table_id' => ['nullable', 'exists:tables,id'],
+            'author' => ['nullable', 'exists:users,id'],
+            'users' => ['nullable', 'array'],
+            'users.*' => ['exists:users,id'],
+        ]);
+
+        $reservationRequest->comment = $validated['comment'] ?? null;
+        $reservationRequest->date = $validated['date'];
+        $reservationRequest->hours = $validated['hours'] ?? null;
+        $reservationRequest->status = $validated['status'] ?? 0;
 
         if (! $reservationRequest->author) {
-            if ($request->author) {
-                $author = User::find($request->author);
-                $reservationRequest->author()->associate($author);
+            if (! empty($validated['author'])) {
+                $reservationRequest->author()->associate(User::find($validated['author']));
             } else {
                 $reservationRequest->author()->associate($request->user());
             }
         }
 
-        if ($request->table_id) {
-            $table = Table::find($request->table_id);
-            $reservationRequest->table()->associate($table);
+        if (! empty($validated['table_id'])) {
+            $reservationRequest->table()->associate(Table::find($validated['table_id']));
         }
 
         $reservationRequest->save();
 
-        if ($request->users) {
-            $users = User::find($request->users);
-            $reservationRequest->users()->attach($users);
+        if (! empty($validated['users'])) {
+            $reservationRequest->users()->attach(User::find($validated['users']));
         }
 
         $reservationRequest->load('author', 'table', 'users');

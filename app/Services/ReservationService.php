@@ -22,9 +22,10 @@ class ReservationService
         $validated = $request->validate([
             'comment' => ['nullable', 'string'],
             'date' => ['required', 'date'],
-            'hours' => ['nullable', 'integer'],
+            'hours' => ['nullable', 'integer', 'min:0', 'max:12'],
             'table_id' => ['sometimes', 'nullable', 'exists:tables,id'],
-            'users' => ['sometimes', 'nullable', 'exists:users,id'],
+            'users' => ['sometimes', 'nullable', 'array'],
+            'users.*' => ['exists:users,id'],
         ]);
 
         $reservation->comment = $validated['comment'];
