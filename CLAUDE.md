@@ -57,17 +57,21 @@ This is a **Laravel 13 + Vue 3 + Inertia.js** application for club table reserva
 **Routes split:**
 - `routes/web.php` — Inertia pages (Welcome, Dashboard), includes `settings.php`
 - `routes/settings.php` — Profile, Security, API token, Appearance settings pages
-- `routes/api.php` — REST API protected by `auth:sanctum`
+- `routes/api.php` — REST API protected by `auth:sanctum`: full CRUD for Reservations, ReservationRequests, Tables, Invites, plus relationship management (attach/detach users, tables)
 
 **Domain model relationships:**
-- `User` ↔ `Reservation` (many-to-many), `User` ↔ `ReservationRequest` (many-to-many)
+- `User` ↔ `Reservation` (many-to-many via `reservation_user`), `User` ↔ `ReservationRequest` (many-to-many)
 - `Table` → `Reservation` (one-to-many), `Table` → `ReservationRequest` (one-to-many)
 - `ReservationRequest` has an `author` (User) and optional `table`; can have `invites`
 - `Invite` links an `author` User to a `target` User for a `Reservation`; has `accept()`/`revoke()` methods that manage the `reservation.users` pivot
 
-**Authentication:** Laravel Fortify handles registration, login, password reset, email verification, and 2FA (TOTP). Sanctum provides API token auth for the REST API.
+**Intended workflow:** `ReservationRequest` (pending, table optional, invites can be sent) → converts into `Reservation` (confirmed, table required). Two separate models reflect this proposal-then-confirmation flow.
+
+**Authentication:** Laravel Fortify handles registration, login, password reset, email verification, and 2FA (TOTP). Sanctum provides API token auth for the REST API. Both session-based (web) and token-based (API) auth are active simultaneously.
 
 **Inertia shared data** (via `HandleInertiaRequests`): `auth.user`, `name` (app name), `sidebarOpen`.
+
+**Flash toasts:** Controllers call `initializeFlashToast()` to pass toast messages to the frontend; the client reads them from the Inertia shared data on page transitions.
 
 ### Frontend (Vue 3 + TypeScript)
 
@@ -75,10 +79,20 @@ This is a **Laravel 13 + Vue 3 + Inertia.js** application for club table reserva
 
 **Structure:**
 - `resources/js/pages/` — Inertia page components (map 1:1 to routes)
-- `resources/js/components/ui/` — low-level UI primitives (built on Reka UI)
+- `resources/js/components/ui/` — low-level UI primitives (built on Reka UI), each with an `index.ts` barrel export
 - `resources/js/composables/` — `useAppearance`, `useCurrentUrl`, `useInitials`, `useTwoFactorAuth`
 - `resources/js/types/` — TypeScript types (`Auth`, `User`, `TwoFactorConfigContent`, navigation/UI types)
 
-**Routing:** Laravel Wayfinder (`@laravel/vite-plugin-wayfinder`) generates typed route helpers from PHP route definitions — use these instead of hardcoded strings.
+**Layout system:** Page components declare their layout via `defineOptions({ layout: ... })`:
+- Public/auth pages (`auth/*`) → `AuthLayout` (variants: Simple, Split, Card)
+- Settings pages → `[AppLayout, SettingsLayout]` (nested array)
+- All other authenticated pages → `AppLayout` → `AppSidebarLayout` or `AppHeaderLayout`
+- Welcome page uses no layout
 
-**UI components** are organized by component name under `resources/js/components/ui/`, each with an `index.ts` barrel export. The sidebar uses a cookie (`sidebar_state`) to persist open/closed state, synced with the server via `HandleInertiaRequests`.
+**Routing:** Laravel Wayfinder (`@laravel/vite-plugin-wayfinder`) auto-generates typed route helpers from PHP route definitions — use these instead of hardcoded strings. Re-runs on Vite dev server restart.
+
+**Composables:**
+- `useAppearance()` — theme management (light/dark/system), persists via cookie
+- `useInitials()` — derives avatar fallback text from user name
+- `useTwoFactorAuth()` — TOTP setup/teardown flow
+- `useCurrentUrl()` — tracks active page for nav highlighting
