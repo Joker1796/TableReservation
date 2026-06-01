@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\InviteController;
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\ReservationRequestController;
-use App\Http\Controllers\TableController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\API\InviteController;
+use App\Http\Controllers\API\ReservationController;
+use App\Http\Controllers\API\ReservationRequestController;
+use App\Http\Controllers\API\TableController;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

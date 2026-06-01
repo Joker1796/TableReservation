@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Enums\InviteStatus;
+use App\Http\Controllers\Controller;
 use App\Models\Invite;
 use App\Services\InviteService;
 use Illuminate\Http\Request;
