@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\PasswordUpdateRequest;
 use App\Http\Requests\Settings\TwoFactorAuthenticationRequest;
+use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -54,10 +55,8 @@ class SecurityController extends Controller implements HasMiddleware
 
     public function generateToken(Request $request): RedirectResponse
     {
-        $request->user()->tokens()->delete();
-        $newToken = $request->user()->createToken('api-token');
-
-        session()->flash('token', $newToken->plainTextToken);
+        $token = UserService::regenerateApiToken($request->user());
+        session()->flash('token', $token);
 
         return redirect()->route('api-token.edit');
     }

@@ -90,7 +90,7 @@ class ReservationRequestTest extends TestCase
             ->create();
 
         $arguments = ReservationRequest::factory()::ARGUMENTS;
-        $arguments['users'] = [$users->pluck('id')->toArray()];
+        $arguments['user_ids'] = $users->pluck('id')->toArray();
 
         $response = $this->call(
             'GET',

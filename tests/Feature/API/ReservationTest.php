@@ -41,7 +41,7 @@ class ReservationTest extends TestCase
             ->create();
 
         $arguments = Reservation::factory()::ARGUMENTS;
-        $arguments['users'] = $users->pluck('id')->toArray();
+        $arguments['user_ids'] = $users->pluck('id')->toArray();
 
         $response = $this->call(
             'GET',
@@ -245,7 +245,7 @@ class ReservationTest extends TestCase
         $users = User::factory()->count(3)->create();
 
         $arguments = Reservation::factory()::ARGUMENTS;
-        $arguments['users'] = $users->pluck('id')->toArray();
+        $arguments['user_ids'] = $users->pluck('id')->toArray();
 
         $response = $this->call('GET', '/api/V1/reservation/create', $arguments);
 

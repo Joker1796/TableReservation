@@ -84,5 +84,4 @@ class ApiTokenTest extends TestCase
         $this->post(route('api-token.generate'))
             ->assertRedirect(route('login'));
     }
-
 }

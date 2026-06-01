@@ -35,7 +35,7 @@ class ReservationRequestFactory extends Factory
             'comment' => fake()->text(),
             'date' => $this->faker->date(),
             'hours' => $this->faker->numberBetween(1, 12),
-            'status' => $this->faker->numberBetween(1, 4),
+            'status' => $this->faker->numberBetween(0, 2),
             'author_id' => User::factory(),
             'table_id' => Table::factory(),
         ];

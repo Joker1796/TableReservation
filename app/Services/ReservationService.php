@@ -3,47 +3,57 @@
 namespace App\Services;
 
 use App\Models\Reservation;
-use App\Models\Table;
+use App\Models\ReservationRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ReservationService
 {
-    public static function create(Request $request): Response
-    {
-        $reservation = new Reservation;
-
-        return self::update($request, $reservation);
-    }
-
-    public static function update(Request $request, Reservation $reservation): Response
+    private static function createOrUpdate(Request $request, Reservation $reservation, ?int $authorId = null): Reservation
     {
         $validated = $request->validate([
-            'comment' => ['nullable', 'string'],
             'date' => ['required', 'date'],
             'hours' => ['nullable', 'integer', 'min:0', 'max:12'],
+            'comment' => ['nullable', 'string'],
             'table_id' => ['sometimes', 'nullable', 'exists:tables,id'],
-            'users' => ['sometimes', 'nullable', 'array'],
-            'users.*' => ['exists:users,id'],
+            'user_ids' => ['sometimes', 'nullable', 'array'],
+            'user_ids.*' => ['exists:users,id'],
         ]);
 
-        $reservation->comment = $validated['comment'];
         $reservation->date = $validated['date'];
-        $reservation->hours = $validated['hours'];
+        $reservation->hours = $validated['hours'] ?? null;
+        $reservation->comment = $validated['comment'] ?? null;
 
-        if (! empty($validated['table_id'])) {
-            $table = Table::find($validated['table_id']);
-            $reservation->table()->associate($table);
+        if (array_key_exists('table_id', $validated)) {
+            $reservation->table_id = $validated['table_id'];
         }
 
         $reservation->save();
 
-        if (! empty($validated['users'])) {
-            $users = User::find($validated['users']);
-            $reservation->users()->attach($users);
+        $userIds = array_unique(array_merge(
+            $authorId !== null ? [$authorId] : [],
+            $validated['user_ids'] ?? [],
+        ));
+
+        if (! empty($userIds)) {
+            $reservation->users()->attach($userIds);
         }
 
+        return $reservation;
+    }
+
+    public static function create(Request $request): Response
+    {
+        $reservation = self::createOrUpdate($request, new Reservation);
+        $reservation->load('table', 'users');
+
+        return response($reservation, 200);
+    }
+
+    public static function update(Request $request, Reservation $reservation): Response
+    {
+        $reservation = self::createOrUpdate($request, $reservation);
         $reservation->load('table', 'users');
 
         return response($reservation, 200);
@@ -70,5 +80,22 @@ class ReservationService
         $reservation->load('users');
 
         return response($reservation, 200);
+    }
+
+    public static function createFromReservationRequest(ReservationRequest $rr): Reservation
+    {
+        $reservation = new Reservation;
+        $reservation->date = $rr->date;
+        $reservation->hours = $rr->hours;
+        $reservation->comment = $rr->comment;
+        $reservation->table_id = $rr->table_id;
+        $reservation->save();
+
+        return $reservation;
+    }
+
+    public static function createFromWeb(Request $request, int $authorId): void
+    {
+        self::createOrUpdate($request, new Reservation, $authorId);
     }
 }

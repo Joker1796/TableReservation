@@ -1,0 +1,84 @@
+<script setup lang="ts">
+import { Head, useForm } from '@inertiajs/vue3';
+import Heading from '@/components/Heading.vue';
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+
+defineOptions({
+    layout: {
+        breadcrumbs: [
+            { title: 'Столы', href: '/admin/tables' },
+            { title: 'Создать', href: '/admin/tables/create' },
+        ],
+    },
+});
+
+const form = useForm({
+    name: '',
+    description: '' as string | null,
+    status: 'not_ready' as 'ready' | 'not_ready',
+});
+
+function submit(): void {
+    form.post('/admin/tables');
+}
+</script>
+
+<template>
+    <Head title="Добавить стол" />
+
+    <div class="space-y-6 p-4">
+        <Heading variant="small" title="Новый стол" description="Добавьте стол в систему" />
+
+        <form class="max-w-lg space-y-5" @submit.prevent="submit">
+            <div class="grid gap-2">
+                <Label for="name">Название <span class="text-destructive">*</span></Label>
+                <Input id="name" v-model="form.name" placeholder="Стол №1" required maxlength="100" />
+                <InputError :message="form.errors.name" />
+            </div>
+
+            <div class="grid gap-2">
+                <Label for="status">Статус <span class="text-destructive">*</span></Label>
+                <Select
+                    :model-value="form.status"
+                    @update:model-value="(v) => form.status = v as 'ready' | 'not_ready'"
+                >
+                    <SelectTrigger id="status">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="ready">Готов</SelectItem>
+                        <SelectItem value="not_ready">Не готов</SelectItem>
+                    </SelectContent>
+                </Select>
+                <InputError :message="form.errors.status" />
+            </div>
+
+            <div class="grid gap-2">
+                <Label for="description">Описание</Label>
+                <textarea
+                    id="description"
+                    v-model="form.description"
+                    rows="3"
+                    placeholder="Описание стола, особенности..."
+                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+                <InputError :message="form.errors.description" />
+            </div>
+
+            <div class="flex items-center gap-3">
+                <Button type="submit" :disabled="form.processing">Создать стол</Button>
+                <Button variant="outline" type="button" as="a" href="/admin/tables">Отмена</Button>
+            </div>
+        </form>
+    </div>
+</template>

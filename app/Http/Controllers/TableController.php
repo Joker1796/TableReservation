@@ -40,13 +40,13 @@ class TableController extends Controller
         return TableService::deleteReservation($table, $reservation);
     }
 
-    public function addReservationRequest(Table $table, ReservationRequest $reservationRequest)
+    public function addReservationRequest(Table $table, ReservationRequest $rr)
     {
-        return TableService::addReservationRequest($table, $reservationRequest);
+        return TableService::addReservationRequest($table, $rr);
     }
 
-    public function deleteReservationRequest(Table $table, ReservationRequest $reservationRequest)
+    public function deleteReservationRequest(Table $table, ReservationRequest $rr)
     {
-        return TableService::deleteReservationRequest($table, $reservationRequest);
+        return TableService::deleteReservationRequest($table, $rr);
     }
 }

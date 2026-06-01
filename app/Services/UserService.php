@@ -40,4 +40,11 @@ class UserService
 
         return response($user, 200);
     }
+
+    public static function regenerateApiToken(User $user): string
+    {
+        $user->tokens()->delete();
+
+        return $user->createToken('api-token')->plainTextToken;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ReservationRequestStatus;
 use Database\Factories\ReservationRequestFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ class ReservationRequest extends Model
 
     protected $casts = [
         'date' => 'datetime',
+        'status' => ReservationRequestStatus::class,
     ];
 
     public function users(): BelongsToMany
