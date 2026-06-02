@@ -16,7 +16,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { dashboard } from '@/routes';
+import { dashboard, home } from '@/routes';
 import type { Invite, ReservationRequest, ReservationTable, ReservationUser } from '@/types/reservation';
 
 type Props = {
@@ -30,7 +30,7 @@ const props = defineProps<Props>();
 
 defineOptions({
     layout: {
-        breadcrumbs: [{ title: 'Dashboard', href: dashboard() }],
+        breadcrumbs: [{ title: 'Главная', href: home() }, { title: 'Dashboard', href: dashboard() }],
     },
 });
 

@@ -74,7 +74,7 @@ const passwordInput = useTemplateRef('passwordInput');
                                 id="password"
                                 name="password"
                                 ref="passwordInput"
-                                placeholder="Password"
+                                placeholder="Пароль"
                             />
                             <InputError :message="errors.password" />
                         </div>

@@ -136,7 +136,7 @@ onUnmounted(() => clearTwoFactorAuthData());
 
             <div>
                 <Button v-if="hasSetupData" @click="showSetupModal = true">
-                    <ShieldCheck />Continue setup
+                    <ShieldCheck />Продолжить настройку
                 </Button>
                 <Form
                     v-else
@@ -153,9 +153,8 @@ onUnmounted(() => clearTwoFactorAuthData());
 
         <div v-else class="flex flex-col items-start justify-start space-y-4">
             <p class="text-sm text-muted-foreground">
-                You will be prompted for a secure, random pin during login,
-                which you can retrieve from the TOTP-supported application on
-                your phone.
+                При входе вам будет предложено ввести случайный PIN-код,
+                который можно получить в TOTP-приложении на вашем телефоне.
             </p>
 
             <div class="relative inline">
@@ -165,7 +164,7 @@ onUnmounted(() => clearTwoFactorAuthData());
                         type="submit"
                         :disabled="processing"
                     >
-                        Disable 2FA
+                        Отключить 2FA
                     </Button>
                 </Form>
             </div>
