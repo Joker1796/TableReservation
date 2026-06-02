@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { dashboard, login, register } from '@/routes';
 import { index as reservationsIndex } from '@/routes/reservations';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
 
 withDefaults(
     defineProps<{

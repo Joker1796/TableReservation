@@ -19,8 +19,8 @@ import {
     SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { Auth } from '@/types/auth';
 import type { NavItem } from '@/types';
+import type { Auth } from '@/types/auth';
 
 const page = usePage<{ auth: Auth }>();
 const isAdmin = computed(() => page.props.auth?.user?.is_admin === true);

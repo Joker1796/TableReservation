@@ -22,7 +22,7 @@ type Props = {
     users: ReservationUser[];
 };
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 defineOptions({
     layout: {
@@ -43,7 +43,9 @@ const form = useForm({
 
 const userPickerOpen = ref(false);
 const userPickerRef = ref<HTMLElement | null>(null);
-onClickOutside(userPickerRef, () => { userPickerOpen.value = false; });
+onClickOutside(userPickerRef, () => {
+ userPickerOpen.value = false; 
+});
 
 const userSearch = ref('');
 

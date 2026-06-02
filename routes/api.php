@@ -8,14 +8,20 @@ use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])
+Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('reservation')
     ->name('reservation.')
     ->group(function () {
         Route::get('/create', [ReservationController::class, 'create']);
-        Route::get('/{reservation}', [ReservationController::class, 'show']);
         Route::put('/{reservation}', [ReservationController::class, 'update']);
         Route::delete('/{reservation}', [ReservationController::class, 'softDelete']);
+    });
+
+Route::middleware(['auth', 'verified'])
+    ->prefix('reservation')
+    ->name('reservation.')
+    ->group(function () {
+        Route::get('/{reservation}', [ReservationController::class, 'show']);
         Route::put('/{reservation}/user/{user}', [ReservationController::class, 'attachUser']);
         Route::delete('/{reservation}/user/{user}', [ReservationController::class, 'detachUser']);
     });

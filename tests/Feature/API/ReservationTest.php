@@ -14,9 +14,38 @@ class ReservationTest extends TestCase
 
     public function acting(): void
     {
-        $this->actingAs(User::factory()->create())
+        $this->actingAs(User::factory()->create(['is_admin' => true]))
             ->withSession(['banned' => false])
             ->get('/');
+    }
+
+    public function test_reservation_non_admin_is_forbidden_from_create(): void
+    {
+        $this->actingAs(User::factory()->create())->withSession(['banned' => false])->get('/');
+
+        $response = $this->call('GET', '/api/V1/reservation/create', Reservation::factory()::ARGUMENTS);
+
+        $response->assertForbidden();
+    }
+
+    public function test_reservation_non_admin_is_forbidden_from_update(): void
+    {
+        $reservation = Reservation::factory()->create();
+        $this->actingAs(User::factory()->create())->withSession(['banned' => false])->get('/');
+
+        $response = $this->call('PUT', '/api/V1/reservation/'.$reservation->id, Reservation::factory()::UPDATED_ARGUMENTS);
+
+        $response->assertForbidden();
+    }
+
+    public function test_reservation_non_admin_is_forbidden_from_delete(): void
+    {
+        $reservation = Reservation::factory()->create();
+        $this->actingAs(User::factory()->create())->withSession(['banned' => false])->get('/');
+
+        $response = $this->call('DELETE', '/api/V1/reservation/'.$reservation->id);
+
+        $response->assertForbidden();
     }
 
     public function test_reservation_created_successfully(): void
@@ -102,7 +131,7 @@ class ReservationTest extends TestCase
 
     public function test_reservation_showed_successfully(): void
     {
-        $this->acting();
+        $this->actingAs(User::factory()->create())->withSession(['banned' => false])->get('/');
 
         $reservation = Reservation::factory()->create();
 
@@ -135,9 +164,12 @@ class ReservationTest extends TestCase
 
     public function test_reservation_attach_user_successfully(): void
     {
-        $this->acting();
+        $participant = User::factory()->create();
+        $this->actingAs($participant)->withSession(['banned' => false])->get('/');
 
         $reservation = Reservation::factory()->create();
+        $reservation->users()->attach($participant->id);
+
         $user = User::factory()->create();
 
         $response = $this->call(
@@ -155,25 +187,48 @@ class ReservationTest extends TestCase
 
     public function test_reservation_detach_user_successfully(): void
     {
-        $this->acting();
+        $participant = User::factory()->create();
+        $this->actingAs($participant)->withSession(['banned' => false])->get('/');
 
-        $reservation = Reservation::factory()
-            ->has(User::factory())
-            ->create();
-
-        $userId = $reservation->users()->first()->id;
+        $other = User::factory()->create();
+        $reservation = Reservation::factory()->create();
+        $reservation->users()->attach([$participant->id, $other->id]);
 
         $response = $this->call(
             'DELETE',
-            '/api/V1/reservation/'.$reservation->id.'/user/'.$userId
+            '/api/V1/reservation/'.$reservation->id.'/user/'.$other->id
         );
 
         $response->assertOk();
 
         $this->assertDatabaseMissing('reservation_user', [
-            'user_id' => $userId,
+            'user_id' => $other->id,
             'reservation_id' => $reservation->id,
         ]);
+    }
+
+    public function test_reservation_non_participant_is_forbidden_from_attach_user(): void
+    {
+        $this->actingAs(User::factory()->create())->withSession(['banned' => false])->get('/');
+
+        $reservation = Reservation::factory()->create();
+        $user = User::factory()->create();
+
+        $response = $this->call('PUT', '/api/V1/reservation/'.$reservation->id.'/user/'.$user->id);
+
+        $response->assertForbidden();
+    }
+
+    public function test_reservation_non_participant_is_forbidden_from_detach_user(): void
+    {
+        $this->actingAs(User::factory()->create())->withSession(['banned' => false])->get('/');
+
+        $reservation = Reservation::factory()->has(User::factory())->create();
+        $userId = $reservation->users()->first()->id;
+
+        $response = $this->call('DELETE', '/api/V1/reservation/'.$reservation->id.'/user/'.$userId);
+
+        $response->assertForbidden();
     }
 
     public function test_reservation_dont_created_without_required_date(): void

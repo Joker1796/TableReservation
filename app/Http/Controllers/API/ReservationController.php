@@ -32,11 +32,15 @@ class ReservationController extends Controller
 
     public function attachUser(Reservation $reservation, User $user)
     {
+        abort_unless($reservation->users()->where('user_id', auth()->id())->exists(), 403);
+
         return ReservationService::attachUser($reservation, $user);
     }
 
     public function detachUser(Reservation $reservation, User $user)
     {
+        abort_unless($reservation->users()->where('user_id', auth()->id())->exists(), 403);
+
         return ReservationService::detachUser($reservation, $user);
     }
 }

@@ -52,7 +52,10 @@ function openInviteDialog(reservationId: number): void {
 }
 
 function sendInvite(): void {
-    if (!inviteReservationId.value) return;
+    if (!inviteReservationId.value) {
+return;
+}
+
     inviteForm.post(`/admin/reservations/${inviteReservationId.value}/invite`, {
         onSuccess: () => {
             inviteDialogOpen.value = false;

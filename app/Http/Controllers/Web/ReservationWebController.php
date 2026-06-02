@@ -18,10 +18,12 @@ class ReservationWebController extends Controller
     public function index(): Response
     {
         $reservations = Reservation::with(['table', 'users'])->latest()->get();
+        $users = User::orderBy('name')->get(['id', 'name', 'email']);
 
         return Inertia::render('reservations/Index', [
             'reservations' => $reservations,
             'authUserId' => auth()->id(),
+            'users' => $users,
         ]);
     }
 
@@ -55,7 +57,7 @@ class ReservationWebController extends Controller
 
     public function edit(int $id): Response
     {
-        $reservation = auth()->user()->reservations()->with('table')->findOrFail($id);
+        $reservation = Reservation::with('table')->findOrFail($id);
         $tables = Table::where('status', TableStatus::READY)
             ->orWhere('id', $reservation->table_id)
             ->get();
@@ -68,7 +70,7 @@ class ReservationWebController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
-        $reservation = auth()->user()->reservations()->findOrFail($id);
+        $reservation = Reservation::findOrFail($id);
         ReservationService::update($request, $reservation);
 
         return redirect()->route('reservations.show', $id);
@@ -76,9 +78,27 @@ class ReservationWebController extends Controller
 
     public function destroy(int $id): RedirectResponse
     {
-        $reservation = auth()->user()->reservations()->findOrFail($id);
+        $reservation = Reservation::findOrFail($id);
         ReservationService::softDelete($reservation);
 
         return redirect()->route('reservations.index');
+    }
+
+    public function attachUser(int $id, int $userId): RedirectResponse
+    {
+        $reservation = Reservation::findOrFail($id);
+        abort_unless($reservation->users()->where('user_id', auth()->id())->exists(), 403);
+        $reservation->users()->syncWithoutDetaching([$userId]);
+
+        return back();
+    }
+
+    public function detachUser(int $id, int $userId): RedirectResponse
+    {
+        $reservation = Reservation::findOrFail($id);
+        abort_unless($reservation->users()->where('user_id', auth()->id())->exists(), 403);
+        $reservation->users()->detach($userId);
+
+        return back();
     }
 }

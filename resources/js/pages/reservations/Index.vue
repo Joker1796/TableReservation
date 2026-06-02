@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { CalendarDays, Clock, Plus, Table2, Users } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { CalendarDays, Clock, Plus, Table2, UserPlus, Users, X } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Auth } from '@/types/auth';
-import type { Reservation } from '@/types/reservation';
+import type { Reservation, ReservationUser } from '@/types/reservation';
 
 type Props = {
     reservations: Reservation[];
     authUserId: number;
+    users: ReservationUser[];
 };
 
 const props = defineProps<Props>();
@@ -25,6 +26,9 @@ defineOptions({
         ],
     },
 });
+
+const addOpen = ref<Record<number, boolean>>({});
+const selectedUserId = ref<Record<number, string>>({});
 
 function formatDate(date: string): string {
     return new Date(date).toLocaleDateString('ru-RU', {
@@ -42,9 +46,34 @@ function isMine(reservation: Reservation): boolean {
     return reservation.users.some((u) => u.id === props.authUserId);
 }
 
+function availableUsers(reservation: Reservation): ReservationUser[] {
+    const ids = new Set(reservation.users.map((u) => u.id));
+
+    return props.users.filter((u) => !ids.has(u.id));
+}
+
+function addParticipant(reservation: Reservation): void {
+    const userId = selectedUserId.value[reservation.id];
+
+    if (!userId) {
+        return;
+    }
+
+    useForm({}).put(`/reservations/${reservation.id}/user/${userId}`, {
+        onSuccess: () => {
+            selectedUserId.value[reservation.id] = '';
+            addOpen.value[reservation.id] = false;
+        },
+    });
+}
+
+function removeParticipant(reservationId: number, userId: number): void {
+    useForm({}).delete(`/reservations/${reservationId}/user/${userId}`);
+}
+
 function deleteReservation(id: number): void {
     if (confirm('Удалить резервирование?')) {
-        router.delete(`/reservations/${id}`);
+        useForm({}).delete(`/reservations/${id}`);
     }
 }
 </script>
@@ -109,16 +138,30 @@ function deleteReservation(id: number): void {
                         {{ reservation.comment }}
                     </p>
 
-                    <div v-if="reservation.users.length > 0" class="pt-1">
-                        <p class="mb-2 flex items-center gap-1 text-xs text-muted-foreground">
-                            <Users class="h-3.5 w-3.5" />
-                            Участники ({{ reservation.users.length }})
-                        </p>
+                    <!-- Participants -->
+                    <div class="pt-1">
+                        <div class="mb-2 flex items-center justify-between">
+                            <p class="flex items-center gap-1 text-xs text-muted-foreground">
+                                <Users class="h-3.5 w-3.5" />
+                                Участники ({{ reservation.users.length }})
+                            </p>
+                            <button
+                                v-if="isMine(reservation) && availableUsers(reservation).length > 0"
+                                type="button"
+                                class="flex items-center gap-1 rounded text-xs text-muted-foreground hover:text-foreground"
+                                @click="addOpen[reservation.id] = !addOpen[reservation.id]"
+                            >
+                                <UserPlus class="h-3.5 w-3.5" />
+                                Добавить
+                            </button>
+                        </div>
+
                         <div class="flex flex-wrap gap-1.5">
                             <div
                                 v-for="user in reservation.users"
                                 :key="user.id"
-                                class="flex items-center gap-1.5 rounded-full border bg-muted/50 py-0.5 pl-0.5 pr-2.5 text-xs"
+                                class="flex items-center gap-1 rounded-full border bg-muted/50 py-0.5 pl-0.5 text-xs"
+                                :class="isMine(reservation) ? 'pr-1' : 'pr-2.5'"
                                 :title="user.email"
                             >
                                 <div
@@ -127,8 +170,42 @@ function deleteReservation(id: number): void {
                                 >
                                     {{ getInitial(user.name) }}
                                 </div>
-                                <span class="max-w-[100px] truncate font-medium">{{ user.name }}</span>
+                                <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
+                                <button
+                                    v-if="isMine(reservation)"
+                                    type="button"
+                                    class="ml-0.5 rounded-full p-0.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                                    :title="`Убрать ${user.name}`"
+                                    @click="removeParticipant(reservation.id, user.id)"
+                                >
+                                    <X class="h-3 w-3" />
+                                </button>
                             </div>
+                        </div>
+
+                        <!-- Add participant form -->
+                        <div v-if="isMine(reservation) && addOpen[reservation.id]" class="mt-2 flex gap-1.5">
+                            <select
+                                v-model="selectedUserId[reservation.id]"
+                                class="flex-1 rounded-md border border-input bg-background px-2 py-1 text-xs ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
+                            >
+                                <option value="" disabled selected>Выбрать участника</option>
+                                <option
+                                    v-for="user in availableUsers(reservation)"
+                                    :key="user.id"
+                                    :value="String(user.id)"
+                                >
+                                    {{ user.name }}
+                                </option>
+                            </select>
+                            <Button
+                                size="sm"
+                                class="h-7 px-2 text-xs"
+                                :disabled="!selectedUserId[reservation.id]"
+                                @click="addParticipant(reservation)"
+                            >
+                                Добавить
+                            </Button>
                         </div>
                     </div>
 
@@ -136,7 +213,7 @@ function deleteReservation(id: number): void {
                         <Button variant="outline" size="sm" as-child class="flex-1">
                             <Link :href="`/reservations/${reservation.id}`">Подробнее</Link>
                         </Button>
-                        <template v-if="isMine(reservation)">
+                        <template v-if="isAdmin">
                             <Button variant="outline" size="sm" as-child>
                                 <Link :href="`/reservations/${reservation.id}/edit`">Изменить</Link>
                             </Button>

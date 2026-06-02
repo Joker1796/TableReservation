@@ -26,7 +26,7 @@ type Props = {
     users: ReservationUser[];
 };
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 defineOptions({
     layout: {
@@ -44,7 +44,9 @@ const statusVariant: Record<number, 'default' | 'secondary' | 'destructive' | 'o
 const showForm = ref(false);
 const userPickerOpen = ref(false);
 const userPickerRef = ref<HTMLElement | null>(null);
-onClickOutside(userPickerRef, () => { userPickerOpen.value = false; });
+onClickOutside(userPickerRef, () => {
+ userPickerOpen.value = false; 
+});
 
 const form = useForm({
     date: '',

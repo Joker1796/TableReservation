@@ -19,12 +19,12 @@ class ReservationWebTest extends TestCase
         return $user;
     }
 
-    private function ownReservation(User $user): Reservation
+    private function actingAsAdmin(): User
     {
-        $reservation = Reservation::factory()->create();
-        $reservation->users()->attach($user->id);
+        $admin = User::factory()->create(['is_admin' => true]);
+        $this->actingAs($admin);
 
-        return $reservation;
+        return $admin;
     }
 
     // --- guest redirects ---
@@ -75,19 +75,74 @@ class ReservationWebTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
-    // --- index / create / show ---
+    public function test_guests_are_redirected_from_attach_user(): void
+    {
+        $reservation = Reservation::factory()->create();
+        $user = User::factory()->create();
+        $this->put(route('reservations.user.attach', [$reservation->id, $user->id]))
+            ->assertRedirect(route('login'));
+    }
+
+    public function test_guests_are_redirected_from_detach_user(): void
+    {
+        $reservation = Reservation::factory()->has(User::factory())->create();
+        $userId = $reservation->users()->first()->id;
+        $this->delete(route('reservations.user.detach', [$reservation->id, $userId]))
+            ->assertRedirect(route('login'));
+    }
+
+    // --- non-participant forbidden ---
+
+    public function test_non_participant_is_forbidden_from_attach_user(): void
+    {
+        $user = $this->actingAsUser();
+        $reservation = Reservation::factory()->create();
+        $other = User::factory()->create();
+
+        $this->put(route('reservations.user.attach', [$reservation->id, $other->id]))
+            ->assertForbidden();
+
+        $this->assertDatabaseMissing('reservation_user', [
+            'reservation_id' => $reservation->id,
+            'user_id' => $other->id,
+        ]);
+    }
+
+    public function test_non_participant_is_forbidden_from_detach_user(): void
+    {
+        $this->actingAsUser();
+        $reservation = Reservation::factory()->has(User::factory())->create();
+        $userId = $reservation->users()->first()->id;
+
+        $this->delete(route('reservations.user.detach', [$reservation->id, $userId]))
+            ->assertForbidden();
+
+        $this->assertDatabaseHas('reservation_user', [
+            'reservation_id' => $reservation->id,
+            'user_id' => $userId,
+        ]);
+    }
+
+    // --- non-admin forbidden ---
+
+    public function test_non_admin_is_forbidden_from_create(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $this->get(route('reservations.create'))->assertForbidden();
+    }
+
+    public function test_non_admin_is_forbidden_from_store(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $this->post(route('reservations.store'), Reservation::factory()::ARGUMENTS)->assertForbidden();
+    }
+
+    // --- admin happy path ---
 
     public function test_user_can_view_reservations_index(): void
     {
         $this->actingAsUser();
         $this->get(route('reservations.index'))
-            ->assertOk();
-    }
-
-    public function test_user_can_view_create_form(): void
-    {
-        $this->actingAsUser();
-        $this->get(route('reservations.create'))
             ->assertOk();
     }
 
@@ -100,11 +155,16 @@ class ReservationWebTest extends TestCase
             ->assertOk();
     }
 
-    // --- store ---
-
-    public function test_user_can_create_reservation(): void
+    public function test_admin_can_view_create_form(): void
     {
-        $this->actingAsUser();
+        $this->actingAsAdmin();
+        $this->get(route('reservations.create'))
+            ->assertOk();
+    }
+
+    public function test_admin_can_create_reservation(): void
+    {
+        $this->actingAsAdmin();
 
         $this->post(route('reservations.store'), Reservation::factory()::ARGUMENTS)
             ->assertRedirect(route('reservations.index'));
@@ -114,7 +174,7 @@ class ReservationWebTest extends TestCase
 
     public function test_reservation_not_created_without_date(): void
     {
-        $this->actingAsUser();
+        $this->actingAsAdmin();
 
         $data = Reservation::factory()::ARGUMENTS;
         unset($data['date']);
@@ -123,30 +183,19 @@ class ReservationWebTest extends TestCase
             ->assertSessionHasErrors(['date']);
     }
 
-    // --- edit / update ---
-
-    public function test_user_can_view_edit_form_for_own_reservation(): void
+    public function test_admin_can_view_edit_form(): void
     {
-        $user = $this->actingAsUser();
-        $reservation = $this->ownReservation($user);
+        $this->actingAsAdmin();
+        $reservation = Reservation::factory()->create();
 
         $this->get(route('reservations.edit', $reservation->id))
             ->assertOk();
     }
 
-    public function test_user_cannot_view_edit_form_for_others_reservation(): void
+    public function test_admin_can_update_reservation(): void
     {
-        $this->actingAsUser();
+        $this->actingAsAdmin();
         $reservation = Reservation::factory()->create();
-
-        $this->get(route('reservations.edit', $reservation->id))
-            ->assertNotFound();
-    }
-
-    public function test_user_can_update_own_reservation(): void
-    {
-        $user = $this->actingAsUser();
-        $reservation = $this->ownReservation($user);
 
         $this->put(route('reservations.update', $reservation->id), Reservation::factory()::UPDATED_ARGUMENTS)
             ->assertRedirect(route('reservations.show', $reservation->id));
@@ -157,21 +206,10 @@ class ReservationWebTest extends TestCase
         ]);
     }
 
-    public function test_user_cannot_update_others_reservation(): void
+    public function test_admin_can_delete_reservation(): void
     {
-        $this->actingAsUser();
+        $this->actingAsAdmin();
         $reservation = Reservation::factory()->create();
-
-        $this->put(route('reservations.update', $reservation->id), Reservation::factory()::UPDATED_ARGUMENTS)
-            ->assertNotFound();
-    }
-
-    // --- destroy ---
-
-    public function test_user_can_delete_own_reservation(): void
-    {
-        $user = $this->actingAsUser();
-        $reservation = $this->ownReservation($user);
 
         $this->delete(route('reservations.destroy', $reservation->id))
             ->assertRedirect(route('reservations.index'));
@@ -179,12 +217,53 @@ class ReservationWebTest extends TestCase
         $this->assertSoftDeleted('reservations', ['id' => $reservation->id]);
     }
 
-    public function test_user_cannot_delete_others_reservation(): void
-    {
-        $this->actingAsUser();
-        $reservation = Reservation::factory()->create();
+    // --- participant user management ---
 
-        $this->delete(route('reservations.destroy', $reservation->id))
-            ->assertNotFound();
+    public function test_participant_can_attach_user(): void
+    {
+        $participant = $this->actingAsUser();
+        $reservation = Reservation::factory()->create();
+        $reservation->users()->attach($participant->id);
+        $other = User::factory()->create();
+
+        $this->put(route('reservations.user.attach', [$reservation->id, $other->id]))
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('reservation_user', [
+            'reservation_id' => $reservation->id,
+            'user_id' => $other->id,
+        ]);
+    }
+
+    public function test_participant_can_detach_user(): void
+    {
+        $participant = $this->actingAsUser();
+        $other = User::factory()->create();
+
+        $reservation = Reservation::factory()->create();
+        $reservation->users()->attach([$participant->id, $other->id]);
+
+        $this->delete(route('reservations.user.detach', [$reservation->id, $other->id]))
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('reservation_user', [
+            'reservation_id' => $reservation->id,
+            'user_id' => $other->id,
+        ]);
+    }
+
+    public function test_participant_can_detach_themselves(): void
+    {
+        $participant = $this->actingAsUser();
+        $reservation = Reservation::factory()->create();
+        $reservation->users()->attach($participant->id);
+
+        $this->delete(route('reservations.user.detach', [$reservation->id, $participant->id]))
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('reservation_user', [
+            'reservation_id' => $reservation->id,
+            'user_id' => $participant->id,
+        ]);
     }
 }
