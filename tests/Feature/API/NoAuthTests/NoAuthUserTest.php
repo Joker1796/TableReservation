@@ -2,8 +2,8 @@
 
 namespace Feature\API\NoAuthTests;
 
+use App\Models\BookingRequest;
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -51,42 +51,42 @@ class NoAuthUserTest extends TestCase
         ]);
     }
 
-    public function test_user_dont_attach_reservation_request_without_auth(): void
+    public function test_user_dont_attach_booking_request_without_auth(): void
     {
         $user = User::factory()->create();
-        $reservationRequest = ReservationRequest::factory()->create();
+        $bookingRequest = BookingRequest::factory()->create();
 
         $response = $this->call(
             'PUT',
-            '/api/V1/user/'.$user->id.'/reservation-request/'.$reservationRequest->id
+            '/api/V1/user/'.$user->id.'/booking-request/'.$bookingRequest->id
         );
 
         $response->assertStatus(302);
 
-        $this->assertDatabaseMissing('reservation_request_user', [
+        $this->assertDatabaseMissing('booking_request_user', [
             'user_id' => $user->id,
-            'reservation_request_id' => $reservationRequest->id,
+            'booking_request_id' => $bookingRequest->id,
         ]);
     }
 
-    public function test_user_dont_detach_reservation_request_without_auth(): void
+    public function test_user_dont_detach_booking_request_without_auth(): void
     {
         $user = User::factory()
-            ->has(ReservationRequest::factory())
+            ->has(BookingRequest::factory())
             ->create();
 
-        $reservationRequestId = $user->reservationRequests()->first()->id;
+        $bookingRequestId = $user->bookingRequests()->first()->id;
 
         $response = $this->call(
             'DELETE',
-            '/api/V1/user/'.$user->id.'/reservation-request/'.$reservationRequestId
+            '/api/V1/user/'.$user->id.'/booking-request/'.$bookingRequestId
         );
 
         $response->assertStatus(302);
 
-        $this->assertDatabaseHas('reservation_request_user', [
+        $this->assertDatabaseHas('booking_request_user', [
             'user_id' => $user->id,
-            'reservation_request_id' => $reservationRequestId,
+            'booking_request_id' => $bookingRequestId,
         ]);
     }
 

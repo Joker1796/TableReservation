@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\BookingRequest;
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\User;
 use App\Services\UserService;
 
@@ -19,13 +19,13 @@ class UserController
         return UserService::detachReservation($user, $reservation);
     }
 
-    public function attachReservationRequest(User $user, ReservationRequest $reservationRequest)
+    public function attachBookingRequest(User $user, BookingRequest $bookingRequest)
     {
-        return UserService::attachReservationRequest($user, $reservationRequest);
+        return UserService::attachBookingRequest($user, $bookingRequest);
     }
 
-    public function detachReservationRequest(User $user, ReservationRequest $reservationRequest)
+    public function detachBookingRequest(User $user, BookingRequest $bookingRequest)
     {
-        return UserService::detachReservationRequest($user, $reservationRequest);
+        return UserService::detachBookingRequest($user, $bookingRequest);
     }
 }

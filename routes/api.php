@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\BookingRequestController;
 use App\Http\Controllers\API\InviteController;
 use App\Http\Controllers\API\ReservationController;
-use App\Http\Controllers\API\ReservationRequestController;
 use App\Http\Controllers\API\TableController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
@@ -21,17 +21,17 @@ Route::middleware(['auth', 'verified'])
     });
 
 Route::middleware(['auth', 'verified'])
-    ->prefix('reservation-request')
-    ->name('reservation-request.')
+    ->prefix('booking-request')
+    ->name('booking-request.')
     ->group(function () {
-        Route::get('/create', [ReservationRequestController::class, 'create']);
-        Route::get('/{reservationRequest}', [ReservationRequestController::class, 'show']);
-        Route::put('/{reservationRequest}', [ReservationRequestController::class, 'update']);
-        Route::delete('/{reservationRequest}', [ReservationRequestController::class, 'softDelete']);
-        Route::put('/{reservationRequest}/user/{user}', [ReservationRequestController::class, 'attachUser']);
-        Route::delete('/{reservationRequest}/user/{user}', [ReservationRequestController::class, 'detachUser']);
-        Route::put('/{reservationRequest}/table/{table}', [ReservationRequestController::class, 'associateTable']);
-        Route::delete('/{reservationRequest}/table', [ReservationRequestController::class, 'deleteTable']);
+        Route::get('/create', [BookingRequestController::class, 'create']);
+        Route::get('/{bookingRequest}', [BookingRequestController::class, 'show']);
+        Route::put('/{bookingRequest}', [BookingRequestController::class, 'update']);
+        Route::delete('/{bookingRequest}', [BookingRequestController::class, 'softDelete']);
+        Route::put('/{bookingRequest}/user/{user}', [BookingRequestController::class, 'attachUser']);
+        Route::delete('/{bookingRequest}/user/{user}', [BookingRequestController::class, 'detachUser']);
+        Route::put('/{bookingRequest}/table/{table}', [BookingRequestController::class, 'associateTable']);
+        Route::delete('/{bookingRequest}/table', [BookingRequestController::class, 'deleteTable']);
     });
 
 Route::middleware('auth:sanctum')
@@ -44,8 +44,8 @@ Route::middleware('auth:sanctum')
         Route::delete('/{table}', [TableController::class, 'softDelete']);
         Route::put('/{table}/reservation/{reservation}', [TableController::class, 'addReservation']);
         Route::delete('/{table}/reservation/{reservation}', [TableController::class, 'deleteReservation']);
-        Route::put('/{table}/reservation-request/{rr}', [TableController::class, 'addReservationRequest']);
-        Route::delete('/{table}/reservation-request/{rr}', [TableController::class, 'deleteReservationRequest']);
+        Route::put('/{table}/booking-request/{br}', [TableController::class, 'addBookingRequest']);
+        Route::delete('/{table}/booking-request/{br}', [TableController::class, 'deleteBookingRequest']);
     });
 
 Route::middleware('auth:sanctum')
@@ -55,8 +55,8 @@ Route::middleware('auth:sanctum')
         Route::get('/', fn (Request $request) => $request->user());
         Route::put('/{user}/reservation/{reservation}', [UserController::class, 'attachReservation']);
         Route::delete('/{user}/reservation/{reservation}', [UserController::class, 'detachReservation']);
-        Route::put('/{user}/reservation-request/{reservationRequest}', [UserController::class, 'attachReservationRequest']);
-        Route::delete('/{user}/reservation-request/{reservationRequest}', [UserController::class, 'detachReservationRequest']);
+        Route::put('/{user}/booking-request/{bookingRequest}', [UserController::class, 'attachBookingRequest']);
+        Route::delete('/{user}/booking-request/{bookingRequest}', [UserController::class, 'detachBookingRequest']);
     });
 
 Route::middleware('auth:sanctum')

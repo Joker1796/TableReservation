@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Enums\ReservationRequestStatus;
+use App\Enums\BookingRequestStatus;
+use App\Models\BookingRequest;
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AdminReservationRequestTest extends TestCase
+class AdminBookingRequestTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -32,9 +32,9 @@ class AdminReservationRequestTest extends TestCase
 
     public function test_guests_are_redirected_from_update_status(): void
     {
-        $rr = ReservationRequest::factory()->create();
-        $this->put(route('admin.requests.updateStatus', $rr->id), [
-            'status' => ReservationRequestStatus::REJECTED->value,
+        $br = BookingRequest::factory()->create();
+        $this->put(route('admin.requests.updateStatus', $br->id), [
+            'status' => BookingRequestStatus::REJECTED->value,
         ])
             ->assertRedirect(route('login'));
     }
@@ -50,10 +50,10 @@ class AdminReservationRequestTest extends TestCase
 
     public function test_non_admin_is_forbidden_from_update_status(): void
     {
-        $rr = ReservationRequest::factory()->create();
+        $br = BookingRequest::factory()->create();
         $this->actingAs(User::factory()->create());
-        $this->put(route('admin.requests.updateStatus', $rr->id), [
-            'status' => ReservationRequestStatus::REJECTED->value,
+        $this->put(route('admin.requests.updateStatus', $br->id), [
+            'status' => BookingRequestStatus::REJECTED->value,
         ])
             ->assertForbidden();
     }
@@ -70,16 +70,16 @@ class AdminReservationRequestTest extends TestCase
     public function test_admin_can_reject_request(): void
     {
         $this->admin();
-        $rr = ReservationRequest::factory()->create();
+        $br = BookingRequest::factory()->create();
 
-        $this->put(route('admin.requests.updateStatus', $rr->id), [
-            'status' => ReservationRequestStatus::REJECTED->value,
+        $this->put(route('admin.requests.updateStatus', $br->id), [
+            'status' => BookingRequestStatus::REJECTED->value,
         ])
             ->assertRedirect(route('admin.requests.index'));
 
-        $this->assertDatabaseHas('reservation_requests', [
-            'id' => $rr->id,
-            'status' => ReservationRequestStatus::REJECTED->value,
+        $this->assertDatabaseHas('booking_requests', [
+            'id' => $br->id,
+            'status' => BookingRequestStatus::REJECTED->value,
         ]);
     }
 
@@ -87,20 +87,20 @@ class AdminReservationRequestTest extends TestCase
     {
         $admin = $this->admin();
         $author = User::factory()->create();
-        $rr = ReservationRequest::factory()->create(['author_id' => $author->id]);
+        $br = BookingRequest::factory()->create(['author_id' => $author->id]);
 
-        $this->put(route('admin.requests.updateStatus', $rr->id), [
-            'status' => ReservationRequestStatus::APPROVED->value,
+        $this->put(route('admin.requests.updateStatus', $br->id), [
+            'status' => BookingRequestStatus::APPROVED->value,
         ])
             ->assertRedirect(route('admin.requests.index'));
 
-        $this->assertDatabaseHas('reservation_requests', [
-            'id' => $rr->id,
-            'status' => ReservationRequestStatus::APPROVED->value,
+        $this->assertDatabaseHas('booking_requests', [
+            'id' => $br->id,
+            'status' => BookingRequestStatus::APPROVED->value,
         ]);
 
         $this->assertDatabaseHas('reservations', [
-            'date' => $rr->date,
+            'date' => $br->date,
         ]);
     }
 
@@ -108,10 +108,10 @@ class AdminReservationRequestTest extends TestCase
     {
         $admin = $this->admin();
         $author = User::factory()->create();
-        $rr = ReservationRequest::factory()->create(['author_id' => $author->id]);
+        $br = BookingRequest::factory()->create(['author_id' => $author->id]);
 
-        $this->put(route('admin.requests.updateStatus', $rr->id), [
-            'status' => ReservationRequestStatus::APPROVED->value,
+        $this->put(route('admin.requests.updateStatus', $br->id), [
+            'status' => BookingRequestStatus::APPROVED->value,
         ]);
 
         $reservation = Reservation::latest()->first();
@@ -124,16 +124,16 @@ class AdminReservationRequestTest extends TestCase
     public function test_admin_can_assign_table_to_request(): void
     {
         $this->admin();
-        $rr = ReservationRequest::factory()->create(['table_id' => null]);
+        $br = BookingRequest::factory()->create(['table_id' => null]);
         $table = Table::factory()->create();
 
-        $this->put(route('admin.requests.assignTable', $rr->id), [
+        $this->put(route('admin.requests.assignTable', $br->id), [
             'table_id' => $table->id,
         ])
             ->assertRedirect(route('admin.requests.index'));
 
-        $this->assertDatabaseHas('reservation_requests', [
-            'id' => $rr->id,
+        $this->assertDatabaseHas('booking_requests', [
+            'id' => $br->id,
             'table_id' => $table->id,
         ]);
     }
@@ -141,11 +141,11 @@ class AdminReservationRequestTest extends TestCase
     public function test_admin_can_delete_request(): void
     {
         $this->admin();
-        $rr = ReservationRequest::factory()->create();
+        $br = BookingRequest::factory()->create();
 
-        $this->delete(route('admin.requests.destroy', $rr->id))
+        $this->delete(route('admin.requests.destroy', $br->id))
             ->assertRedirect(route('admin.requests.index'));
 
-        $this->assertSoftDeleted('reservation_requests', ['id' => $rr->id]);
+        $this->assertSoftDeleted('booking_requests', ['id' => $br->id]);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Feature\API;
 
+use App\Models\BookingRequest;
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -164,41 +164,41 @@ class TableTest extends TestCase
         $this->assertEmpty($table->fresh()->reservations->where('id', $reservationId));
     }
 
-    public function test_table_add_reservation_request_successfully(): void
+    public function test_table_add_booking_request_successfully(): void
     {
         $this->acting();
 
         $table = Table::factory()->create();
-        $reservationRequest = ReservationRequest::factory()->create();
+        $bookingRequest = BookingRequest::factory()->create();
 
         $response = $this->call(
             'PUT',
-            '/api/V1/table/'.$table->id.'/reservation-request/'.$reservationRequest->id
+            '/api/V1/table/'.$table->id.'/booking-request/'.$bookingRequest->id
         );
 
         $response->assertOk();
 
-        $this->assertNotEmpty($table->fresh()->reservationRequests->where('id', $reservationRequest->id));
+        $this->assertNotEmpty($table->fresh()->bookingRequests->where('id', $bookingRequest->id));
     }
 
-    public function test_table_delete_reservation_request_successfully(): void
+    public function test_table_delete_booking_request_successfully(): void
     {
         $this->acting();
 
         $table = Table::factory()
-            ->has(ReservationRequest::factory()->count(3))
+            ->has(BookingRequest::factory()->count(3))
             ->create();
 
-        $reservationRequestId = $table->reservationRequests()->first()->id;
+        $bookingRequestId = $table->bookingRequests()->first()->id;
 
         $response = $this->call(
             'DELETE',
-            '/api/V1/table/'.$table->id.'/reservation-request/'.$reservationRequestId
+            '/api/V1/table/'.$table->id.'/booking-request/'.$bookingRequestId
         );
 
         $response->assertOk();
 
-        $this->assertEmpty($table->fresh()->reservationRequests->where('id', $reservationRequestId));
+        $this->assertEmpty($table->fresh()->bookingRequests->where('id', $bookingRequestId));
     }
 
     public function test_table_dont_created_without_required_name(): void

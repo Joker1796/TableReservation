@@ -17,11 +17,11 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { dashboard, home } from '@/routes';
-import type { Invite, ReservationRequest, ReservationTable, ReservationUser } from '@/types/reservation';
+import type { BookingRequest, Invite, ReservationTable, ReservationUser } from '@/types/reservation';
 
 type Props = {
     tables: ReservationTable[];
-    myRequests: ReservationRequest[];
+    myRequests: BookingRequest[];
     pendingInvites: Invite[];
     users: ReservationUser[];
 };
@@ -63,7 +63,7 @@ function toggleUser(id: number): void {
 }
 
 function submit(): void {
-    form.post('/reservation-requests', {
+    form.post('/booking-requests', {
         onSuccess: () => {
             showForm.value = false;
             form.reset();

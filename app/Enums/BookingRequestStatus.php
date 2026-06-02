@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum ReservationRequestStatus: int
+enum BookingRequestStatus: int
 {
     case PENDING = 0;
     case APPROVED = 1;

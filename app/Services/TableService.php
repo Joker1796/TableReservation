@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Enums\TableStatus;
+use App\Models\BookingRequest;
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\Table;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -59,18 +59,18 @@ class TableService
         return response($table, 200);
     }
 
-    public static function addReservationRequest(Table $table, ReservationRequest $reservationRequest): Response
+    public static function addBookingRequest(Table $table, BookingRequest $bookingRequest): Response
     {
-        $table->reservationRequests()->save($reservationRequest);
-        $table->load('reservationRequests');
+        $table->bookingRequests()->save($bookingRequest);
+        $table->load('bookingRequests');
 
         return response($table, 200);
     }
 
-    public static function deleteReservationRequest(Table $table, ReservationRequest $reservationRequest): Response
+    public static function deleteBookingRequest(Table $table, BookingRequest $bookingRequest): Response
     {
-        $table->reservationRequests()->where('id', $reservationRequest->id)->delete();
-        $table->load('reservationRequests');
+        $table->bookingRequests()->where('id', $bookingRequest->id)->delete();
+        $table->load('bookingRequests');
 
         return response($table, 200);
     }

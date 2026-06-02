@@ -23,7 +23,7 @@ export type Reservation = {
     updated_at: string;
 };
 
-export type ReservationRequestStatus = 'pending' | 'approved' | 'rejected';
+export type BookingRequestStatus = 'pending' | 'approved' | 'rejected';
 
 export type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
 
@@ -39,7 +39,7 @@ export type Invite = {
     created_at: string;
 };
 
-export type ReservationRequest = {
+export type BookingRequest = {
     id: number;
     author_id: number;
     author: ReservationUser | null;

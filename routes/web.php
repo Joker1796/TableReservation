@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Web\BookingRequestWebController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\InviteWebController;
-use App\Http\Controllers\Web\ReservationRequestWebController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -13,8 +13,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    Route::post('reservation-requests', [ReservationRequestWebController::class, 'store'])
-        ->name('reservation-requests.store');
+    Route::post('booking-requests', [BookingRequestWebController::class, 'store'])
+        ->name('booking-requests.store');
     Route::put('invites/{id}/accept', [InviteWebController::class, 'accept'])
         ->name('invites.accept');
     Route::put('invites/{id}/reject', [InviteWebController::class, 'reject'])

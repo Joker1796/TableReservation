@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\BookingRequest;
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\User;
 use Illuminate\Http\Response;
 
@@ -25,18 +25,18 @@ class UserService
         return response($user, 200);
     }
 
-    public static function attachReservationRequest(User $user, ReservationRequest $reservationRequest): Response
+    public static function attachBookingRequest(User $user, BookingRequest $bookingRequest): Response
     {
-        $user->reservationRequests()->attach($reservationRequest);
-        $user->load('reservationRequests');
+        $user->bookingRequests()->attach($bookingRequest);
+        $user->load('bookingRequests');
 
         return response($user, 200);
     }
 
-    public static function detachReservationRequest(User $user, ReservationRequest $reservationRequest): Response
+    public static function detachBookingRequest(User $user, BookingRequest $bookingRequest): Response
     {
-        $user->reservationRequests()->detach($reservationRequest);
-        $user->load('reservationRequests');
+        $user->bookingRequests()->detach($bookingRequest);
+        $user->load('bookingRequests');
 
         return response($user, 200);
     }

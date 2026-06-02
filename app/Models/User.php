@@ -40,8 +40,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Reservation::class);
     }
 
-    public function reservationRequests(): BelongsToMany
+    public function bookingRequests(): BelongsToMany
     {
-        return $this->belongsToMany(ReservationRequest::class);
+        return $this->belongsToMany(BookingRequest::class, 'booking_request_user');
     }
 }

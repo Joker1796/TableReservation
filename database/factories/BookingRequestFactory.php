@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\ReservationRequest;
+use App\Models\BookingRequest;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<ReservationRequest>
+ * @extends Factory<BookingRequest>
  */
-class ReservationRequestFactory extends Factory
+class BookingRequestFactory extends Factory
 {
     const array ARGUMENTS = [
         'comment' => 'test comment',

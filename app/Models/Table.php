@@ -23,8 +23,8 @@ class Table extends Model
         return $this->hasMany(Reservation::class);
     }
 
-    public function reservationRequests(): HasMany
+    public function bookingRequests(): HasMany
     {
-        return $this->hasMany(ReservationRequest::class);
+        return $this->hasMany(BookingRequest::class);
     }
 }

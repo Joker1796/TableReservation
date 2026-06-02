@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\ReservationRequest;
+use App\Models\BookingRequest;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class ReservationRequestSeeder extends Seeder
+class BookingRequestSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +14,8 @@ class ReservationRequestSeeder extends Seeder
     public function run(): void
     {
         $user = User::factory()->create();
-        $reservationRequest = ReservationRequest::factory()->make();
+        $bookingRequest = BookingRequest::factory()->make();
 
-        $reservationRequest->author()->associate($user);
+        $bookingRequest->author()->associate($user);
     }
 }

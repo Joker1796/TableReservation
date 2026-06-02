@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\BookingRequest;
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\Table;
 use App\Services\TableService;
 use Illuminate\Http\Request;
@@ -41,13 +41,13 @@ class TableController extends Controller
         return TableService::deleteReservation($table, $reservation);
     }
 
-    public function addReservationRequest(Table $table, ReservationRequest $rr)
+    public function addBookingRequest(Table $table, BookingRequest $br)
     {
-        return TableService::addReservationRequest($table, $rr);
+        return TableService::addBookingRequest($table, $br);
     }
 
-    public function deleteReservationRequest(Table $table, ReservationRequest $rr)
+    public function deleteBookingRequest(Table $table, BookingRequest $br)
     {
-        return TableService::deleteReservationRequest($table, $rr);
+        return TableService::deleteBookingRequest($table, $br);
     }
 }

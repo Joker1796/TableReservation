@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Web;
 use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
 use App\Http\Controllers\Controller;
+use App\Models\BookingRequest;
 use App\Models\Invite;
-use App\Models\ReservationRequest;
 use App\Models\Table;
 use App\Models\User;
 use Inertia\Inertia;
@@ -18,7 +18,7 @@ class DashboardController extends Controller
     {
         $tables = Table::where('status', TableStatus::READY)->get();
 
-        $myRequests = ReservationRequest::with(['table', 'users'])
+        $myRequests = BookingRequest::with(['table', 'users'])
             ->where('author_id', auth()->id())
             ->latest()
             ->get();

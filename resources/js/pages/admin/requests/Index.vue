@@ -10,10 +10,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import type { ReservationRequest, ReservationTable } from '@/types/reservation';
+import type { BookingRequest, ReservationTable } from '@/types/reservation';
 
 type Props = {
-    requests: ReservationRequest[];
+    requests: BookingRequest[];
     tables: ReservationTable[];
 };
 

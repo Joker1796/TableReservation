@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Services\ReservationRequestService;
+use App\Services\BookingRequestService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class ReservationRequestWebController extends Controller
+class BookingRequestWebController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
-        ReservationRequestService::createFromWeb($request, auth()->id());
+        BookingRequestService::createFromWeb($request, auth()->id());
 
         return redirect()->route('dashboard');
     }

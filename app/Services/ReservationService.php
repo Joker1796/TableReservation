@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\BookingRequest;
 use App\Models\Reservation;
-use App\Models\ReservationRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -82,13 +82,13 @@ class ReservationService
         return response($reservation, 200);
     }
 
-    public static function createFromReservationRequest(ReservationRequest $rr): Reservation
+    public static function createFromBookingRequest(BookingRequest $br): Reservation
     {
         $reservation = new Reservation;
-        $reservation->date = $rr->date;
-        $reservation->hours = $rr->hours;
-        $reservation->comment = $rr->comment;
-        $reservation->table_id = $rr->table_id;
+        $reservation->date = $br->date;
+        $reservation->hours = $br->hours;
+        $reservation->comment = $br->comment;
+        $reservation->table_id = $br->table_id;
         $reservation->save();
 
         return $reservation;

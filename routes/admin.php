@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminBookingRequestController;
 use App\Http\Controllers\Admin\AdminReservationController;
-use App\Http\Controllers\Admin\AdminReservationRequestController;
 use App\Http\Controllers\Admin\AdminTableController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,13 +31,13 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::delete('/reservations/{id}', [AdminReservationController::class, 'destroy'])
             ->name('reservations.destroy');
 
-        // Reservation Requests
-        Route::get('/requests', [AdminReservationRequestController::class, 'index'])
+        // Booking Requests
+        Route::get('/requests', [AdminBookingRequestController::class, 'index'])
             ->name('requests.index');
-        Route::put('/requests/{id}/status', [AdminReservationRequestController::class, 'updateStatus'])
+        Route::put('/requests/{id}/status', [AdminBookingRequestController::class, 'updateStatus'])
             ->name('requests.updateStatus');
-        Route::put('/requests/{id}/table', [AdminReservationRequestController::class, 'assignTable'])
+        Route::put('/requests/{id}/table', [AdminBookingRequestController::class, 'assignTable'])
             ->name('requests.assignTable');
-        Route::delete('/requests/{id}', [AdminReservationRequestController::class, 'destroy'])
+        Route::delete('/requests/{id}', [AdminBookingRequestController::class, 'destroy'])
             ->name('requests.destroy');
     });
