@@ -30,7 +30,7 @@ const props = defineProps<Props>();
 
 defineOptions({
     layout: {
-        breadcrumbs: [{ title: 'Главная', href: home() }, { title: 'Dashboard', href: dashboard() }],
+        breadcrumbs: [{ title: 'Главная', href: home() }, { title: 'Панель управления', href: dashboard() }],
     },
 });
 
