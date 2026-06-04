@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Web;
 
+use App\Mail\NewBookingRequestMail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class BookingRequestWebTest extends TestCase
@@ -55,5 +57,67 @@ class BookingRequestWebTest extends TestCase
             'comment' => 'no date here',
         ])
             ->assertSessionHasErrors(['date']);
+    }
+
+    public function test_email_is_queued_to_all_admins_on_booking_request_creation(): void
+    {
+        Mail::fake();
+
+        $admin1 = User::factory()->create(['is_admin' => true]);
+        $admin2 = User::factory()->create(['is_admin' => true]);
+        $user = User::factory()->create(['is_admin' => false]);
+
+        $this->actingAs($user);
+
+        $this->post(route('booking-requests.store'), ['date' => '2026-01-01']);
+
+        Mail::assertQueued(NewBookingRequestMail::class, 2);
+        Mail::assertQueued(NewBookingRequestMail::class, fn ($mail) => $mail->hasTo($admin1->email));
+        Mail::assertQueued(NewBookingRequestMail::class, fn ($mail) => $mail->hasTo($admin2->email));
+    }
+
+    public function test_email_is_not_sent_to_regular_users(): void
+    {
+        Mail::fake();
+
+        User::factory()->create(['is_admin' => true]);
+        $regularUser = User::factory()->create(['is_admin' => false]);
+
+        $this->actingAs($regularUser);
+
+        $this->post(route('booking-requests.store'), ['date' => '2026-01-01']);
+
+        Mail::assertQueued(NewBookingRequestMail::class, fn ($mail) => ! $mail->hasTo($regularUser->email));
+    }
+
+    public function test_no_email_queued_when_no_admins_exist(): void
+    {
+        Mail::fake();
+
+        $this->actingAs(User::factory()->create(['is_admin' => false]));
+
+        $this->post(route('booking-requests.store'), ['date' => '2026-01-01']);
+
+        Mail::assertNothingQueued();
+    }
+
+    public function test_queued_email_contains_correct_booking_request(): void
+    {
+        Mail::fake();
+
+        User::factory()->create(['is_admin' => true]);
+        $author = User::factory()->create();
+
+        $this->actingAs($author);
+
+        $this->post(route('booking-requests.store'), [
+            'date' => '2026-06-15',
+            'comment' => 'тестовый комментарий',
+        ]);
+
+        Mail::assertQueued(NewBookingRequestMail::class, function ($mail) {
+            return $mail->bookingRequest->comment === 'тестовый комментарий'
+                && str_starts_with($mail->bookingRequest->date, '2026-06-15');
+        });
     }
 }

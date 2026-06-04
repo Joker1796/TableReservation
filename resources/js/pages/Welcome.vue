@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
+import BookingRequestModal from '@/components/BookingRequestModal.vue';
 import { dashboard, login, register } from '@/routes';
-import { index as reservationsIndex } from '@/routes/reservations';
 
 withDefaults(
     defineProps<{
@@ -68,13 +68,13 @@ withDefaults(
                 время с комфортом в компании друзей.
             </p>
             <div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                <Link
-                    v-if="$page.props.auth.user"
-                    :href="reservationsIndex()"
-                    class="rounded-lg bg-[#1b1b18] px-7 py-3 text-base font-medium text-white hover:bg-black dark:bg-[#EDEDEC] dark:text-[#1b1b18] dark:hover:bg-white"
-                >
-                    Забронировать стол
-                </Link>
+                <BookingRequestModal v-if="$page.props.auth.user">
+                    <button
+                        class="rounded-lg bg-[#1b1b18] px-7 py-3 text-base font-medium text-white hover:bg-black dark:bg-[#EDEDEC] dark:text-[#1b1b18] dark:hover:bg-white"
+                    >
+                        Забронировать стол
+                    </button>
+                </BookingRequestModal>
                 <Link
                     v-else
                     :href="login()"
@@ -209,13 +209,13 @@ withDefaults(
                 <p class="mb-8 text-[#A1A09A] dark:text-[#706f6c]">
                     Столики расходятся быстро — особенно в выходные. Не откладывайте на потом.
                 </p>
-                <Link
-                    v-if="$page.props.auth.user"
-                    :href="reservationsIndex()"
-                    class="inline-block rounded-lg bg-white px-8 py-3 text-base font-medium text-[#1b1b18] hover:bg-[#f5f5f3] dark:bg-[#1b1b18] dark:text-white dark:hover:bg-black"
-                >
-                    Забронировать стол
-                </Link>
+                <BookingRequestModal v-if="$page.props.auth.user">
+                    <button
+                        class="inline-block rounded-lg bg-white px-8 py-3 text-base font-medium text-[#1b1b18] hover:bg-[#f5f5f3] dark:bg-[#1b1b18] dark:text-white dark:hover:bg-black"
+                    >
+                        Забронировать стол
+                    </button>
+                </BookingRequestModal>
                 <Link
                     v-else
                     :href="login()"

@@ -3,7 +3,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { DateInput, Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -55,12 +55,7 @@ function submit(): void {
         <form class="max-w-lg space-y-5" @submit.prevent="submit">
             <div class="grid gap-2">
                 <Label for="date">Дата <span class="text-destructive">*</span></Label>
-                <Input
-                    id="date"
-                    v-model="form.date"
-                    type="date"
-                    required
-                />
+                <DateInput id="date" v-model="form.date" required />
                 <InputError :message="form.errors.date" />
             </div>
 

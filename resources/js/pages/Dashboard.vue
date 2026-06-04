@@ -7,7 +7,7 @@ import InputError from '@/components/InputError.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { DateInput, Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -50,7 +50,6 @@ onClickOutside(userPickerRef, () => {
 
 const form = useForm({
     date: '',
-    hours: null as number | null,
     comment: '' as string | null,
     table_id: null as number | null,
     user_ids: [] as number[],
@@ -156,25 +155,10 @@ function formatDate(date: string): string {
                 </CardHeader>
                 <CardContent>
                     <form class="space-y-4" @submit.prevent="submit">
-                        <div class="grid gap-4 sm:grid-cols-2">
-                            <div class="grid gap-2">
-                                <Label for="date">Дата <span class="text-destructive">*</span></Label>
-                                <Input id="date" v-model="form.date" type="date" required />
-                                <InputError :message="form.errors.date" />
-                            </div>
-                            <div class="grid gap-2">
-                                <Label for="hours">Количество часов</Label>
-                                <Input
-                                    id="hours"
-                                    type="number"
-                                    min="1"
-                                    max="12"
-                                    placeholder="1–12"
-                                    :value="form.hours ?? undefined"
-                                    @input="(e: Event) => form.hours = (e.target as HTMLInputElement).value ? Number((e.target as HTMLInputElement).value) : null"
-                                />
-                                <InputError :message="form.errors.hours" />
-                            </div>
+                        <div class="grid gap-2">
+                            <Label for="date">Дата <span class="text-destructive">*</span></Label>
+                            <DateInput id="date" v-model="form.date" required />
+                            <InputError :message="form.errors.date" />
                         </div>
                         <div class="grid gap-2">
                             <Label for="table_id">Предпочтительный стол</Label>

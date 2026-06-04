@@ -123,9 +123,12 @@ class BookingRequestService
         return response($bookingRequest, ResponseAlias::HTTP_OK);
     }
 
-    public static function createFromWeb(Request $request, int $authorId): void
+    public static function createFromWeb(Request $request, int $authorId): BookingRequest
     {
-        self::createOrUpdate($request, new BookingRequest, $authorId);
+        $br = self::createOrUpdate($request, new BookingRequest, $authorId);
+        $br->load('author');
+
+        return $br;
     }
 
     public static function updateStatus(Request $request, BookingRequest $br, int $adminId): void

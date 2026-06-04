@@ -3,15 +3,24 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewBookingRequestMail;
+use App\Models\User;
 use App\Services\BookingRequestService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class BookingRequestWebController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
-        BookingRequestService::createFromWeb($request, auth()->id());
+        $bookingRequest = BookingRequestService::createFromWeb($request, auth()->id());
+
+        $admins = User::where('is_admin', true)->get();
+
+        foreach ($admins as $admin) {
+            Mail::to($admin)->queue(new NewBookingRequestMail($bookingRequest));
+        }
 
         return redirect()->route('dashboard');
     }
