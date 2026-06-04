@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\BookingRequestStatus;
 use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
 use App\Http\Controllers\Controller;
@@ -36,7 +37,8 @@ class ReservationWebController extends Controller
         $myRequestDates = BookingRequest::where(function ($q) use ($userId) {
             $q->where('author_id', $userId)
                 ->orWhereHas('users', fn ($q2) => $q2->where('user_id', $userId));
-        })->pluck('date')->map(fn ($d) => substr($d, 0, 10))->unique()->values();
+        })->where('status', BookingRequestStatus::PENDING)
+            ->pluck('date')->map(fn ($d) => substr($d, 0, 10))->unique()->values();
 
         $myInviteDates = Invite::where('target_id', $userId)
             ->where('status', InviteStatus::PENDING)
