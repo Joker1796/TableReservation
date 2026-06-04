@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
+use App\Models\Invite;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -45,6 +47,13 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'pendingInvites' => fn () => auth()->check()
+                ? Invite::with(['author', 'reservation.table'])
+                    ->where('target_id', auth()->id())
+                    ->where('status', InviteStatus::PENDING)
+                    ->latest()
+                    ->get()
+                : [],
             'bookingFormData' => fn () => auth()->check() ? [
                 'tables' => Table::where('status', TableStatus::READY)->orderBy('name')->get(['id', 'name']),
                 'users'  => User::where('id', '!=', auth()->id())->orderBy('name')->get(['id', 'name', 'email']),

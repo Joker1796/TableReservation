@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
+use App\Models\Invite;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,6 +69,60 @@ class DashboardTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->where('bookingFormData.users.0.id', $other->id)
                 ->has('bookingFormData.users', 1)
+            );
+    }
+
+    public function test_pending_invites_are_shared_for_authenticated_users(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        Invite::factory()->create([
+            'target_id' => $user->id,
+            'status'    => InviteStatus::PENDING,
+        ]);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('pendingInvites', 1)
+            );
+    }
+
+    public function test_pending_invites_only_includes_pending_status(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        Invite::factory()->create(['target_id' => $user->id, 'status' => InviteStatus::PENDING]);
+        Invite::factory()->create(['target_id' => $user->id, 'status' => InviteStatus::ACCEPTED]);
+        Invite::factory()->create(['target_id' => $user->id, 'status' => InviteStatus::REVOKED]);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('pendingInvites', 1)
+            );
+    }
+
+    public function test_pending_invites_only_includes_current_users_invites(): void
+    {
+        $user = User::factory()->create();
+        $other = User::factory()->create();
+        $this->actingAs($user);
+
+        Invite::factory()->create(['target_id' => $user->id,  'status' => InviteStatus::PENDING]);
+        Invite::factory()->create(['target_id' => $other->id, 'status' => InviteStatus::PENDING]);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('pendingInvites', 1)
+            );
+    }
+
+    public function test_pending_invites_is_empty_array_for_guests(): void
+    {
+        $this->get('/')
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('pendingInvites', [])
             );
     }
 }

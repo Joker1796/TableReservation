@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
-import { Bell, CalendarDays, Check, Clock, Plus, Table2, X } from 'lucide-vue-next';
+import { CalendarDays, Clock, Plus, Table2 } from 'lucide-vue-next';
 import { ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Badge } from '@/components/ui/badge';
@@ -17,12 +17,11 @@ import {
 } from '@/components/ui/select';
 import UserPicker from '@/components/UserPicker.vue';
 import { dashboard, home } from '@/routes';
-import type { BookingRequest, Invite, ReservationTable, ReservationUser } from '@/types/reservation';
+import type { BookingRequest, ReservationTable, ReservationUser } from '@/types/reservation';
 
 type Props = {
     tables: ReservationTable[];
     myRequests: BookingRequest[];
-    pendingInvites: Invite[];
     users: ReservationUser[];
 };
 
@@ -59,14 +58,6 @@ function submit(): void {
     });
 }
 
-function acceptInvite(id: number): void {
-    useForm({}).put(`/invites/${id}/accept`);
-}
-
-function rejectInvite(id: number): void {
-    useForm({}).put(`/invites/${id}/reject`);
-}
-
 function formatDate(date: string): string {
     return new Date(date).toLocaleDateString('ru-RU', {
         day: '2-digit',
@@ -80,51 +71,6 @@ function formatDate(date: string): string {
     <Head title="Dashboard" />
 
     <div class="flex flex-col gap-8 p-4">
-        <!-- Pending invites -->
-        <div v-if="pendingInvites.length > 0">
-            <div class="mb-4 flex items-center gap-2">
-                <Bell class="h-5 w-5 text-orange-500" />
-                <h2 class="text-lg font-semibold">Приглашения</h2>
-                <Badge variant="secondary">{{ pendingInvites.length }}</Badge>
-            </div>
-            <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                <Card v-for="invite in pendingInvites" :key="invite.id" class="border-orange-200 dark:border-orange-900">
-                    <CardContent class="pt-4">
-                        <div class="mb-3 space-y-1.5">
-                            <p class="text-sm text-muted-foreground">
-                                <span class="font-medium text-foreground">{{ invite.author?.name }}</span>
-                                приглашает вас
-                            </p>
-                            <div v-if="invite.reservation" class="space-y-1">
-                                <div class="flex items-center gap-1.5 text-sm font-medium">
-                                    <CalendarDays class="h-3.5 w-3.5 text-muted-foreground" />
-                                    {{ formatDate(invite.reservation.date) }}
-                                </div>
-                                <div v-if="invite.reservation.hours" class="flex items-center gap-1.5 text-sm text-muted-foreground">
-                                    <Clock class="h-3.5 w-3.5" />
-                                    {{ invite.reservation.hours }} ч.
-                                </div>
-                                <div v-if="invite.reservation.table" class="flex items-center gap-1.5 text-sm text-muted-foreground">
-                                    <Table2 class="h-3.5 w-3.5" />
-                                    {{ invite.reservation.table.name }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <Button size="sm" class="flex-1 gap-1" @click="acceptInvite(invite.id)">
-                                <Check class="h-3.5 w-3.5" />
-                                Принять
-                            </Button>
-                            <Button size="sm" variant="outline" class="flex-1 gap-1 text-destructive hover:bg-destructive hover:text-destructive-foreground" @click="rejectInvite(invite.id)">
-                                <X class="h-3.5 w-3.5" />
-                                Отклонить
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
-
         <!-- New request -->
         <div>
             <div class="mb-4 flex items-center justify-between">

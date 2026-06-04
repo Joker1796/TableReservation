@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BookingRequest;
-use App\Models\Invite;
 use App\Models\Table;
 use App\Models\User;
 use Inertia\Inertia;
@@ -23,21 +21,14 @@ class DashboardController extends Controller
             ->latest()
             ->get();
 
-        $pendingInvites = Invite::with(['author', 'reservation.table'])
-            ->where('target_id', auth()->id())
-            ->where('status', InviteStatus::PENDING)
-            ->latest()
-            ->get();
-
         $users = User::where('id', '!=', auth()->id())
             ->orderBy('name')
             ->get(['id', 'name', 'email']);
 
         return Inertia::render('Dashboard', [
-            'tables' => $tables,
+            'tables'     => $tables,
             'myRequests' => $myRequests,
-            'pendingInvites' => $pendingInvites,
-            'users' => $users,
+            'users'      => $users,
         ]);
     }
 }
