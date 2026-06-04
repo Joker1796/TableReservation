@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Enums\BookingRequestStatus;
 use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
+use App\Models\BookingRequest;
 use App\Models\Invite;
 use App\Models\Table;
 use App\Models\User;
@@ -123,6 +125,49 @@ class DashboardTest extends TestCase
         $this->get('/')
             ->assertInertia(fn (Assert $page) => $page
                 ->where('pendingInvites', [])
+            );
+    }
+
+    // --- pending booking requests (admin notifications) ---
+
+    public function test_pending_booking_requests_are_shared_with_admin(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $this->actingAs($admin);
+
+        BookingRequest::factory()->create(['status' => BookingRequestStatus::PENDING]);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('pendingBookingRequests', 1)
+            );
+    }
+
+    public function test_pending_booking_requests_only_includes_pending_status(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $this->actingAs($admin);
+
+        BookingRequest::factory()->create(['status' => BookingRequestStatus::PENDING]);
+        BookingRequest::factory()->create(['status' => BookingRequestStatus::APPROVED]);
+        BookingRequest::factory()->create(['status' => BookingRequestStatus::REJECTED]);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('pendingBookingRequests', 1)
+            );
+    }
+
+    public function test_pending_booking_requests_are_empty_for_non_admin(): void
+    {
+        $user = User::factory()->create(['is_admin' => false]);
+        $this->actingAs($user);
+
+        BookingRequest::factory()->create(['status' => BookingRequestStatus::PENDING]);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('pendingBookingRequests', [])
             );
     }
 }

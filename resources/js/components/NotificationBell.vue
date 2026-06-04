@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { router, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import { Bell, CalendarDays, Check, Table2, X } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { Badge } from '@/components/ui/badge';
@@ -11,10 +11,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { Invite } from '@/types/reservation';
+import type { BookingRequest, Invite } from '@/types/reservation';
 
-const page = usePage<{ pendingInvites: Invite[] }>();
+const page = usePage<{ pendingInvites: Invite[]; pendingBookingRequests: BookingRequest[] }>();
 const invites = computed<Invite[]>(() => page.props.pendingInvites ?? []);
+const bookingRequests = computed<BookingRequest[]>(() => page.props.pendingBookingRequests ?? []);
+const totalCount = computed(() => invites.value.length + bookingRequests.value.length);
 
 function formatDate(date: string): string {
     return new Date(date).toLocaleDateString('ru-RU', {
@@ -39,10 +41,10 @@ function reject(id: number): void {
             <Button variant="ghost" size="icon" class="relative h-9 w-9">
                 <Bell class="h-5 w-5 opacity-80" />
                 <span
-                    v-if="invites.length > 0"
+                    v-if="totalCount > 0"
                     class="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground"
                 >
-                    {{ invites.length > 9 ? '9+' : invites.length }}
+                    {{ totalCount > 9 ? '9+' : totalCount }}
                 </span>
             </Button>
         </DropdownMenuTrigger>
@@ -51,17 +53,18 @@ function reject(id: number): void {
             <DropdownMenuLabel class="flex items-center gap-2">
                 <Bell class="h-4 w-4" />
                 Уведомления
-                <Badge v-if="invites.length > 0" variant="secondary" class="ml-auto">
-                    {{ invites.length }}
+                <Badge v-if="totalCount > 0" variant="secondary" class="ml-auto">
+                    {{ totalCount }}
                 </Badge>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            <div v-if="invites.length === 0" class="px-3 py-6 text-center text-sm text-muted-foreground">
+            <div v-if="totalCount === 0" class="px-3 py-6 text-center text-sm text-muted-foreground">
                 Нет новых уведомлений
             </div>
 
-            <div v-else class="max-h-80 overflow-y-auto">
+            <!-- Приглашения -->
+            <div v-if="invites.length > 0" class="max-h-80 overflow-y-auto">
                 <div
                     v-for="invite in invites"
                     :key="invite.id"
@@ -98,6 +101,36 @@ function reject(id: number): void {
                     </div>
                 </div>
             </div>
+
+            <!-- Заявки на бронирование (только для админов) -->
+            <template v-if="bookingRequests.length > 0">
+                <DropdownMenuSeparator v-if="invites.length > 0" />
+                <div class="max-h-60 overflow-y-auto">
+                    <div
+                        v-for="req in bookingRequests"
+                        :key="`br-${req.id}`"
+                        class="border-b px-3 py-3 last:border-0"
+                    >
+                        <p class="mb-1 text-sm">
+                            <span class="font-medium">{{ req.author?.name }}</span>
+                            подал заявку на бронирование
+                        </p>
+                        <div class="mb-2 space-y-0.5">
+                            <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                <CalendarDays class="h-3 w-3" />
+                                {{ formatDate(req.date) }}
+                            </div>
+                            <div v-if="req.table" class="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                <Table2 class="h-3 w-3" />
+                                {{ req.table.name }}
+                            </div>
+                        </div>
+                        <Button size="sm" variant="outline" class="h-7 w-full text-xs" as-child>
+                            <Link href="/admin/requests">Рассмотреть</Link>
+                        </Button>
+                    </div>
+                </div>
+            </template>
         </DropdownMenuContent>
     </DropdownMenu>
 </template>

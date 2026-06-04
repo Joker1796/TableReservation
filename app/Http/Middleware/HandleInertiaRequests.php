@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\BookingRequestStatus;
 use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
+use App\Models\BookingRequest;
 use App\Models\Invite;
 use App\Models\Table;
 use App\Models\User;
@@ -52,6 +54,12 @@ class HandleInertiaRequests extends Middleware
                     ->whereHas('reservation')
                     ->where('target_id', auth()->id())
                     ->where('status', InviteStatus::PENDING)
+                    ->latest()
+                    ->get()
+                : [],
+            'pendingBookingRequests' => fn () => auth()->check() && auth()->user()->is_admin
+                ? BookingRequest::with(['author', 'table'])
+                    ->where('status', BookingRequestStatus::PENDING)
                     ->latest()
                     ->get()
                 : [],
