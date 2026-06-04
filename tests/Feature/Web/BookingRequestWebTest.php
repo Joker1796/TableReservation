@@ -17,7 +17,6 @@ class BookingRequestWebTest extends TestCase
     {
         $this->post(route('booking-requests.store'), [
             'date' => '2026-01-01',
-            'hours' => 2,
         ])
             ->assertRedirect(route('login'));
     }
@@ -28,7 +27,6 @@ class BookingRequestWebTest extends TestCase
 
         $this->post(route('booking-requests.store'), [
             'date' => '2026-01-01',
-            'hours' => 2,
             'comment' => 'test comment',
         ])
             ->assertRedirect(route('dashboard'));

@@ -247,56 +247,6 @@ class BookingRequestTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_booking_request_dont_created_with_invalid_hours(): void
-    {
-        $this->acting();
-
-        $arguments = BookingRequest::factory()::ARGUMENTS;
-        $arguments['hours'] = -1;
-
-        $response = $this->call('GET', '/api/V1/booking-request/create', $arguments);
-
-        $response->assertStatus(302);
-    }
-
-    public function test_booking_request_dont_created_with_hours_over_max(): void
-    {
-        $this->acting();
-
-        $arguments = BookingRequest::factory()::ARGUMENTS;
-        $arguments['hours'] = 13;
-
-        $response = $this->call('GET', '/api/V1/booking-request/create', $arguments);
-
-        $response->assertStatus(302);
-    }
-
-    public function test_booking_request_created_with_zero_hours_successfully(): void
-    {
-        $this->acting();
-
-        $arguments = BookingRequest::factory()::ARGUMENTS;
-        $arguments['hours'] = 0;
-
-        $response = $this->call('GET', '/api/V1/booking-request/create', $arguments);
-
-        $response->assertOk();
-        $this->assertEquals(0, $response->json('hours'));
-    }
-
-    public function test_booking_request_created_with_null_hours_successfully(): void
-    {
-        $this->acting();
-
-        $arguments = BookingRequest::factory()::ARGUMENTS;
-        $arguments['hours'] = null;
-
-        $response = $this->call('GET', '/api/V1/booking-request/create', $arguments);
-
-        $response->assertOk();
-        $this->assertNull($response->json('hours'));
-    }
-
     public function test_booking_request_dont_created_with_nonexistent_table_id(): void
     {
         $this->acting();

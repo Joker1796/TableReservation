@@ -14,7 +14,6 @@ export type ReservationUser = {
 export type Reservation = {
     id: number;
     date: string;
-    hours: number | null;
     comment: string | null;
     table_id: number | null;
     table: ReservationTable | null;
@@ -44,7 +43,6 @@ export type BookingRequest = {
     author_id: number;
     author: ReservationUser | null;
     date: string;
-    hours: number | null;
     comment: string | null;
     table_id: number | null;
     table: ReservationTable | null;

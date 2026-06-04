@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
-import { CalendarDays, Clock, Plus, Table2 } from 'lucide-vue-next';
+import { CalendarDays, Plus, Table2 } from 'lucide-vue-next';
 import { ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Badge } from '@/components/ui/badge';
@@ -151,10 +151,6 @@ function formatDate(date: string): string {
                                 <div class="flex items-center gap-1.5 text-sm font-medium">
                                     <CalendarDays class="h-3.5 w-3.5 text-muted-foreground" />
                                     {{ formatDate(req.date) }}
-                                </div>
-                                <div v-if="req.hours" class="flex items-center gap-1.5 text-sm text-muted-foreground">
-                                    <Clock class="h-3.5 w-3.5" />
-                                    {{ req.hours }} ч.
                                 </div>
                                 <div v-if="req.table" class="flex items-center gap-1.5 text-sm text-muted-foreground">
                                     <Table2 class="h-3.5 w-3.5" />

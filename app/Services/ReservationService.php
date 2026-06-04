@@ -14,7 +14,6 @@ class ReservationService
     {
         $validated = $request->validate([
             'date' => ['required', 'date'],
-            'hours' => ['nullable', 'integer', 'min:0', 'max:12'],
             'comment' => ['nullable', 'string'],
             'table_id' => ['sometimes', 'nullable', 'exists:tables,id'],
             'user_ids' => ['sometimes', 'nullable', 'array'],
@@ -22,7 +21,6 @@ class ReservationService
         ]);
 
         $reservation->date = $validated['date'];
-        $reservation->hours = $validated['hours'] ?? null;
         $reservation->comment = $validated['comment'] ?? null;
 
         if (array_key_exists('table_id', $validated)) {
@@ -86,7 +84,6 @@ class ReservationService
     {
         $reservation = new Reservation;
         $reservation->date = $br->date;
-        $reservation->hours = $br->hours;
         $reservation->comment = $br->comment;
         $reservation->table_id = $br->table_id;
         $reservation->save();

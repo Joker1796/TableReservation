@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import { CalendarDays, Clock, Edit, Table2, Trash2, Users } from 'lucide-vue-next';
+import { CalendarDays, Edit, Table2, Trash2, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -81,16 +81,6 @@ function deleteReservation(): void {
                     </div>
 
                     <Separator />
-
-                    <div v-if="reservation.hours" class="flex items-center gap-3">
-                        <Clock class="h-4 w-4 text-muted-foreground" />
-                        <div>
-                            <p class="text-xs text-muted-foreground">Длительность</p>
-                            <p class="font-medium">{{ reservation.hours }} ч.</p>
-                        </div>
-                    </div>
-
-                    <Separator v-if="reservation.hours" />
 
                     <div v-if="reservation.table" class="flex items-center gap-3">
                         <Table2 class="h-4 w-4 text-muted-foreground" />

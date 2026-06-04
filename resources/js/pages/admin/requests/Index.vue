@@ -84,7 +84,6 @@ function deleteRequest(id: number): void {
                     <tr>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Пользователь</th>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Дата</th>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Часы</th>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Стол</th>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Комментарий</th>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Статус</th>
@@ -101,9 +100,6 @@ function deleteRequest(id: number): void {
                             <span v-else class="text-muted-foreground">—</span>
                         </td>
                         <td class="px-4 py-3 font-medium">{{ formatDate(req.date) }}</td>
-                        <td class="px-4 py-3 text-muted-foreground">
-                            {{ req.hours ? `${req.hours} ч.` : '—' }}
-                        </td>
                         <td class="px-4 py-3">
                             <!-- Одобренная заявка: показываем только badge -->
                             <Badge v-if="req.status === 1 && req.table" variant="outline">

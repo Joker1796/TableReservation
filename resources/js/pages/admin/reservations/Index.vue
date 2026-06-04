@@ -96,7 +96,6 @@ function deleteReservation(id: number): void {
                 <thead class="border-b border-sidebar-border/70 bg-muted/40 dark:border-sidebar-border">
                     <tr>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Дата</th>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Часы</th>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Стол</th>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Участники</th>
                         <th class="px-4 py-3 text-left font-medium text-muted-foreground">Комментарий</th>
@@ -106,9 +105,6 @@ function deleteReservation(id: number): void {
                 <tbody class="divide-y divide-sidebar-border/70 dark:divide-sidebar-border">
                     <tr v-for="res in reservations" :key="res.id" class="hover:bg-muted/20">
                         <td class="px-4 py-3 font-medium">{{ formatDate(res.date) }}</td>
-                        <td class="px-4 py-3 text-muted-foreground">
-                            {{ res.hours ? `${res.hours} ч.` : '—' }}
-                        </td>
                         <td class="px-4 py-3">
                             <span v-if="res.table">
                                 <Badge variant="outline">{{ res.table.name }}</Badge>

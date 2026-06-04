@@ -17,7 +17,6 @@ class BookingRequestService
     {
         $validated = $request->validate([
             'date' => ['required', 'date'],
-            'hours' => ['nullable', 'integer', 'min:0', 'max:12'],
             'comment' => ['nullable', 'string'],
             'status' => ['sometimes', 'nullable', 'integer', 'min:0'],
             'table_id' => ['sometimes', 'nullable', 'exists:tables,id'],
@@ -27,7 +26,6 @@ class BookingRequestService
         ]);
 
         $br->date = $validated['date'];
-        $br->hours = $validated['hours'] ?? null;
         $br->comment = $validated['comment'] ?? null;
         $br->status = $validated['status'] ?? $br->status ?? 0;
 

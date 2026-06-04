@@ -35,7 +35,6 @@ defineOptions({
 
 const form = useForm({
     date: '',
-    hours: null as number | null,
     comment: '' as string | null,
     table_id: null as number | null,
     user_ids: [] as number[],
@@ -77,20 +76,6 @@ function submit(): void {
                 <Label for="date">Дата <span class="text-destructive">*</span></Label>
                 <DateInput id="date" v-model="form.date" required />
                 <InputError :message="form.errors.date" />
-            </div>
-
-            <div class="grid gap-2">
-                <Label for="hours">Количество часов</Label>
-                <Input
-                    id="hours"
-                    type="number"
-                    min="1"
-                    max="12"
-                    placeholder="1–12"
-                    :value="form.hours ?? undefined"
-                    @input="(e: Event) => form.hours = (e.target as HTMLInputElement).value ? Number((e.target as HTMLInputElement).value) : null"
-                />
-                <InputError :message="form.errors.hours" />
             </div>
 
             <div class="grid gap-2">

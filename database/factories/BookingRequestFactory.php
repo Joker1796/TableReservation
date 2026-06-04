@@ -15,14 +15,12 @@ class BookingRequestFactory extends Factory
     const array ARGUMENTS = [
         'comment' => 'test comment',
         'date' => '01.01.2026 00:00:00',
-        'hours' => 1,
         'status' => 0,
     ];
 
     const array UPDATED_ARGUMENTS = [
         'comment' => 'test comment updated',
         'date' => '2026-01-02T10:00:00.000000Z',
-        'hours' => 4,
         'status' => 1,
     ];
 
@@ -34,7 +32,6 @@ class BookingRequestFactory extends Factory
         return [
             'comment' => fake()->text(),
             'date' => $this->faker->date(),
-            'hours' => $this->faker->numberBetween(1, 12),
             'status' => $this->faker->numberBetween(0, 2),
             'author_id' => User::factory(),
             'table_id' => Table::factory(),

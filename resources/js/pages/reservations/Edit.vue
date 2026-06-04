@@ -3,7 +3,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
-import { DateInput, Input } from '@/components/ui/input';
+import { DateInput } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -32,7 +32,6 @@ defineOptions({
 
 const form = useForm({
     date: props.reservation.date.substring(0, 10),
-    hours: props.reservation.hours,
     comment: props.reservation.comment,
     table_id: props.reservation.table_id,
 });
@@ -57,20 +56,6 @@ function submit(): void {
                 <Label for="date">Дата <span class="text-destructive">*</span></Label>
                 <DateInput id="date" v-model="form.date" required />
                 <InputError :message="form.errors.date" />
-            </div>
-
-            <div class="grid gap-2">
-                <Label for="hours">Количество часов</Label>
-                <Input
-                    id="hours"
-                    type="number"
-                    min="1"
-                    max="12"
-                    placeholder="1–12"
-                    :value="form.hours ?? undefined"
-                    @input="(e: Event) => form.hours = (e.target as HTMLInputElement).value ? Number((e.target as HTMLInputElement).value) : null"
-                />
-                <InputError :message="form.errors.hours" />
             </div>
 
             <div class="grid gap-2">

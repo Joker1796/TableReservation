@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3';
-import { CalendarDays, Clock, Plus, Table2, UserPlus, Users, X } from 'lucide-vue-next';
+import { CalendarDays, Plus, Table2, UserPlus, Users, X } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import BookingRequestModal from '@/components/BookingRequestModal.vue';
 import { Badge } from '@/components/ui/badge';
@@ -266,10 +266,6 @@ function deleteReservation(id: number): void {
                     </div>
                 </CardHeader>
                 <CardContent class="space-y-3">
-                    <div v-if="reservation.hours" class="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock class="h-3.5 w-3.5" />
-                        {{ reservation.hours }} ч.
-                    </div>
                     <div v-if="reservation.table" class="flex items-center gap-2 text-sm text-muted-foreground">
                         <Table2 class="h-3.5 w-3.5" />
                         {{ reservation.table.description || reservation.table.name }}
