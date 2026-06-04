@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
+import { home } from '@/routes';
 import type { Auth } from '@/types/auth';
 import type { Reservation, ReservationUser } from '@/types/reservation';
 
@@ -27,6 +28,7 @@ const isAdmin = computed(() => page.props.auth?.user?.is_admin === true);
 defineOptions({
     layout: {
         breadcrumbs: [
+            { title: 'Главная', href: home() },
             { title: 'Резервирования', href: '/reservations' },
         ],
     },

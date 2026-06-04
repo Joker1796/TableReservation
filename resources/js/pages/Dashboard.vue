@@ -31,7 +31,7 @@ defineOptions({
     layout: {
         breadcrumbs: [
             { title: 'Главная', href: home() },
-            { title: 'Мои заявки', href: dashboard() },
+            { title: 'Заявки на бронирование', href: dashboard() },
         ],
     },
 });
@@ -71,7 +71,7 @@ function formatDate(date: string): string {
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Заявки на бронирование" />
 
     <div class="flex flex-col gap-8 p-4">
         <!-- New request -->
