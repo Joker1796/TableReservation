@@ -15,9 +15,15 @@ use Inertia\Response;
 
 class ReservationWebController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $reservations = Reservation::with(['table', 'users'])->latest()->get();
+        $date = $request->date ?? now()->toDateString();
+
+        $reservations = Reservation::with(['table', 'users'])
+            ->whereDate('date', $date)
+            ->latest()
+            ->get();
+
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
 
         return Inertia::render('reservations/Index', [

@@ -34,6 +34,7 @@ function submit(): void {
 
 function onOpenChange(value: boolean): void {
     open.value = value;
+
     if (!value) {
         form.reset();
         form.clearErrors();

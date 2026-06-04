@@ -5,6 +5,7 @@ namespace Tests\Feature\Web;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ReservationWebTest extends TestCase
@@ -144,6 +145,46 @@ class ReservationWebTest extends TestCase
         $this->actingAsUser();
         $this->get(route('reservations.index'))
             ->assertOk();
+    }
+
+    public function test_index_returns_only_reservations_for_given_date(): void
+    {
+        $this->actingAsUser();
+
+        Reservation::factory()->create(['date' => '2026-07-10']);
+        Reservation::factory()->create(['date' => '2026-07-10']);
+        Reservation::factory()->create(['date' => '2026-07-11']);
+
+        $this->get(route('reservations.index', ['date' => '2026-07-10']))
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('reservations/Index')
+                ->has('reservations', 2)
+            );
+    }
+
+    public function test_index_defaults_to_today_when_no_date_given(): void
+    {
+        $this->actingAsUser();
+
+        Reservation::factory()->create(['date' => now()->toDateString()]);
+        Reservation::factory()->create(['date' => now()->addDay()->toDateString()]);
+
+        $this->get(route('reservations.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('reservations', 1)
+            );
+    }
+
+    public function test_index_returns_empty_when_no_reservations_on_date(): void
+    {
+        $this->actingAsUser();
+
+        Reservation::factory()->create(['date' => '2026-07-10']);
+
+        $this->get(route('reservations.index', ['date' => '2026-08-01']))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('reservations', 0)
+            );
     }
 
     public function test_user_can_view_reservation(): void
