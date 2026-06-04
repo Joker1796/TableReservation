@@ -3,6 +3,7 @@
 namespace Tests\Feature\Web;
 
 use App\Mail\NewBookingRequestMail;
+use App\Models\Table;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
@@ -57,6 +58,58 @@ class BookingRequestWebTest extends TestCase
             'comment' => 'no date here',
         ])
             ->assertSessionHasErrors(['date']);
+    }
+
+    public function test_user_can_specify_table_in_booking_request(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $table = Table::factory()->create();
+
+        $this->post(route('booking-requests.store'), [
+            'date'     => '2026-01-01',
+            'table_id' => $table->id,
+        ]);
+
+        $this->assertDatabaseHas('booking_requests', ['table_id' => $table->id]);
+    }
+
+    public function test_user_can_add_participants_to_booking_request(): void
+    {
+        $author = User::factory()->create();
+        $participant = User::factory()->create();
+        $this->actingAs($author);
+
+        $this->post(route('booking-requests.store'), [
+            'date'     => '2026-01-01',
+            'user_ids' => [$participant->id],
+        ]);
+
+        $br = $author->bookingRequests()->first();
+        $this->assertTrue($br->users->contains($participant));
+        $this->assertTrue($br->users->contains($author));
+    }
+
+    public function test_invalid_table_id_fails_validation(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        $this->post(route('booking-requests.store'), [
+            'date'     => '2026-01-01',
+            'table_id' => 99999,
+        ])
+            ->assertSessionHasErrors(['table_id']);
+    }
+
+    public function test_invalid_user_id_in_user_ids_fails_validation(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        $this->post(route('booking-requests.store'), [
+            'date'     => '2026-01-01',
+            'user_ids' => [99999],
+        ])
+            ->assertSessionHasErrors(['user_ids.0']);
     }
 
     public function test_email_is_queued_to_all_admins_on_booking_request_creation(): void

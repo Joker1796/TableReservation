@@ -2,6 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\TableStatus;
+use App\Models\Table;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,6 +45,10 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'bookingFormData' => fn () => auth()->check() ? [
+                'tables' => Table::where('status', TableStatus::READY)->orderBy('name')->get(['id', 'name']),
+                'users'  => User::where('id', '!=', auth()->id())->orderBy('name')->get(['id', 'name', 'email']),
+            ] : null,
         ];
     }
 }

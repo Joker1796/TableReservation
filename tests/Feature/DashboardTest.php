@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Enums\TableStatus;
+use App\Models\Table;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
@@ -23,5 +26,47 @@ class DashboardTest extends TestCase
 
         $response = $this->get(route('dashboard'));
         $response->assertOk();
+    }
+
+    public function test_booking_form_data_is_shared_for_authenticated_users(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        Table::factory()->create(['status' => TableStatus::READY]);
+        User::factory()->create();
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('bookingFormData.tables', 1)
+                ->has('bookingFormData.users', 1)
+            );
+    }
+
+    public function test_booking_form_data_only_includes_ready_tables(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        Table::factory()->create(['status' => TableStatus::READY]);
+        Table::factory()->create(['status' => TableStatus::NOT_READY]);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('bookingFormData.tables', 1)
+            );
+    }
+
+    public function test_booking_form_data_excludes_current_user(): void
+    {
+        $user = User::factory()->create();
+        $other = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('bookingFormData.users.0.id', $other->id)
+                ->has('bookingFormData.users', 1)
+            );
     }
 }
