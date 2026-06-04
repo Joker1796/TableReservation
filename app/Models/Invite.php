@@ -35,12 +35,12 @@ class Invite extends Model
 
     public function accept(): static
     {
-        $this->reservation->users()->attach($this->target);
-
-        if ($this->reservation->save()) {
-            $this->status = InviteStatus::ACCEPTED;
+        if ($this->reservation) {
+            $this->reservation->users()->attach($this->target);
+            $this->reservation->save();
         }
 
+        $this->status = InviteStatus::ACCEPTED;
         $this->save();
 
         return $this;
@@ -48,13 +48,12 @@ class Invite extends Model
 
     public function revoke(): static
     {
-        if ($this->reservation->users->contains($this->target)) {
+        if ($this->reservation && $this->reservation->users->contains($this->target)) {
             $this->reservation->users()->detach($this->target);
             $this->reservation->save();
         }
 
         $this->status = InviteStatus::REVOKED;
-
         $this->save();
 
         return $this;

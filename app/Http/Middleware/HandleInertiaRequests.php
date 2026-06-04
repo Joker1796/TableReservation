@@ -49,6 +49,7 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'pendingInvites' => fn () => auth()->check()
                 ? Invite::with(['author', 'reservation.table'])
+                    ->whereHas('reservation')
                     ->where('target_id', auth()->id())
                     ->where('status', InviteStatus::PENDING)
                     ->latest()
