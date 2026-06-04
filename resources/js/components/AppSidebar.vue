@@ -27,7 +27,7 @@ const isAdmin = computed(() => page.props.auth?.user?.is_admin === true);
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Главная',
+        title: 'Заявки на бронирование',
         href: dashboard(),
         icon: LayoutGrid,
     },

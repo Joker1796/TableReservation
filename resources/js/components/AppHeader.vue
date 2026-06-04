@@ -55,7 +55,7 @@ const activeItemStyles =
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Главная',
+        title: 'Заявки на бронирование',
         href: dashboard(),
         icon: LayoutGrid,
     },

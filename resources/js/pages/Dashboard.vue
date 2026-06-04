@@ -29,7 +29,10 @@ defineProps<Props>();
 
 defineOptions({
     layout: {
-        breadcrumbs: [{ title: 'Главная', href: home() }, { title: 'Панель управления', href: dashboard() }],
+        breadcrumbs: [
+            { title: 'Главная', href: home() },
+            { title: 'Мои заявки', href: dashboard() },
+        ],
     },
 });
 

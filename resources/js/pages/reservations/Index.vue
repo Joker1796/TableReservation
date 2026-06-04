@@ -3,6 +3,7 @@ import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3';
 import { CalendarDays, Clock, Plus, Table2, UserPlus, Users, X } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
+import BookingRequestModal from '@/components/BookingRequestModal.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -167,12 +168,17 @@ function deleteReservation(id: number): void {
                 <h1 class="text-2xl font-semibold">Резервирования</h1>
                 <p class="text-sm text-muted-foreground">Бронирования столов по датам</p>
             </div>
-            <Button v-if="isAdmin" as-child>
-                <Link href="/reservations/create">
-                    <Plus class="h-4 w-4" />
-                    Создать
-                </Link>
-            </Button>
+            <div class="flex items-center gap-2">
+                <BookingRequestModal>
+                    <Button variant="outline">Забронировать стол</Button>
+                </BookingRequestModal>
+                <Button v-if="isAdmin" as-child>
+                    <Link href="/reservations/create">
+                        <Plus class="h-4 w-4" />
+                        Создать
+                    </Link>
+                </Button>
+            </div>
         </div>
 
         <!-- Date strip -->
