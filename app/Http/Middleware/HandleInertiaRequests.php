@@ -56,7 +56,7 @@ class HandleInertiaRequests extends Middleware
                 : [],
             'bookingFormData' => fn () => auth()->check() ? [
                 'tables' => Table::where('status', TableStatus::READY)->orderBy('name')->get(['id', 'name']),
-                'users'  => User::where('id', '!=', auth()->id())->orderBy('name')->get(['id', 'name', 'email']),
+                'users' => User::where('id', '!=', auth()->id())->orderBy('name')->get(['id', 'name', 'email']),
             ] : null,
         ];
     }

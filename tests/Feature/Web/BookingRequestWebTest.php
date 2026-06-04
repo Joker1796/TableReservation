@@ -67,7 +67,7 @@ class BookingRequestWebTest extends TestCase
         $table = Table::factory()->create();
 
         $this->post(route('booking-requests.store'), [
-            'date'     => '2026-01-01',
+            'date' => '2026-01-01',
             'table_id' => $table->id,
         ]);
 
@@ -81,7 +81,7 @@ class BookingRequestWebTest extends TestCase
         $this->actingAs($author);
 
         $this->post(route('booking-requests.store'), [
-            'date'     => '2026-01-01',
+            'date' => '2026-01-01',
             'user_ids' => [$participant->id],
         ]);
 
@@ -95,7 +95,7 @@ class BookingRequestWebTest extends TestCase
         $this->actingAs(User::factory()->create());
 
         $this->post(route('booking-requests.store'), [
-            'date'     => '2026-01-01',
+            'date' => '2026-01-01',
             'table_id' => 99999,
         ])
             ->assertSessionHasErrors(['table_id']);
@@ -106,7 +106,7 @@ class BookingRequestWebTest extends TestCase
         $this->actingAs(User::factory()->create());
 
         $this->post(route('booking-requests.store'), [
-            'date'     => '2026-01-01',
+            'date' => '2026-01-01',
             'user_ids' => [99999],
         ])
             ->assertSessionHasErrors(['user_ids.0']);

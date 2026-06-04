@@ -16,6 +16,9 @@ type Props = {
     reservations: Reservation[];
     authUserId: number;
     users: ReservationUser[];
+    myReservationDates: string[];
+    myRequestDates: string[];
+    myInviteDates: string[];
 };
 
 const props = defineProps<Props>();
@@ -199,11 +202,28 @@ function deleteReservation(id: number): void {
                     {{ showMonth(date, i) ? monthName(date) : dayName(date) }}
                 </span>
                 <span class="mt-1 text-base font-bold leading-none">{{ dayNumber(date) }}</span>
-                <span
-                    v-if="date === todayStr"
-                    class="mt-1 h-1 w-1 rounded-full"
-                    :class="date === activeDate ? 'bg-background' : 'bg-primary'"
-                />
+                <div class="mt-1 flex min-h-[4px] items-center justify-center gap-0.5">
+                    <span
+                        v-if="date === todayStr"
+                        class="h-1 w-1 rounded-full"
+                        :class="date === activeDate ? 'bg-background' : 'bg-primary'"
+                    />
+                    <span
+                        v-if="myReservationDates.includes(date)"
+                        class="h-1 w-1 rounded-full"
+                        :class="date === activeDate ? 'bg-background/60' : 'bg-green-500'"
+                    />
+                    <span
+                        v-if="myRequestDates.includes(date)"
+                        class="h-1 w-1 rounded-full"
+                        :class="date === activeDate ? 'bg-background/60' : 'bg-blue-500'"
+                    />
+                    <span
+                        v-if="myInviteDates.includes(date)"
+                        class="h-1 w-1 rounded-full"
+                        :class="date === activeDate ? 'bg-background/60' : 'bg-amber-500'"
+                    />
+                </div>
             </button>
         </div>
 

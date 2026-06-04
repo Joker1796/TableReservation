@@ -2,7 +2,8 @@
 import { Head, Link } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import BookingRequestModal from '@/components/BookingRequestModal.vue';
-import { dashboard, login, register } from '@/routes';
+import { login, register } from '@/routes';
+import { index as reservationsIndex } from '@/routes/reservations';
 
 withDefaults(
     defineProps<{
@@ -35,7 +36,7 @@ withDefaults(
                 </a>
                 <Link
                     v-if="$page.props.auth.user"
-                    :href="dashboard()"
+                    :href="reservationsIndex().url"
                     class="rounded-md bg-[#1b1b18] px-4 py-1.5 text-sm text-white hover:bg-black dark:bg-[#EDEDEC] dark:text-[#1b1b18] dark:hover:bg-white"
                 >
                     Личный кабинет

@@ -26,9 +26,9 @@ class DashboardController extends Controller
             ->get(['id', 'name', 'email']);
 
         return Inertia::render('Dashboard', [
-            'tables'     => $tables,
+            'tables' => $tables,
             'myRequests' => $myRequests,
-            'users'      => $users,
+            'users' => $users,
         ]);
     }
 }

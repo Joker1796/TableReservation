@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
 use App\Http\Controllers\Controller;
+use App\Models\BookingRequest;
+use App\Models\Invite;
 use App\Models\Reservation;
 use App\Models\Table;
 use App\Models\User;
@@ -18,6 +21,7 @@ class ReservationWebController extends Controller
     public function index(Request $request): Response
     {
         $date = $request->date ?? now()->toDateString();
+        $userId = auth()->id();
 
         $reservations = Reservation::with(['table', 'users'])
             ->whereDate('date', $date)
@@ -26,10 +30,27 @@ class ReservationWebController extends Controller
 
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
 
+        $myReservationDates = Reservation::whereHas('users', fn ($q) => $q->where('user_id', $userId))
+            ->pluck('date')->map(fn ($d) => substr($d, 0, 10))->unique()->values();
+
+        $myRequestDates = BookingRequest::where(function ($q) use ($userId) {
+            $q->where('author_id', $userId)
+                ->orWhereHas('users', fn ($q2) => $q2->where('user_id', $userId));
+        })->pluck('date')->map(fn ($d) => substr($d, 0, 10))->unique()->values();
+
+        $myInviteDates = Invite::where('target_id', $userId)
+            ->where('status', InviteStatus::PENDING)
+            ->with('reservation:id,date')
+            ->get()->pluck('reservation.date')
+            ->filter()->map(fn ($d) => substr($d, 0, 10))->unique()->values();
+
         return Inertia::render('reservations/Index', [
             'reservations' => $reservations,
-            'authUserId' => auth()->id(),
+            'authUserId' => $userId,
             'users' => $users,
+            'myReservationDates' => $myReservationDates,
+            'myRequestDates' => $myRequestDates,
+            'myInviteDates' => $myInviteDates,
         ]);
     }
 

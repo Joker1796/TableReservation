@@ -2,6 +2,9 @@
 
 namespace Tests\Feature\Web;
 
+use App\Enums\InviteStatus;
+use App\Models\BookingRequest;
+use App\Models\Invite;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -306,5 +309,79 @@ class ReservationWebTest extends TestCase
             'reservation_id' => $reservation->id,
             'user_id' => $participant->id,
         ]);
+    }
+
+    // --- date strip indicators ---
+
+    public function test_index_returns_my_reservation_dates(): void
+    {
+        $user = $this->actingAsUser();
+        $r1 = Reservation::factory()->create(['date' => '2026-07-10']);
+        $r1->users()->attach($user->id);
+        Reservation::factory()->create(['date' => '2026-07-11']);
+
+        $this->get(route('reservations.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('myReservationDates', fn ($v) => collect($v)->contains('2026-07-10') && ! collect($v)->contains('2026-07-11'))
+            );
+    }
+
+    public function test_index_returns_my_request_dates_as_author(): void
+    {
+        $user = $this->actingAsUser();
+        BookingRequest::factory()->create(['author_id' => $user->id, 'date' => '2026-07-15']);
+
+        $this->get(route('reservations.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('myRequestDates', fn ($v) => collect($v)->contains('2026-07-15'))
+            );
+    }
+
+    public function test_index_returns_my_request_dates_as_participant(): void
+    {
+        $user = $this->actingAsUser();
+        $req = BookingRequest::factory()->create(['date' => '2026-07-20']);
+        $req->users()->attach($user->id);
+
+        $this->get(route('reservations.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('myRequestDates', fn ($v) => collect($v)->contains('2026-07-20'))
+            );
+    }
+
+    public function test_index_returns_my_invite_dates(): void
+    {
+        $user = $this->actingAsUser();
+        $author = User::factory()->create();
+        $reservation = Reservation::factory()->create(['date' => '2026-07-25']);
+        Invite::factory()->create([
+            'author_id' => $author->id,
+            'target_id' => $user->id,
+            'reservation_id' => $reservation->id,
+            'status' => InviteStatus::PENDING,
+        ]);
+
+        $this->get(route('reservations.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('myInviteDates', fn ($v) => collect($v)->contains('2026-07-25'))
+            );
+    }
+
+    public function test_index_excludes_non_pending_invite_dates(): void
+    {
+        $user = $this->actingAsUser();
+        $author = User::factory()->create();
+        $reservation = Reservation::factory()->create(['date' => '2026-07-26']);
+        Invite::factory()->create([
+            'author_id' => $author->id,
+            'target_id' => $user->id,
+            'reservation_id' => $reservation->id,
+            'status' => InviteStatus::ACCEPTED,
+        ]);
+
+        $this->get(route('reservations.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('myInviteDates', fn ($v) => ! collect($v)->contains('2026-07-26'))
+            );
     }
 }

@@ -79,7 +79,7 @@ class DashboardTest extends TestCase
 
         Invite::factory()->create([
             'target_id' => $user->id,
-            'status'    => InviteStatus::PENDING,
+            'status' => InviteStatus::PENDING,
         ]);
 
         $this->get(route('dashboard'))
