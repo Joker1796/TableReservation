@@ -22,6 +22,6 @@ class BookingRequestWebController extends Controller
             Mail::to($admin)->queue(new NewBookingRequestMail($bookingRequest));
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->route('reservations.index');
     }
 }

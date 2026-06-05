@@ -29,7 +29,7 @@ class BookingRequestWebTest extends TestCase
             'date' => '2026-01-01',
             'comment' => 'test comment',
         ])
-            ->assertRedirect(route('dashboard'));
+            ->assertRedirect(route('reservations.index'));
 
         $this->assertDatabaseHas('booking_requests', ['comment' => 'test comment']);
     }

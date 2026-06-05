@@ -16,7 +16,7 @@ class InviteWebController
 
         InviteService::accept($invite);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('reservations.index');
     }
 
     public function reject(int $id): RedirectResponse
@@ -27,6 +27,6 @@ class InviteWebController
 
         InviteService::revoke($invite);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('reservations.index');
     }
 }

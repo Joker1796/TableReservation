@@ -38,7 +38,7 @@ class InviteWebTest extends TestCase
 
         $this->actingAs($user)
             ->put(route('invites.accept', $invite->id))
-            ->assertRedirect(route('dashboard'));
+            ->assertRedirect(route('reservations.index'));
 
         $this->assertDatabaseHas('invites', [
             'id' => $invite->id,
@@ -56,7 +56,7 @@ class InviteWebTest extends TestCase
 
         $this->actingAs($user)
             ->put(route('invites.reject', $invite->id))
-            ->assertRedirect(route('dashboard'));
+            ->assertRedirect(route('reservations.index'));
 
         $this->assertDatabaseHas('invites', [
             'id' => $invite->id,

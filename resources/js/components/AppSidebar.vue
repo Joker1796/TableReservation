@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { CalendarDays, ClipboardList, LayoutGrid, Settings, Table2 } from 'lucide-vue-next';
+import { CalendarDays, ClipboardList, Settings, Table2 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -18,7 +18,6 @@ import {
     SidebarMenuItem,
     SidebarSeparator,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 import type { Auth } from '@/types/auth';
 
@@ -30,11 +29,6 @@ const mainNavItems: NavItem[] = [
         title: 'Резервирования',
         href: '/reservations',
         icon: CalendarDays,
-    },
-    {
-        title: 'Заявки на бронирование',
-        href: dashboard(),
-        icon: LayoutGrid,
     },
 ];
 
@@ -65,7 +59,7 @@ const footerNavItems: NavItem[] = [];
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="dashboard()">
+                        <Link href="/reservations">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>
