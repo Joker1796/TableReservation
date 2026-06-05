@@ -412,4 +412,76 @@ class ReservationWebTest extends TestCase
                 ->where('myInviteDates', fn ($v) => ! collect($v)->contains('2026-07-26'))
             );
     }
+
+    // --- myBookingRequests ---
+
+    public function test_index_returns_booking_requests_for_date_where_user_is_author(): void
+    {
+        $user = $this->actingAsUser();
+        BookingRequest::factory()->create(['author_id' => $user->id, 'date' => '2026-07-10', 'status' => BookingRequestStatus::PENDING]);
+
+        $this->get(route('reservations.index', ['date' => '2026-07-10']))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('myBookingRequests', 1)
+            );
+    }
+
+    public function test_index_returns_booking_requests_for_date_where_user_is_participant(): void
+    {
+        $user = $this->actingAsUser();
+        $req = BookingRequest::factory()->create(['date' => '2026-07-10', 'status' => BookingRequestStatus::PENDING]);
+        $req->users()->attach($user->id);
+
+        $this->get(route('reservations.index', ['date' => '2026-07-10']))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('myBookingRequests', 1)
+            );
+    }
+
+    public function test_index_excludes_booking_requests_for_other_date(): void
+    {
+        $user = $this->actingAsUser();
+        BookingRequest::factory()->create(['author_id' => $user->id, 'date' => '2026-07-11', 'status' => BookingRequestStatus::PENDING]);
+
+        $this->get(route('reservations.index', ['date' => '2026-07-10']))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('myBookingRequests', 0)
+            );
+    }
+
+    public function test_index_excludes_booking_requests_where_user_is_not_involved(): void
+    {
+        $this->actingAsUser();
+        BookingRequest::factory()->create(['date' => '2026-07-10', 'status' => BookingRequestStatus::PENDING]);
+
+        $this->get(route('reservations.index', ['date' => '2026-07-10']))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('myBookingRequests', 0)
+            );
+    }
+
+    public function test_index_excludes_non_pending_booking_requests(): void
+    {
+        $user = $this->actingAsUser();
+        BookingRequest::factory()->create(['author_id' => $user->id, 'date' => '2026-07-10', 'status' => BookingRequestStatus::PENDING]);
+        BookingRequest::factory()->create(['author_id' => $user->id, 'date' => '2026-07-10', 'status' => BookingRequestStatus::APPROVED]);
+        BookingRequest::factory()->create(['author_id' => $user->id, 'date' => '2026-07-10', 'status' => BookingRequestStatus::REJECTED]);
+
+        $this->get(route('reservations.index', ['date' => '2026-07-10']))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('myBookingRequests', 1)
+            );
+    }
+
+    public function test_index_excludes_soft_deleted_booking_requests(): void
+    {
+        $user = $this->actingAsUser();
+        $req = BookingRequest::factory()->create(['author_id' => $user->id, 'date' => '2026-07-10', 'status' => BookingRequestStatus::PENDING]);
+        $req->delete();
+
+        $this->get(route('reservations.index', ['date' => '2026-07-10']))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('myBookingRequests', 0)
+            );
+    }
 }

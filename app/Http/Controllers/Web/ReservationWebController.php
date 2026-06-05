@@ -46,6 +46,15 @@ class ReservationWebController extends Controller
             ->get()->pluck('reservation.date')
             ->filter()->map(fn ($d) => substr($d, 0, 10))->unique()->values();
 
+        $myBookingRequests = BookingRequest::where(function ($q) use ($userId) {
+            $q->where('author_id', $userId)
+                ->orWhereHas('users', fn ($q2) => $q2->where('user_id', $userId));
+        })->whereDate('date', $date)
+            ->where('status', BookingRequestStatus::PENDING)
+            ->with(['table', 'users', 'author'])
+            ->latest()
+            ->get();
+
         return Inertia::render('reservations/Index', [
             'reservations' => $reservations,
             'authUserId' => $userId,
@@ -53,6 +62,7 @@ class ReservationWebController extends Controller
             'myReservationDates' => $myReservationDates,
             'myRequestDates' => $myRequestDates,
             'myInviteDates' => $myInviteDates,
+            'myBookingRequests' => $myBookingRequests,
         ]);
     }
 

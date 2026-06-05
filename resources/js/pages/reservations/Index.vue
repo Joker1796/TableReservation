@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3';
-import { CalendarDays, Plus, Table2, UserPlus, Users, X } from 'lucide-vue-next';
+import { CalendarDays, ClipboardList, Plus, Table2, UserPlus, Users, X } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import BookingRequestModal from '@/components/BookingRequestModal.vue';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Spinner } from '@/components/ui/spinner';
 import { home } from '@/routes';
 import type { Auth } from '@/types/auth';
-import type { Reservation, ReservationUser } from '@/types/reservation';
+import type { BookingRequest, Reservation, ReservationUser } from '@/types/reservation';
 
 type Props = {
     reservations: Reservation[];
@@ -19,6 +19,7 @@ type Props = {
     myReservationDates: string[];
     myRequestDates: string[];
     myInviteDates: string[];
+    myBookingRequests: BookingRequest[];
 };
 
 const props = defineProps<Props>();
@@ -102,7 +103,7 @@ function selectDate(date: string): void {
         {
             preserveState: true,
             preserveScroll: true,
-            only: ['reservations'],
+            only: ['reservations', 'myBookingRequests'],
             onFinish: () => {
  loading.value = false;
 },
@@ -233,6 +234,73 @@ function deleteReservation(id: number): void {
         </div>
 
         <template v-else>
+        <!-- My booking requests -->
+        <div v-if="myBookingRequests.length > 0" class="space-y-3">
+            <h2 class="flex items-center gap-2 text-base font-semibold">
+                <ClipboardList class="h-4 w-4 text-muted-foreground" />
+                Мои заявки
+            </h2>
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <Card v-for="request in myBookingRequests" :key="request.id">
+                    <CardHeader class="pb-3">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <CardTitle class="text-base">
+                                    {{ request.table ? request.table.name : 'Стол не выбран' }}
+                                </CardTitle>
+                                <CardDescription class="mt-1 flex items-center gap-1">
+                                    <CalendarDays class="h-3.5 w-3.5" />
+                                    {{ formatDate(request.date) }}
+                                </CardDescription>
+                            </div>
+                            <div class="flex flex-col items-end gap-1">
+                                <Badge
+                                    :variant="request.status === 0 ? 'outline' : request.status === 1 ? 'default' : 'destructive'"
+                                    class="text-xs"
+                                >
+                                    {{ request.status === 0 ? 'На рассмотрении' : request.status === 1 ? 'Одобрена' : 'Отклонена' }}
+                                </Badge>
+                                <Badge variant="secondary" class="text-xs">
+                                    {{ request.author_id === authUserId ? 'Автор' : 'Участник' }}
+                                </Badge>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent class="space-y-3">
+                        <div v-if="request.table" class="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Table2 class="h-3.5 w-3.5" />
+                            {{ request.table.description || request.table.name }}
+                        </div>
+                        <p v-if="request.comment" class="line-clamp-2 text-sm text-muted-foreground">
+                            {{ request.comment }}
+                        </p>
+                        <div v-if="request.users.length > 0" class="pt-1">
+                            <p class="mb-2 flex items-center gap-1 text-xs text-muted-foreground">
+                                <Users class="h-3.5 w-3.5" />
+                                Участники ({{ request.users.length }})
+                            </p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <div
+                                    v-for="user in request.users"
+                                    :key="user.id"
+                                    class="flex items-center gap-1 rounded-full border bg-muted/50 px-2.5 py-0.5 text-xs"
+                                    :title="user.email"
+                                >
+                                    <div
+                                        class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold"
+                                        :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
+                                    >
+                                        {{ getInitial(user.name) }}
+                                    </div>
+                                    <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+
         <!-- Empty state -->
         <div
             v-if="reservations.length === 0"
