@@ -69,30 +69,41 @@ function onOpenChange(value: boolean): void {
             <DialogHeader>
                 <DialogTitle>Заявка на бронирование стола</DialogTitle>
                 <DialogDescription>
-                    Укажите дату и дополнительные пожелания. Администратор подтвердит заявку.
+                    Укажите дату и дополнительные пожелания. Администратор
+                    подтвердит заявку.
                 </DialogDescription>
             </DialogHeader>
             <form class="space-y-4" @submit.prevent="submit">
                 <!-- Date -->
                 <div class="grid gap-2">
-                    <Label for="modal-date">Дата <span class="text-destructive">*</span></Label>
+                    <Label for="modal-date"
+                        >Дата <span class="text-destructive">*</span></Label
+                    >
                     <DateInput id="modal-date" v-model="form.date" required />
                     <InputError :message="form.errors.date" />
                 </div>
 
                 <!-- Table -->
-                <div v-if="page.props.bookingFormData?.tables?.length" class="grid gap-2">
+                <div
+                    v-if="page.props.bookingFormData?.tables?.length"
+                    class="grid gap-2"
+                >
                     <Label>Стол</Label>
                     <Select
-                        :model-value="form.table_id ? String(form.table_id) : undefined"
-                        @update:model-value="(v) => form.table_id = v ? Number(v) : null"
+                        :model-value="
+                            form.table_id ? String(form.table_id) : undefined
+                        "
+                        @update:model-value="
+                            (v) => (form.table_id = v ? Number(v) : null)
+                        "
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Не выбран" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem
-                                v-for="table in page.props.bookingFormData.tables"
+                                v-for="table in page.props.bookingFormData
+                                    .tables"
                                 :key="table.id"
                                 :value="String(table.id)"
                             >
@@ -104,7 +115,10 @@ function onOpenChange(value: boolean): void {
                 </div>
 
                 <!-- Participants -->
-                <div v-if="page.props.bookingFormData?.users?.length" class="grid gap-2">
+                <div
+                    v-if="page.props.bookingFormData?.users?.length"
+                    class="grid gap-2"
+                >
                     <Label>Участники</Label>
                     <UserPicker
                         :users="page.props.bookingFormData.users"
@@ -128,8 +142,15 @@ function onOpenChange(value: boolean): void {
                 </div>
 
                 <DialogFooter>
-                    <Button type="button" variant="outline" @click="onOpenChange(false)">Отмена</Button>
-                    <Button type="submit" :disabled="form.processing">Отправить заявку</Button>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        @click="onOpenChange(false)"
+                        >Отмена</Button
+                    >
+                    <Button type="submit" :disabled="form.processing"
+                        >Отправить заявку</Button
+                    >
                 </DialogFooter>
             </form>
         </DialogContent>

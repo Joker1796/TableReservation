@@ -105,7 +105,9 @@ defineProps<{
             v-if="canRegister"
         >
             Нет аккаунта?
-            <TextLink :href="register()" :tabindex="5">Зарегистрироваться</TextLink>
+            <TextLink :href="register()" :tabindex="5"
+                >Зарегистрироваться</TextLink
+            >
         </div>
     </Form>
 </template>

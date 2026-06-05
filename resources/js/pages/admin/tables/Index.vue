@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Edit, Plus, Trash2 } from 'lucide-vue-next';
+import Pagination from '@/components/Pagination.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import Pagination from '@/components/Pagination.vue';
-import type { ReservationTable } from '@/types/reservation';
 import type { Paginated } from '@/types/pagination';
+import type { ReservationTable } from '@/types/reservation';
 
 type Props = {
     tables: Paginated<ReservationTable>;
@@ -36,7 +36,9 @@ function deleteTable(id: number): void {
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-2xl font-semibold">Столы</h1>
-                <p class="text-sm text-muted-foreground">Управление столами клуба</p>
+                <p class="text-sm text-muted-foreground">
+                    Управление столами клуба
+                </p>
             </div>
             <Button as-child>
                 <Link href="/admin/tables/create">
@@ -55,46 +57,64 @@ function deleteTable(id: number): void {
 
         <div v-else class="flex flex-col gap-4">
             <div class="panel-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="col-th text-left">Название</th>
-                        <th class="col-th text-left">Описание</th>
-                        <th class="col-th text-left">Статус</th>
-                        <th class="col-th text-right">Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="table in tables.data" :key="table.id">
-                        <td class="col-td font-medium">{{ table.name }}</td>
-                        <td class="col-td max-w-xs text-muted-foreground">
-                            <span class="line-clamp-1">{{ table.description || '—' }}</span>
-                        </td>
-                        <td class="col-td">
-                            <Badge :variant="table.status === 'ready' ? 'default' : 'secondary'">
-                                {{ table.status === 'ready' ? 'Готов' : 'Не готов' }}
-                            </Badge>
-                        </td>
-                        <td class="col-td">
-                            <div class="flex justify-end gap-2">
-                                <Button variant="outline" size="icon" as-child>
-                                    <Link :href="`/admin/tables/${table.id}/edit`">
-                                        <Edit class="h-4 w-4" />
-                                    </Link>
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    class="btn-danger"
-                                    @click="deleteTable(table.id)"
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-th text-left">Название</th>
+                            <th class="col-th text-left">Описание</th>
+                            <th class="col-th text-left">Статус</th>
+                            <th class="col-th text-right">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="table in tables.data" :key="table.id">
+                            <td class="col-td font-medium">{{ table.name }}</td>
+                            <td class="col-td max-w-xs text-muted-foreground">
+                                <span class="line-clamp-1">{{
+                                    table.description || '—'
+                                }}</span>
+                            </td>
+                            <td class="col-td">
+                                <Badge
+                                    :variant="
+                                        table.status === 'ready'
+                                            ? 'default'
+                                            : 'secondary'
+                                    "
                                 >
-                                    <Trash2 class="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                    {{
+                                        table.status === 'ready'
+                                            ? 'Готов'
+                                            : 'Не готов'
+                                    }}
+                                </Badge>
+                            </td>
+                            <td class="col-td">
+                                <div class="flex justify-end gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        as-child
+                                    >
+                                        <Link
+                                            :href="`/admin/tables/${table.id}/edit`"
+                                        >
+                                            <Edit class="h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        class="btn-danger"
+                                        @click="deleteTable(table.id)"
+                                    >
+                                        <Trash2 class="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <Pagination :links="tables.links" />
         </div>

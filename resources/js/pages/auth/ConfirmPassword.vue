@@ -10,7 +10,8 @@ import { store } from '@/routes/password/confirm';
 defineOptions({
     layout: {
         title: 'Подтверждение пароля',
-        description: 'Это защищённая область. Подтвердите пароль перед продолжением.',
+        description:
+            'Это защищённая область. Подтвердите пароль перед продолжением.',
     },
 });
 </script>

@@ -33,14 +33,21 @@ function toggleUser(id: number): void {
     <div ref="pickerRef" class="relative">
         <button
             type="button"
-            class="flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            class="flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
             @click="open = !open"
         >
             <span class="flex items-center gap-2 text-muted-foreground">
                 <Users class="h-4 w-4 shrink-0" />
-                {{ modelValue.length === 0 ? 'Добавить участников' : `Выбрано: ${modelValue.length}` }}
+                {{
+                    modelValue.length === 0
+                        ? 'Добавить участников'
+                        : `Выбрано: ${modelValue.length}`
+                }}
             </span>
-            <ChevronDown class="h-4 w-4 shrink-0 text-muted-foreground" :class="{ 'rotate-180': open }" />
+            <ChevronDown
+                class="h-4 w-4 shrink-0 text-muted-foreground"
+                :class="{ 'rotate-180': open }"
+            />
         </button>
 
         <div
@@ -56,10 +63,16 @@ function toggleUser(id: number): void {
             >
                 <Check
                     class="h-4 w-4 shrink-0"
-                    :class="modelValue.includes(user.id) ? 'text-primary' : 'text-transparent'"
+                    :class="
+                        modelValue.includes(user.id)
+                            ? 'text-primary'
+                            : 'text-transparent'
+                    "
                 />
                 <span class="font-medium">{{ user.name }}</span>
-                <span class="ml-auto text-xs text-muted-foreground">{{ user.email }}</span>
+                <span class="ml-auto text-xs text-muted-foreground">{{
+                    user.email
+                }}</span>
             </button>
         </div>
     </div>
@@ -68,9 +81,11 @@ function toggleUser(id: number): void {
         <span
             v-for="user in users.filter((u) => modelValue.includes(u.id))"
             :key="user.id"
-            class="flex items-center gap-1 rounded-full border bg-muted/50 py-0.5 pl-0.5 pr-2 text-xs"
+            class="flex items-center gap-1 rounded-full border bg-muted/50 py-0.5 pr-2 pl-0.5 text-xs"
         >
-            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+            <span
+                class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground"
+            >
                 {{ user.name.charAt(0).toUpperCase() }}
             </span>
             <span class="font-medium">{{ user.name }}</span>

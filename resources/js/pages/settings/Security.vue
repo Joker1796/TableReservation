@@ -118,10 +118,7 @@ onUnmounted(() => clearTwoFactorAuthData());
     </div>
 
     <div v-if="canManageTwoFactor" class="space-y-6">
-        <Heading
-            variant="small"
-            title="Двухфакторная аутентификация"
-        />
+        <Heading variant="small" title="Двухфакторная аутентификация" />
 
         <div
             v-if="!twoFactorEnabled"
@@ -130,8 +127,8 @@ onUnmounted(() => clearTwoFactorAuthData());
             <p class="text-sm text-muted-foreground">
                 При включении двухфакторной аутентификации вам будет предложено
                 ввести безопасный PIN-код при входе в систему. Этот PIN-код
-                можно получить в приложении на вашем телефоне,
-                поддерживающем TOTP.
+                можно получить в приложении на вашем телефоне, поддерживающем
+                TOTP.
             </p>
 
             <div>
@@ -153,8 +150,8 @@ onUnmounted(() => clearTwoFactorAuthData());
 
         <div v-else class="flex flex-col items-start justify-start space-y-4">
             <p class="text-sm text-muted-foreground">
-                При входе вам будет предложено ввести случайный PIN-код,
-                который можно получить в TOTP-приложении на вашем телефоне.
+                При входе вам будет предложено ввести случайный PIN-код, который
+                можно получить в TOTP-приложении на вашем телефоне.
             </p>
 
             <div class="relative inline">

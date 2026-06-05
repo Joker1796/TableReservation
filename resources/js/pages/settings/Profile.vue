@@ -39,10 +39,7 @@ const user = computed(() => page.props.auth.user);
     <h1 class="sr-only">Настройки профиля</h1>
 
     <div class="flex flex-col space-y-6">
-        <Heading
-            variant="small"
-            title="Общая информация"
-        />
+        <Heading variant="small" title="Общая информация" />
 
         <Form
             v-bind="ProfileController.update.form()"

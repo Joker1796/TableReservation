@@ -23,10 +23,7 @@ const passwordInput = useTemplateRef('passwordInput');
 
 <template>
     <div class="space-y-6">
-        <Heading
-            variant="small"
-            title="Удаление аккаунта"
-        />
+        <Heading variant="small" title="Удаление аккаунта" />
         <div
             class="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10"
         >
@@ -38,7 +35,10 @@ const passwordInput = useTemplateRef('passwordInput');
             </div>
             <Dialog>
                 <DialogTrigger as-child>
-                    <Button variant="destructive" data-test="delete-user-button">
+                    <Button
+                        variant="destructive"
+                        data-test="delete-user-button"
+                    >
                         Удалить аккаунт
                     </Button>
                 </DialogTrigger>
@@ -60,16 +60,14 @@ const passwordInput = useTemplateRef('passwordInput');
                             <DialogDescription>
                                 После удаления вашей учетной записи все ее
                                 ресурсы и данные также будут безвозвратно
-                                удалены. Пожалуйста, введите свой пароль,
-                                чтобы подтвердить, что вы хотите безвозвратно
-                                удалить свою учетную запись.
+                                удалены. Пожалуйста, введите свой пароль, чтобы
+                                подтвердить, что вы хотите безвозвратно удалить
+                                свою учетную запись.
                             </DialogDescription>
                         </DialogHeader>
 
                         <div class="grid gap-2">
-                            <Label for="password" class="sr-only"
-                                >Пароль</Label
-                            >
+                            <Label for="password" class="sr-only">Пароль</Label>
                             <PasswordInput
                                 id="password"
                                 name="password"

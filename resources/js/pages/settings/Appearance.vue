@@ -22,10 +22,7 @@ defineOptions({
     <h1 class="sr-only">Настройки внешнего вида интерфейса</h1>
 
     <div class="space-y-6">
-        <Heading
-            variant="small"
-            title="Выбор темы"
-        />
+        <Heading variant="small" title="Выбор темы" />
         <AppearanceTabs />
     </div>
 </template>

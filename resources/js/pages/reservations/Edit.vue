@@ -54,7 +54,9 @@ function submit(): void {
 
         <form class="max-w-lg space-y-5" @submit.prevent="submit">
             <div class="grid gap-2">
-                <Label for="date">Дата <span class="text-destructive">*</span></Label>
+                <Label for="date"
+                    >Дата <span class="text-destructive">*</span></Label
+                >
                 <DateInput id="date" v-model="form.date" required />
                 <InputError :message="form.errors.date" />
             </div>
@@ -62,14 +64,24 @@ function submit(): void {
             <div class="grid gap-2">
                 <Label for="table_id">Стол</Label>
                 <Select
-                    :model-value="form.table_id ? String(form.table_id) : undefined"
-                    @update:model-value="(v) => form.table_id = v ? Number(v) : null"
+                    :model-value="
+                        form.table_id ? String(form.table_id) : undefined
+                    "
+                    @update:model-value="
+                        (v) => (form.table_id = v ? Number(v) : null)
+                    "
                 >
                     <SelectTrigger id="table_id">
-                        <SelectValue placeholder="Выберите стол (необязательно)" />
+                        <SelectValue
+                            placeholder="Выберите стол (необязательно)"
+                        />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem v-for="table in tables" :key="table.id" :value="String(table.id)">
+                        <SelectItem
+                            v-for="table in tables"
+                            :key="table.id"
+                            :value="String(table.id)"
+                        >
                             {{ table.name }}
                         </SelectItem>
                     </SelectContent>
@@ -92,7 +104,12 @@ function submit(): void {
                 <Button type="submit" :disabled="form.processing">
                     Сохранить изменения
                 </Button>
-                <Button variant="outline" type="button" as="a" :href="`/reservations/${reservation.id}`">
+                <Button
+                    variant="outline"
+                    type="button"
+                    as="a"
+                    :href="`/reservations/${reservation.id}`"
+                >
                     Отмена
                 </Button>
             </div>

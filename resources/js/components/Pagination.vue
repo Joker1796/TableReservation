@@ -6,9 +6,7 @@ import type { PaginationLink } from '@/types/pagination';
 defineProps<{ links: PaginationLink[] }>();
 
 function decodeLabel(label: string): string {
-    return label
-        .replace('&laquo;', '«')
-        .replace('&raquo;', '»');
+    return label.replace('&laquo;', '«').replace('&raquo;', '»');
 }
 </script>
 
@@ -22,7 +20,9 @@ function decodeLabel(label: string): string {
                 class="h-8 min-w-8 px-2 text-xs"
                 as-child
             >
-                <Link :href="link.url" preserve-scroll>{{ decodeLabel(link.label) }}</Link>
+                <Link :href="link.url" preserve-scroll>{{
+                    decodeLabel(link.label)
+                }}</Link>
             </Button>
             <Button
                 v-else

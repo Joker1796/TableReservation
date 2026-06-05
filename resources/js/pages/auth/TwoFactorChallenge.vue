@@ -16,7 +16,8 @@ const authConfigContent = computed<TwoFactorConfigContent>(() => {
     if (showRecoveryInput.value) {
         return {
             title: 'Код восстановления',
-            description: 'Введите один из резервных кодов восстановления для подтверждения входа.',
+            description:
+                'Введите один из резервных кодов восстановления для подтверждения входа.',
             buttonText: 'войти с кодом аутентификации',
         };
     }
@@ -81,7 +82,9 @@ const code = ref<string>('');
                     </div>
                     <InputError :message="errors.code" />
                 </div>
-                <Button type="submit" class="w-full" :disabled="processing">Продолжить</Button>
+                <Button type="submit" class="w-full" :disabled="processing"
+                    >Продолжить</Button
+                >
                 <div class="text-center text-sm text-muted-foreground">
                     <span>или </span>
                     <button
@@ -110,7 +113,9 @@ const code = ref<string>('');
                     required
                 />
                 <InputError :message="errors.recovery_code" />
-                <Button type="submit" class="w-full" :disabled="processing">Продолжить</Button>
+                <Button type="submit" class="w-full" :disabled="processing"
+                    >Продолжить</Button
+                >
 
                 <div class="text-center text-sm text-muted-foreground">
                     <span>или </span>

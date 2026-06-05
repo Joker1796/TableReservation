@@ -38,20 +38,36 @@ function submit(): void {
     <Head title="Добавить стол" />
 
     <div class="space-y-6 p-4">
-        <Heading variant="small" title="Новый стол" description="Добавьте стол в систему" />
+        <Heading
+            variant="small"
+            title="Новый стол"
+            description="Добавьте стол в систему"
+        />
 
         <form class="max-w-lg space-y-5" @submit.prevent="submit">
             <div class="grid gap-2">
-                <Label for="name">Название <span class="text-destructive">*</span></Label>
-                <Input id="name" v-model="form.name" placeholder="Стол №1" required maxlength="100" />
+                <Label for="name"
+                    >Название <span class="text-destructive">*</span></Label
+                >
+                <Input
+                    id="name"
+                    v-model="form.name"
+                    placeholder="Стол №1"
+                    required
+                    maxlength="100"
+                />
                 <InputError :message="form.errors.name" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="status">Статус <span class="text-destructive">*</span></Label>
+                <Label for="status"
+                    >Статус <span class="text-destructive">*</span></Label
+                >
                 <Select
                     :model-value="form.status"
-                    @update:model-value="(v) => form.status = v as 'ready' | 'not_ready'"
+                    @update:model-value="
+                        (v) => (form.status = v as 'ready' | 'not_ready')
+                    "
                 >
                     <SelectTrigger id="status">
                         <SelectValue />
@@ -76,8 +92,16 @@ function submit(): void {
             </div>
 
             <div class="flex items-center gap-3">
-                <Button type="submit" :disabled="form.processing">Создать стол</Button>
-                <Button variant="outline" type="button" as="a" href="/admin/tables">Отмена</Button>
+                <Button type="submit" :disabled="form.processing"
+                    >Создать стол</Button
+                >
+                <Button
+                    variant="outline"
+                    type="button"
+                    as="a"
+                    href="/admin/tables"
+                    >Отмена</Button
+                >
             </div>
         </form>
     </div>

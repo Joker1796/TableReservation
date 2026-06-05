@@ -2,7 +2,9 @@
 import { Form, Head } from '@inertiajs/vue3';
 import { Copy, Check } from 'lucide-vue-next';
 import { ref } from 'vue';
-import SecurityController, { editToken } from '@/actions/App/Http/Controllers/Settings/SecurityController';
+import SecurityController, {
+    editToken,
+} from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -49,8 +51,16 @@ async function copyToken(token: string) {
             description="Здесь вы можете сгенерировать api-токен для вашего аккаунта"
         />
 
-        <Form v-bind="SecurityController.generateToken.form()" class="space-y-4" #default="{ processing }">
-            <Button type="submit" :disabled="processing" data-test="generate-token-button">
+        <Form
+            v-bind="SecurityController.generateToken.form()"
+            class="space-y-4"
+            #default="{ processing }"
+        >
+            <Button
+                type="submit"
+                :disabled="processing"
+                data-test="generate-token-button"
+            >
                 Сгенерировать токен
             </Button>
         </Form>

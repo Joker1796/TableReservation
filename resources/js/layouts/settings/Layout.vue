@@ -18,7 +18,9 @@ const sidebarNavItems = computed<NavItem[]>(() => [
     { title: 'Профиль', href: editProfile() },
     { title: 'Безопасность', href: editSecurity() },
     { title: 'Внешний вид', href: editAppearance() },
-    ...(page.props.auth?.user?.is_api ? [{ title: 'API Токен', href: editToken() }] : []),
+    ...(page.props.auth?.user?.is_api
+        ? [{ title: 'API Токен', href: editToken() }]
+        : []),
 ]);
 
 const { isCurrentOrParentUrl } = useCurrentUrl();

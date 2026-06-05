@@ -45,20 +45,30 @@ function submit(): void {
     <Head title="Редактировать стол" />
 
     <div class="space-y-6 p-4">
-        <Heading variant="small" title="Редактировать стол" :description="table.name" />
+        <Heading
+            variant="small"
+            title="Редактировать стол"
+            :description="table.name"
+        />
 
         <form class="max-w-lg space-y-5" @submit.prevent="submit">
             <div class="grid gap-2">
-                <Label for="name">Название <span class="text-destructive">*</span></Label>
+                <Label for="name"
+                    >Название <span class="text-destructive">*</span></Label
+                >
                 <Input id="name" v-model="form.name" required maxlength="100" />
                 <InputError :message="form.errors.name" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="status">Статус <span class="text-destructive">*</span></Label>
+                <Label for="status"
+                    >Статус <span class="text-destructive">*</span></Label
+                >
                 <Select
                     :model-value="form.status"
-                    @update:model-value="(v) => form.status = v as 'ready' | 'not_ready'"
+                    @update:model-value="
+                        (v) => (form.status = v as 'ready' | 'not_ready')
+                    "
                 >
                     <SelectTrigger id="status">
                         <SelectValue />
@@ -82,8 +92,16 @@ function submit(): void {
             </div>
 
             <div class="flex items-center gap-3">
-                <Button type="submit" :disabled="form.processing">Сохранить</Button>
-                <Button variant="outline" type="button" as="a" href="/admin/tables">Отмена</Button>
+                <Button type="submit" :disabled="form.processing"
+                    >Сохранить</Button
+                >
+                <Button
+                    variant="outline"
+                    type="button"
+                    as="a"
+                    href="/admin/tables"
+                    >Отмена</Button
+                >
             </div>
         </form>
     </div>
