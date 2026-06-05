@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\Web\BookingRequestWebController;
 use App\Http\Controllers\Web\InviteWebController;
+use App\Http\Controllers\Web\WorkshopController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 Route::inertia('/', 'Welcome', ['canRegister' => Features::enabled(Features::registration())])
     ->name('home');
+
+Route::get('/workshop', [WorkshopController::class, 'index'])->name('workshop');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('booking-requests', [BookingRequestWebController::class, 'store'])

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminBookingRequestController;
 use App\Http\Controllers\Admin\AdminReservationController;
 use App\Http\Controllers\Admin\AdminTableController;
+use App\Http\Controllers\Admin\AdminWorkshopController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'admin'])
@@ -40,4 +41,12 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('requests.assignTable');
         Route::delete('/requests/{id}', [AdminBookingRequestController::class, 'destroy'])
             ->name('requests.destroy');
+
+        // Workshop
+        Route::get('/workshop', [AdminWorkshopController::class, 'index'])
+            ->name('workshop.index');
+        Route::post('/workshop', [AdminWorkshopController::class, 'store'])
+            ->name('workshop.store');
+        Route::delete('/workshop/{id}', [AdminWorkshopController::class, 'destroy'])
+            ->name('workshop.destroy');
     });

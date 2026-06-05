@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { CalendarDays, ClipboardList, Settings, Table2 } from 'lucide-vue-next';
+import {
+    CalendarDays,
+    ClipboardList,
+    Paintbrush,
+    Settings,
+    Table2,
+} from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -48,6 +54,11 @@ const adminNavItems: NavItem[] = [
         href: '/admin/requests',
         icon: ClipboardList,
     },
+    {
+        title: 'Мастерская',
+        href: '/admin/workshop',
+        icon: Paintbrush,
+    },
 ];
 
 const footerNavItems: NavItem[] = [];
@@ -59,7 +70,7 @@ const footerNavItems: NavItem[] = [];
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link href="/reservations">
+                        <Link href="/">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>
@@ -78,7 +89,10 @@ const footerNavItems: NavItem[] = [];
                         Администрирование
                     </SidebarGroupLabel>
                     <SidebarMenu>
-                        <SidebarMenuItem v-for="item in adminNavItems" :key="item.title">
+                        <SidebarMenuItem
+                            v-for="item in adminNavItems"
+                            :key="item.title"
+                        >
                             <SidebarMenuButton as-child :tooltip="item.title">
                                 <Link :href="item.href">
                                     <component :is="item.icon" />
