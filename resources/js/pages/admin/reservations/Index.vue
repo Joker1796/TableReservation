@@ -20,10 +20,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import Pagination from '@/components/Pagination.vue';
 import type { Reservation, ReservationUser } from '@/types/reservation';
+import type { Paginated } from '@/types/pagination';
 
 type Props = {
-    reservations: Reservation[];
+    reservations: Paginated<Reservation>;
     users: ReservationUser[];
 };
 
@@ -82,16 +84,12 @@ function deleteReservation(id: number): void {
     <Head title="Резервирования" />
 
     <div class="flex flex-col gap-6 p-4">
-        <div>
-            <h1 class="text-2xl font-semibold">Резервирования</h1>
-            <p class="text-sm text-muted-foreground">Все подтверждённые бронирования</p>
-        </div>
-
-        <div v-if="reservations.length === 0" class="empty-state">
+        <div v-if="reservations.data.length === 0" class="empty-state">
             <p class="text-muted-foreground">Резервирований пока нет</p>
         </div>
 
-        <div v-else class="panel-table">
+        <div v-else class="flex flex-col gap-4">
+            <div class="panel-table">
             <table>
                 <thead>
                     <tr>
@@ -103,7 +101,7 @@ function deleteReservation(id: number): void {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="res in reservations" :key="res.id">
+                    <tr v-for="res in reservations.data" :key="res.id">
                         <td class="col-td font-medium">{{ formatDate(res.date) }}</td>
                         <td class="col-td">
                             <span v-if="res.table">
@@ -143,6 +141,8 @@ function deleteReservation(id: number): void {
                     </tr>
                 </tbody>
             </table>
+            </div>
+            <Pagination :links="reservations.links" />
         </div>
     </div>
 

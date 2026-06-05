@@ -16,7 +16,7 @@ class AdminReservationController extends Controller
 {
     public function index(): Response
     {
-        $reservations = Reservation::with(['table', 'users'])->latest()->get();
+        $reservations = Reservation::with(['table', 'users'])->latest()->paginate(10);
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
 
         return Inertia::render('admin/reservations/Index', [
