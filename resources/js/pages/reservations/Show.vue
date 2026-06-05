@@ -57,7 +57,7 @@ function deleteReservation(): void {
                 <Button
                     variant="outline"
                     size="sm"
-                    class="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                    class="btn-danger"
                     @click="deleteReservation"
                 >
                     <Trash2 class="h-4 w-4" />

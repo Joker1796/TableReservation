@@ -87,40 +87,40 @@ function deleteReservation(id: number): void {
             <p class="text-sm text-muted-foreground">Все подтверждённые бронирования</p>
         </div>
 
-        <div v-if="reservations.length === 0" class="flex items-center justify-center rounded-xl border border-dashed border-sidebar-border/70 py-20 text-center dark:border-sidebar-border">
+        <div v-if="reservations.length === 0" class="empty-state">
             <p class="text-muted-foreground">Резервирований пока нет</p>
         </div>
 
-        <div v-else class="overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-            <table class="w-full text-sm">
-                <thead class="border-b border-sidebar-border/70 bg-muted/40 dark:border-sidebar-border">
+        <div v-else class="panel-table">
+            <table>
+                <thead>
                     <tr>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Дата</th>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Стол</th>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Участники</th>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Комментарий</th>
-                        <th class="px-4 py-3 text-right font-medium text-muted-foreground">Действия</th>
+                        <th class="col-th text-left">Дата</th>
+                        <th class="col-th text-left">Стол</th>
+                        <th class="col-th text-left">Участники</th>
+                        <th class="col-th text-left">Комментарий</th>
+                        <th class="col-th text-right">Действия</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-sidebar-border/70 dark:divide-sidebar-border">
-                    <tr v-for="res in reservations" :key="res.id" class="hover:bg-muted/20">
-                        <td class="px-4 py-3 font-medium">{{ formatDate(res.date) }}</td>
-                        <td class="px-4 py-3">
+                <tbody>
+                    <tr v-for="res in reservations" :key="res.id">
+                        <td class="col-td font-medium">{{ formatDate(res.date) }}</td>
+                        <td class="col-td">
                             <span v-if="res.table">
                                 <Badge variant="outline">{{ res.table.name }}</Badge>
                             </span>
                             <span v-else class="text-muted-foreground">—</span>
                         </td>
-                        <td class="px-4 py-3">
+                        <td class="col-td">
                             <div class="flex items-center gap-1 text-muted-foreground">
                                 <Users class="h-3.5 w-3.5" />
                                 {{ res.users.length }}
                             </div>
                         </td>
-                        <td class="max-w-xs px-4 py-3 text-muted-foreground">
+                        <td class="col-td max-w-xs text-muted-foreground">
                             <span class="line-clamp-1">{{ res.comment || '—' }}</span>
                         </td>
-                        <td class="px-4 py-3">
+                        <td class="col-td">
                             <div class="flex justify-end gap-2">
                                 <Button
                                     variant="outline"
@@ -133,7 +133,7 @@ function deleteReservation(id: number): void {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    class="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                                    class="btn-danger"
                                     @click="deleteReservation(res.id)"
                                 >
                                     <Trash2 class="h-4 w-4" />

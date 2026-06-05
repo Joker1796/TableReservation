@@ -236,7 +236,7 @@ function deleteReservation(id: number): void {
         <!-- Empty state -->
         <div
             v-if="reservations.length === 0"
-            class="flex flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/70 py-20 text-center dark:border-sidebar-border"
+            class="empty-state"
         >
             <CalendarDays class="mb-4 h-12 w-12 text-muted-foreground/50" />
             <p class="text-lg font-medium text-muted-foreground">Нет резервирований</p>
@@ -356,7 +356,7 @@ function deleteReservation(id: number): void {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                class="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                                class="btn-danger"
                                 @click="deleteReservation(reservation.id)"
                             >
                                 Удалить

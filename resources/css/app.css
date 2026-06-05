@@ -171,3 +171,36 @@
         @apply bg-background text-foreground;
     }
 }
+
+@layer components {
+    .panel-table {
+        @apply overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border;
+    }
+    .panel-table table {
+        @apply w-full text-sm;
+    }
+    .panel-table thead {
+        @apply border-b border-sidebar-border/70 bg-muted/40 dark:border-sidebar-border;
+    }
+    .panel-table tbody {
+        @apply divide-y divide-sidebar-border/70 dark:divide-sidebar-border;
+    }
+    .panel-table tbody tr {
+        @apply hover:bg-muted/20;
+    }
+
+    .col-th {
+        @apply px-4 py-3 font-medium text-muted-foreground;
+    }
+    .col-td {
+        @apply px-4 py-3;
+    }
+
+    .btn-danger {
+        @apply text-destructive hover:bg-destructive hover:text-destructive-foreground;
+    }
+
+    .empty-state {
+        @apply flex flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/70 py-20 text-center dark:border-sidebar-border;
+    }
+}

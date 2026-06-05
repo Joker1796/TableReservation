@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 defineOptions({
     layout: {
@@ -65,12 +66,11 @@ function submit(): void {
 
             <div class="grid gap-2">
                 <Label for="description">Описание</Label>
-                <textarea
+                <Textarea
                     id="description"
                     v-model="form.description"
                     rows="3"
                     placeholder="Описание стола, особенности..."
-                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
                 <InputError :message="form.errors.description" />
             </div>

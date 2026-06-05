@@ -15,6 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import UserPicker from '@/components/UserPicker.vue';
 import { dashboard, home } from '@/routes';
 import type { BookingRequest, ReservationTable, ReservationUser } from '@/types/reservation';
@@ -120,12 +121,12 @@ function formatDate(date: string): string {
                         </div>
                         <div class="grid gap-2">
                             <Label for="comment">Комментарий</Label>
-                            <textarea
+                            <Textarea
                                 id="comment"
                                 v-model="form.comment"
                                 rows="2"
                                 placeholder="Дополнительные пожелания..."
-                                class="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                class="min-h-[60px]"
                             />
                             <InputError :message="form.errors.comment" />
                         </div>
@@ -137,7 +138,7 @@ function formatDate(date: string): string {
                 </CardContent>
             </Card>
 
-            <div v-if="myRequests.length === 0 && !showForm" class="flex flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/70 py-14 text-center dark:border-sidebar-border">
+            <div v-if="myRequests.length === 0 && !showForm" class="empty-state py-14">
                 <CalendarDays class="mb-3 h-10 w-10 text-muted-foreground/50" />
                 <p class="text-muted-foreground">Заявок пока нет</p>
                 <p class="mt-1 text-sm text-muted-foreground">Нажмите «Новая заявка», чтобы забронировать стол</p>

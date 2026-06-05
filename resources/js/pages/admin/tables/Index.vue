@@ -44,35 +44,35 @@ function deleteTable(id: number): void {
             </Button>
         </div>
 
-        <div v-if="tables.length === 0" class="flex flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/70 py-20 text-center dark:border-sidebar-border">
+        <div v-if="tables.length === 0" class="empty-state">
             <p class="text-muted-foreground">Столов пока нет</p>
             <Button class="mt-4" as-child>
                 <Link href="/admin/tables/create">Добавить первый стол</Link>
             </Button>
         </div>
 
-        <div v-else class="overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-            <table class="w-full text-sm">
-                <thead class="border-b border-sidebar-border/70 bg-muted/40 dark:border-sidebar-border">
+        <div v-else class="panel-table">
+            <table>
+                <thead>
                     <tr>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Название</th>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Описание</th>
-                        <th class="px-4 py-3 text-left font-medium text-muted-foreground">Статус</th>
-                        <th class="px-4 py-3 text-right font-medium text-muted-foreground">Действия</th>
+                        <th class="col-th text-left">Название</th>
+                        <th class="col-th text-left">Описание</th>
+                        <th class="col-th text-left">Статус</th>
+                        <th class="col-th text-right">Действия</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-sidebar-border/70 dark:divide-sidebar-border">
-                    <tr v-for="table in tables" :key="table.id" class="hover:bg-muted/20">
-                        <td class="px-4 py-3 font-medium">{{ table.name }}</td>
-                        <td class="max-w-xs px-4 py-3 text-muted-foreground">
+                <tbody>
+                    <tr v-for="table in tables" :key="table.id">
+                        <td class="col-td font-medium">{{ table.name }}</td>
+                        <td class="col-td max-w-xs text-muted-foreground">
                             <span class="line-clamp-1">{{ table.description || '—' }}</span>
                         </td>
-                        <td class="px-4 py-3">
+                        <td class="col-td">
                             <Badge :variant="table.status === 'ready' ? 'default' : 'secondary'">
                                 {{ table.status === 'ready' ? 'Готов' : 'Не готов' }}
                             </Badge>
                         </td>
-                        <td class="px-4 py-3">
+                        <td class="col-td">
                             <div class="flex justify-end gap-2">
                                 <Button variant="outline" size="icon" as-child>
                                     <Link :href="`/admin/tables/${table.id}/edit`">
@@ -82,7 +82,7 @@ function deleteTable(id: number): void {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    class="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                                    class="btn-danger"
                                     @click="deleteTable(table.id)"
                                 >
                                     <Trash2 class="h-4 w-4" />

@@ -15,6 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import type { ReservationTable, ReservationUser } from '@/types/reservation';
 
 type Props = {
@@ -162,12 +163,11 @@ function submit(): void {
 
             <div class="grid gap-2">
                 <Label for="comment">Комментарий</Label>
-                <textarea
+                <Textarea
                     id="comment"
                     v-model="form.comment"
                     rows="3"
                     placeholder="Дополнительная информация..."
-                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
                 <InputError :message="form.errors.comment" />
             </div>
