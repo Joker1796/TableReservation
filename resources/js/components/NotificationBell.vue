@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Link, router, usePage } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { Bell, CalendarDays, Check, Table2, X } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +12,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { BookingRequest, Invite } from '@/types/reservation';
+
+const open = ref(false);
 
 const page = usePage<{ pendingInvites: Invite[]; pendingBookingRequests: BookingRequest[] }>();
 const invites = computed<Invite[]>(() => page.props.pendingInvites ?? []);
@@ -36,7 +38,7 @@ function reject(id: number): void {
 </script>
 
 <template>
-    <DropdownMenu>
+    <DropdownMenu v-model:open="open">
         <DropdownMenuTrigger as-child>
             <Button variant="ghost" size="icon" class="relative h-9 w-9">
                 <Bell class="h-5 w-5 opacity-80" />
@@ -125,8 +127,8 @@ function reject(id: number): void {
                                 {{ req.table.name }}
                             </div>
                         </div>
-                        <Button size="sm" variant="outline" class="h-7 w-full text-xs" as-child>
-                            <Link href="/admin/requests">Рассмотреть</Link>
+                        <Button size="sm" variant="outline" class="h-7 w-full text-xs" @click="open = false; router.visit('/admin/requests')">
+                            Рассмотреть
                         </Button>
                     </div>
                 </div>
