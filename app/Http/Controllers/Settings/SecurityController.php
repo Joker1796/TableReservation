@@ -46,8 +46,10 @@ class SecurityController extends Controller implements HasMiddleware
         return Inertia::render('settings/Security', $props);
     }
 
-    public function editToken(): Response
+    public function editToken(Request $request): Response
     {
+        abort_unless($request->user()->is_api, 403);
+
         return Inertia::render('settings/Token', [
             'token' => session('token'),
         ]);
@@ -55,6 +57,8 @@ class SecurityController extends Controller implements HasMiddleware
 
     public function generateToken(Request $request): RedirectResponse
     {
+        abort_unless($request->user()->is_api, 403);
+
         $token = UserService::regenerateApiToken($request->user());
         session()->flash('token', $token);
 

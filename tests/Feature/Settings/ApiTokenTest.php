@@ -13,7 +13,7 @@ class ApiTokenTest extends TestCase
 
     public function test_api_token_page_is_displayed(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['is_api' => true]);
 
         $this->actingAs($user)
             ->get(route('api-token.edit'))
@@ -30,9 +30,16 @@ class ApiTokenTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
+    public function test_api_token_page_is_forbidden_for_non_api_user(): void
+    {
+        $this->actingAs(User::factory()->create(['is_api' => false]))
+            ->get(route('api-token.edit'))
+            ->assertForbidden();
+    }
+
     public function test_api_token_can_be_generated(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['is_api' => true]);
 
         $this->actingAs($user)
             ->post(route('api-token.generate'))
@@ -45,13 +52,16 @@ class ApiTokenTest extends TestCase
         ]);
     }
 
+    public function test_api_token_generation_is_forbidden_for_non_api_user(): void
+    {
+        $this->actingAs(User::factory()->create(['is_api' => false]))
+            ->post(route('api-token.generate'))
+            ->assertForbidden();
+    }
+
     public function test_generated_token_is_shown_after_redirect(): void
     {
-        $user = User::factory()->create();
-
-        $this->actingAs($user)
-            ->post(route('api-token.generate'))
-            ->assertRedirect(route('api-token.edit'));
+        $user = User::factory()->create(['is_api' => true]);
 
         $this->actingAs($user)
             ->followingRedirects()
@@ -64,7 +74,7 @@ class ApiTokenTest extends TestCase
 
     public function test_generating_token_replaces_existing_tokens(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['is_api' => true]);
         $user->createToken('old-token');
 
         $this->assertDatabaseCount('personal_access_tokens', 1);

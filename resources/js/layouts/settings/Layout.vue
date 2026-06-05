@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
@@ -9,25 +10,16 @@ import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editProfile } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
+import type { Auth } from '@/types/auth';
 
-const sidebarNavItems: NavItem[] = [
-    {
-        title: 'Профиль',
-        href: editProfile(),
-    },
-    {
-        title: 'Безопасность',
-        href: editSecurity(),
-    },
-    {
-        title: 'Внешний вид',
-        href: editAppearance(),
-    },
-    {
-        title: 'API Токен',
-        href: editToken(),
-    },
-];
+const page = usePage<{ auth: Auth }>();
+
+const sidebarNavItems = computed<NavItem[]>(() => [
+    { title: 'Профиль', href: editProfile() },
+    { title: 'Безопасность', href: editSecurity() },
+    { title: 'Внешний вид', href: editAppearance() },
+    ...(page.props.auth?.user?.is_api ? [{ title: 'API Токен', href: editToken() }] : []),
+]);
 
 const { isCurrentOrParentUrl } = useCurrentUrl();
 </script>
