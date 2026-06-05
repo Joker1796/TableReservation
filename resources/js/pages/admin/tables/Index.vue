@@ -3,10 +3,12 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { Edit, Plus, Trash2 } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import Pagination from '@/components/Pagination.vue';
 import type { ReservationTable } from '@/types/reservation';
+import type { Paginated } from '@/types/pagination';
 
 type Props = {
-    tables: ReservationTable[];
+    tables: Paginated<ReservationTable>;
 };
 
 defineProps<Props>();
@@ -44,14 +46,15 @@ function deleteTable(id: number): void {
             </Button>
         </div>
 
-        <div v-if="tables.length === 0" class="empty-state">
+        <div v-if="tables.data.length === 0" class="empty-state">
             <p class="text-muted-foreground">Столов пока нет</p>
             <Button class="mt-4" as-child>
                 <Link href="/admin/tables/create">Добавить первый стол</Link>
             </Button>
         </div>
 
-        <div v-else class="panel-table">
+        <div v-else class="flex flex-col gap-4">
+            <div class="panel-table">
             <table>
                 <thead>
                     <tr>
@@ -62,7 +65,7 @@ function deleteTable(id: number): void {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="table in tables" :key="table.id">
+                    <tr v-for="table in tables.data" :key="table.id">
                         <td class="col-td font-medium">{{ table.name }}</td>
                         <td class="col-td max-w-xs text-muted-foreground">
                             <span class="line-clamp-1">{{ table.description || '—' }}</span>
@@ -92,6 +95,8 @@ function deleteTable(id: number): void {
                     </tr>
                 </tbody>
             </table>
+            </div>
+            <Pagination :links="tables.links" />
         </div>
     </div>
 </template>

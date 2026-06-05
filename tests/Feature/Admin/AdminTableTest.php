@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class AdminTableTest extends TestCase
@@ -118,5 +119,30 @@ class AdminTableTest extends TestCase
 
         $this->post(route('admin.tables.store'), $data)
             ->assertSessionHasErrors(['name']);
+    }
+
+    public function test_index_paginates_tables(): void
+    {
+        $this->admin();
+        Table::factory()->count(15)->create();
+
+        $this->get(route('admin.tables.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('tables.data', 10)
+                ->where('tables.total', 15)
+                ->where('tables.current_page', 1)
+            );
+    }
+
+    public function test_index_returns_second_page_of_tables(): void
+    {
+        $this->admin();
+        Table::factory()->count(15)->create();
+
+        $this->get(route('admin.tables.index', ['page' => 2]))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('tables.data', 5)
+                ->where('tables.current_page', 2)
+            );
     }
 }

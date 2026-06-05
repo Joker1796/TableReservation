@@ -10,10 +10,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import Pagination from '@/components/Pagination.vue';
 import type { BookingRequest, ReservationTable } from '@/types/reservation';
+import type { Paginated } from '@/types/pagination';
 
 type Props = {
-    requests: BookingRequest[];
+    requests: Paginated<BookingRequest>;
     tables: ReservationTable[];
 };
 
@@ -68,17 +70,15 @@ function deleteRequest(id: number): void {
         </div>
 
         <div class="flex flex-wrap gap-2">
-            <Badge variant="secondary">Всего: {{ requests.length }}</Badge>
-            <Badge variant="secondary">Новых: {{ requests.filter(r => r.status === 0).length }}</Badge>
-            <Badge variant="default">Одобрено: {{ requests.filter(r => r.status === 1).length }}</Badge>
-            <Badge variant="destructive">Отклонено: {{ requests.filter(r => r.status === 2).length }}</Badge>
+            <Badge variant="secondary">Всего: {{ requests.total }}</Badge>
         </div>
 
-        <div v-if="requests.length === 0" class="empty-state">
+        <div v-if="requests.data.length === 0" class="empty-state">
             <p class="text-muted-foreground">Заявок пока нет</p>
         </div>
 
-        <div v-else class="panel-table">
+        <div v-else class="flex flex-col gap-4">
+            <div class="panel-table">
             <table>
                 <thead>
                     <tr>
@@ -91,7 +91,7 @@ function deleteRequest(id: number): void {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="req in requests" :key="req.id">
+                    <tr v-for="req in requests.data" :key="req.id">
                         <td class="col-td">
                             <div v-if="req.author">
                                 <p class="font-medium">{{ req.author.name }}</p>
@@ -170,6 +170,8 @@ function deleteRequest(id: number): void {
                     </tr>
                 </tbody>
             </table>
+            </div>
+            <Pagination :links="requests.links" />
         </div>
     </div>
 </template>

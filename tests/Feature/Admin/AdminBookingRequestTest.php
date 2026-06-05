@@ -8,6 +8,7 @@ use App\Models\Reservation;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class AdminBookingRequestTest extends TestCase
@@ -147,5 +148,30 @@ class AdminBookingRequestTest extends TestCase
             ->assertRedirect(route('admin.requests.index'));
 
         $this->assertSoftDeleted('booking_requests', ['id' => $br->id]);
+    }
+
+    public function test_index_paginates_requests(): void
+    {
+        $this->admin();
+        BookingRequest::factory()->count(15)->create();
+
+        $this->get(route('admin.requests.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('requests.data', 10)
+                ->where('requests.total', 15)
+                ->where('requests.current_page', 1)
+            );
+    }
+
+    public function test_index_returns_second_page_of_requests(): void
+    {
+        $this->admin();
+        BookingRequest::factory()->count(15)->create();
+
+        $this->get(route('admin.requests.index', ['page' => 2]))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('requests.data', 5)
+                ->where('requests.current_page', 2)
+            );
     }
 }

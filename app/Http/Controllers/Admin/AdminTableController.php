@@ -14,7 +14,7 @@ class AdminTableController extends Controller
 {
     public function index(): Response
     {
-        $tables = Table::latest()->get();
+        $tables = Table::latest()->paginate(10);
 
         return Inertia::render('admin/tables/Index', [
             'tables' => $tables,

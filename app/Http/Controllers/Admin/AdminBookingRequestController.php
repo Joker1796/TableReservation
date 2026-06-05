@@ -17,7 +17,7 @@ class AdminBookingRequestController extends Controller
     {
         $requests = BookingRequest::with(['author', 'table'])
             ->latest()
-            ->get();
+            ->paginate(10);
 
         $tables = Table::orderBy('name')->get(['id', 'name', 'status']);
 
