@@ -77,9 +77,12 @@ class InviteService
     public static function createForReservation(Request $request, Reservation $reservation, int $authorId): void
     {
         $validated = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
+            'user_ids' => ['required', 'array', 'min:1'],
+            'user_ids.*' => ['exists:users,id'],
         ]);
 
-        self::make($authorId, $validated['user_id'], $reservation->id);
+        foreach ($validated['user_ids'] as $userId) {
+            self::make($authorId, $userId, $reservation->id);
+        }
     }
 }

@@ -60,7 +60,7 @@ class AdminReservationTest extends TestCase
         $target = User::factory()->create();
 
         $this->post(route('admin.reservations.sendInvite', $reservation->id), [
-            'user_id' => $target->id,
+            'user_ids' => [$target->id],
         ])
             ->assertRedirect(route('admin.reservations.index'));
 

@@ -13,14 +13,8 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import Pagination from '@/components/Pagination.vue';
+import UserPicker from '@/components/UserPicker.vue';
 import type { Reservation, ReservationUser } from '@/types/reservation';
 import type { Paginated } from '@/types/pagination';
 
@@ -44,7 +38,7 @@ const inviteDialogOpen = ref(false);
 const inviteReservationId = ref<number | null>(null);
 
 const inviteForm = useForm({
-    user_id: null as number | null,
+    user_ids: [] as number[],
 });
 
 function openInviteDialog(reservationId: number): void {
@@ -160,25 +154,17 @@ function deleteReservation(id: number): void {
             </DialogHeader>
             <div class="grid gap-4 py-2">
                 <div class="grid gap-2">
-                    <Label for="invite-user">Пользователь</Label>
-                    <Select
-                        :model-value="inviteForm.user_id != null ? String(inviteForm.user_id) : undefined"
-                        @update:model-value="(v) => inviteForm.user_id = v != null ? Number(v) : null"
-                    >
-                        <SelectTrigger id="invite-user">
-                            <SelectValue placeholder="Выберите пользователя" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem v-for="user in users" :key="user.id" :value="String(user.id)">
-                                {{ user.name }} ({{ user.email }})
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <Label>Участники</Label>
+                    <UserPicker
+                        :users="users"
+                        :model-value="inviteForm.user_ids"
+                        @update:model-value="(v) => inviteForm.user_ids = v"
+                    />
                 </div>
             </div>
             <DialogFooter>
                 <Button variant="outline" @click="inviteDialogOpen = false">Отмена</Button>
-                <Button :disabled="inviteForm.user_id == null || inviteForm.processing" @click="sendInvite">
+                <Button :disabled="inviteForm.user_ids.length === 0 || inviteForm.processing" @click="sendInvite">
                     Отправить приглашение
                 </Button>
             </DialogFooter>
