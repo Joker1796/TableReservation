@@ -84,6 +84,11 @@ function deleteReservation(id: number): void {
     <Head title="Резервирования" />
 
     <div class="flex flex-col gap-6 p-4">
+        <div>
+            <h1 class="text-2xl font-semibold">Резервирования</h1>
+            <p class="text-sm text-muted-foreground">Все подтверждённые бронирования</p>
+        </div>
+
         <div v-if="reservations.data.length === 0" class="empty-state">
             <p class="text-muted-foreground">Резервирований пока нет</p>
         </div>
