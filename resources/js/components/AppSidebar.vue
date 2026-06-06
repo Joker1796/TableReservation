@@ -34,9 +34,9 @@ const mainNavItems: NavItem[] = [
 
 const adminNavItems: NavItem[] = [
     {
-        title: 'Столы',
-        href: '/admin/tables',
-        icon: Table2,
+        title: 'Заявки',
+        href: '/admin/requests',
+        icon: ClipboardList,
     },
     {
         title: 'Резервирования',
@@ -44,9 +44,9 @@ const adminNavItems: NavItem[] = [
         icon: CalendarDays,
     },
     {
-        title: 'Заявки',
-        href: '/admin/requests',
-        icon: ClipboardList,
+        title: 'Столы',
+        href: '/admin/tables',
+        icon: Table2,
     },
     {
         title: 'Мастерская',

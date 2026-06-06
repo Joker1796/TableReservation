@@ -28,7 +28,7 @@ defineProps<Props>();
 defineOptions({
     layout: {
         breadcrumbs: [
-            { title: 'Админ', href: '/admin/tables' },
+            { title: 'Админ', href: '/admin/requests' },
             { title: 'Резервирования', href: '/admin/reservations' },
         ],
     },
