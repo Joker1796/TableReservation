@@ -2,7 +2,7 @@
 import { Head, useForm } from '@inertiajs/vue3';
 import { onClickOutside } from '@vueuse/core';
 import { Check, ChevronDown, Users, X } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,7 @@ type Props = {
     users: ReservationUser[];
 };
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 defineOptions({
     layout: {
@@ -42,6 +42,14 @@ onClickOutside(userPickerRef, () => {
 });
 
 const userSearch = ref('');
+
+const filteredUsers = computed(() =>
+    props.users.filter(
+        (u) =>
+            u.name.toLowerCase().includes(userSearch.value.toLowerCase()) ||
+            u.email.toLowerCase().includes(userSearch.value.toLowerCase()),
+    ),
+);
 
 function toggleUser(id: number): void {
     if (form.user_ids.includes(id)) {
@@ -107,13 +115,7 @@ function submit(): void {
                             <Input v-model="userSearch" placeholder="Поиск..." class="h-8 text-sm" />
                         </div>
                         <div class="max-h-48 overflow-y-auto">
-                            <button
-                                v-for="user in users.filter(
-                                    (u) =>
-                                        u.name.toLowerCase().includes(userSearch.toLowerCase()) ||
-                                        u.email.toLowerCase().includes(userSearch.toLowerCase()),
-                                )"
-                                :key="user.id"
+                            <button v-for="user in filteredUsers" :key="user.id"
                                 type="button"
                                 class="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent"
                                 @click="toggleUser(user.id)"
@@ -125,16 +127,7 @@ function submit(): void {
                                 <span class="font-medium">{{ user.name }}</span>
                                 <span class="ml-auto text-xs text-muted-foreground">{{ user.email }}</span>
                             </button>
-                            <p
-                                v-if="
-                                    !users.some(
-                                        (u) =>
-                                            u.name.toLowerCase().includes(userSearch.toLowerCase()) ||
-                                            u.email.toLowerCase().includes(userSearch.toLowerCase()),
-                                    )
-                                "
-                                class="px-3 py-3 text-center text-sm text-muted-foreground"
-                            >
+                            <p v-if="filteredUsers.length === 0" class="px-3 py-3 text-center text-sm text-muted-foreground">
                                 Ничего не найдено
                             </p>
                         </div>
