@@ -45,10 +45,7 @@ function reject(id: number): void {
         <DropdownMenuTrigger as-child>
             <Button variant="ghost" size="icon" class="relative h-9 w-9">
                 <Bell class="h-5 w-5 opacity-80" />
-                <span
-                    v-if="totalCount > 0"
-                    class="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground"
-                >
+                <span v-if="totalCount > 0" class="notification-badge">
                     {{ totalCount > 9 ? '9+' : totalCount }}
                 </span>
             </Button>
@@ -96,7 +93,7 @@ function reject(id: number): void {
                         <Button
                             size="sm"
                             variant="outline"
-                            class="h-7 flex-1 gap-1 text-xs text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                            class="btn-danger h-7 flex-1 gap-1 text-xs"
                             @click="reject(invite.id)"
                         >
                             <X class="h-3 w-3" />

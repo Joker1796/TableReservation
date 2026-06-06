@@ -61,14 +61,8 @@ function toggleUser(id: number): void {
     </div>
 
     <div v-if="modelValue.length > 0" class="flex flex-wrap gap-1.5">
-        <span
-            v-for="user in users.filter((u) => modelValue.includes(u.id))"
-            :key="user.id"
-            class="flex items-center gap-1 rounded-full border bg-muted/50 py-0.5 pr-2 pl-0.5 text-xs"
-        >
-            <span
-                class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground"
-            >
+        <span v-for="user in users.filter((u) => modelValue.includes(u.id))" :key="user.id" class="user-tag">
+            <span class="user-avatar-sm bg-primary text-primary-foreground">
                 {{ user.name.charAt(0).toUpperCase() }}
             </span>
             <span class="font-medium">{{ user.name }}</span>

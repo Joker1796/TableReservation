@@ -305,11 +305,11 @@ function deleteReservation(id: number): void {
                                     <div
                                         v-for="user in request.users"
                                         :key="user.id"
-                                        class="flex items-center gap-1 rounded-full border bg-muted/50 px-2.5 py-0.5 text-xs"
+                                        class="user-tag px-2.5"
                                         :title="user.email"
                                     >
                                         <div
-                                            class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold"
+                                            class="user-avatar-sm"
                                             :class="
                                                 user.id === authUserId
                                                     ? 'bg-primary text-primary-foreground'
@@ -387,7 +387,7 @@ function deleteReservation(id: number): void {
                                 <div
                                     v-for="user in reservation.users"
                                     :key="user.id"
-                                    class="flex items-center gap-1 rounded-full border bg-muted/50 py-0.5 pl-0.5 text-xs"
+                                    class="user-tag pl-0.5"
                                     :class="isMine(reservation) ? 'pr-1' : 'pr-2.5'"
                                     :title="user.email"
                                 >
@@ -416,10 +416,7 @@ function deleteReservation(id: number): void {
 
                             <!-- Add participant form -->
                             <div v-if="isMine(reservation) && addOpen[reservation.id]" class="mt-2 flex gap-1.5">
-                                <select
-                                    v-model="selectedUserId[reservation.id]"
-                                    class="flex-1 rounded-md border border-input bg-background px-2 py-1 text-xs ring-offset-background focus:ring-2 focus:ring-ring focus:outline-none"
-                                >
+                                <select v-model="selectedUserId[reservation.id]" class="select-input">
                                     <option value="" disabled selected>Выбрать участника</option>
                                     <option
                                         v-for="user in availableUsers(reservation)"

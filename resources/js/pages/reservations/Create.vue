@@ -90,11 +90,7 @@ function submit(): void {
             <div v-if="users.length > 0" class="grid gap-2">
                 <Label>Участники</Label>
                 <div ref="userPickerRef" class="relative">
-                    <button
-                        type="button"
-                        class="flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-                        @click="userPickerOpen = !userPickerOpen"
-                    >
+                    <button type="button" class="picker-trigger" @click="userPickerOpen = !userPickerOpen">
                         <span class="flex items-center gap-2 text-muted-foreground">
                             <Users class="h-4 w-4 shrink-0" />
                             {{
@@ -148,11 +144,9 @@ function submit(): void {
                     <span
                         v-for="user in users.filter((u) => form.user_ids.includes(u.id))"
                         :key="user.id"
-                        class="flex items-center gap-1 rounded-full border bg-muted/50 py-0.5 pr-2 pl-0.5 text-xs"
+                        class="user-tag"
                     >
-                        <span
-                            class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground"
-                        >
+                        <span class="user-avatar-sm bg-primary text-primary-foreground">
                             {{ user.name.charAt(0).toUpperCase() }}
                         </span>
                         <span class="font-medium">{{ user.name }}</span>
