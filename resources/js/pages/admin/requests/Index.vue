@@ -2,6 +2,7 @@
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Check, Trash2, X } from 'lucide-vue-next';
 import Pagination from '@/components/Pagination.vue';
+import RequestStatusBadge from '@/components/RequestStatusBadge.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -24,16 +25,6 @@ defineOptions({
     },
 });
 
-const statusLabel: Record<number, string> = {
-    0: 'Новая',
-    1: 'Одобрена',
-    2: 'Отклонена',
-};
-const statusVariant: Record<number, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-    0: 'secondary',
-    1: 'default',
-    2: 'destructive',
-};
 
 function formatDate(date: string): string {
     return new Date(date).toLocaleDateString('ru-RU', {
@@ -130,9 +121,7 @@ function deleteRequest(id: number): void {
                                 <span class="line-clamp-2">{{ req.comment || '—' }}</span>
                             </td>
                             <td class="col-td">
-                                <Badge :variant="statusVariant[req.status]">
-                                    {{ statusLabel[req.status] }}
-                                </Badge>
+                                <RequestStatusBadge :status="(req.status as 0 | 1 | 2)" />
                             </td>
                             <td class="col-td">
                                 <div class="flex justify-end gap-1">
