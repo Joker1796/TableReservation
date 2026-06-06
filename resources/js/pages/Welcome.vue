@@ -28,39 +28,12 @@ withDefaults(
                 <span class="text-lg font-semibold tracking-tight">Кочующий стол</span>
             </div>
             <nav class="flex items-center gap-3">
-                <Link
-                    href="/workshop"
-                    class="text-sm text-[#6b6585] hover:text-[#453c77] dark:text-[#9b98af] dark:hover:text-[#e8e6f0]"
-                >
-                    Мастерская
-                </Link>
-                <a
-                    href="#pricing"
-                    class="text-sm text-[#6b6585] hover:text-[#453c77] dark:text-[#9b98af] dark:hover:text-[#e8e6f0]"
-                >
-                    Цены
-                </a>
-                <Link
-                    v-if="$page.props.auth.user"
-                    :href="reservationsIndex().url"
-                    class="rounded-md bg-[#453c77] px-4 py-1.5 text-sm text-white hover:bg-[#362f5f] dark:bg-[#e8e6f0] dark:text-[#453c77] dark:hover:bg-white"
-                >
-                    Личный кабинет
-                </Link>
+                <Link href="/workshop" class="link-nav">Мастерская</Link>
+                <a href="#pricing" class="link-nav">Цены</a>
+                <Link v-if="$page.props.auth.user" :href="reservationsIndex().url" class="btn-nav">Личный кабинет</Link>
                 <template v-else>
-                    <Link
-                        :href="login()"
-                        class="text-sm text-[#6b6585] hover:text-[#453c77] dark:text-[#9b98af] dark:hover:text-[#e8e6f0]"
-                    >
-                        Войти
-                    </Link>
-                    <Link
-                        v-if="canRegister"
-                        :href="register()"
-                        class="rounded-md bg-[#453c77] px-4 py-1.5 text-sm text-white hover:bg-[#362f5f] dark:bg-[#e8e6f0] dark:text-[#453c77] dark:hover:bg-white"
-                    >
-                        Регистрация
-                    </Link>
+                    <Link :href="login()" class="link-nav">Войти</Link>
+                    <Link v-if="canRegister" :href="register()" class="btn-nav">Регистрация</Link>
                 </template>
             </nav>
         </header>
@@ -76,19 +49,9 @@ withDefaults(
             </p>
             <div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <BookingRequestModal v-if="$page.props.auth.user">
-                    <button
-                        class="rounded-lg bg-[#453c77] px-7 py-3 text-base font-medium text-white hover:bg-[#362f5f] dark:bg-[#e8e6f0] dark:text-[#453c77] dark:hover:bg-white"
-                    >
-                        Забронировать стол
-                    </button>
+                    <button class="btn-primary">Забронировать стол</button>
                 </BookingRequestModal>
-                <Link
-                    v-else
-                    :href="login()"
-                    class="rounded-lg bg-[#453c77] px-7 py-3 text-base font-medium text-white hover:bg-[#362f5f] dark:bg-[#e8e6f0] dark:text-[#453c77] dark:hover:bg-white"
-                >
-                    Забронировать стол
-                </Link>
+                <Link v-else :href="login()" class="btn-primary">Забронировать стол</Link>
                 <a
                     href="#pricing"
                     class="rounded-lg border border-[#dddaf0] px-7 py-3 text-base font-medium hover:border-[#453c77] dark:border-[#352f5a] dark:hover:border-[#9b98af]"
@@ -103,12 +66,8 @@ withDefaults(
             <div class="mx-auto max-w-5xl">
                 <h2 class="mb-12 text-center text-3xl font-bold">Наши услуги</h2>
                 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                    <div
-                        class="rounded-xl border border-[#dddaf0] bg-white p-6 dark:border-[#352f5a] dark:bg-[#171428]"
-                    >
-                        <div
-                            class="mb-4 flex size-10 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                    <div class="card-service">
+                        <div class="icon-service">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"
@@ -128,12 +87,8 @@ withDefaults(
                             Выберите удобное время и стол за пару кликов. Подтверждение приходит мгновенно на почту.
                         </p>
                     </div>
-                    <div
-                        class="rounded-xl border border-[#dddaf0] bg-white p-6 dark:border-[#352f5a] dark:bg-[#171428]"
-                    >
-                        <div
-                            class="mb-4 flex size-10 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                    <div class="card-service">
+                        <div class="icon-service">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"
@@ -154,12 +109,8 @@ withDefaults(
                             подтвердить участие.
                         </p>
                     </div>
-                    <div
-                        class="rounded-xl border border-[#dddaf0] bg-white p-6 dark:border-[#352f5a] dark:bg-[#171428]"
-                    >
-                        <div
-                            class="mb-4 flex size-10 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                    <div class="card-service">
+                        <div class="icon-service">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"
@@ -184,9 +135,7 @@ withDefaults(
                         href="/workshop"
                         class="group flex flex-col rounded-xl border border-[#dddaf0] bg-white p-6 transition-colors hover:border-[#453c77] dark:border-[#352f5a] dark:bg-[#171428] dark:hover:border-[#a096d0]"
                     >
-                        <div
-                            class="mb-4 flex size-10 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                        <div class="icon-service">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"
@@ -206,9 +155,9 @@ withDefaults(
                             3D-печать и профессиональный покрас миниатюр. Коллекционные персонажи и игровые фигурки на
                             заказ.
                         </p>
-                        <span class="text-sm font-medium text-[#453c77] group-hover:underline dark:text-[#a096d0]">
-                            Подробнее →
-                        </span>
+                        <span class="text-sm font-medium text-[#453c77] group-hover:underline dark:text-[#a096d0]"
+                            >Подробнее →</span
+                        >
                     </Link>
                 </div>
             </div>
@@ -237,11 +186,7 @@ withDefaults(
                         </ul>
                     </div>
                     <div class="relative rounded-xl border-2 border-[#453c77] p-6 dark:border-[#a096d0]">
-                        <span
-                            class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#453c77] px-3 py-0.5 text-xs font-medium text-white dark:bg-[#a096d0] dark:text-[#1e1a35]"
-                        >
-                            Популярно
-                        </span>
+                        <span class="badge-popular">Популярно</span>
                         <p class="mb-1 text-sm font-medium text-[#6b6585] dark:text-[#9b98af]">Премиум</p>
                         <p class="mb-4 text-3xl font-bold">3 000 ₽</p>
                         <p class="mb-6 text-sm text-[#6b6585] dark:text-[#9b98af]">за стол / вечер</p>
@@ -250,16 +195,13 @@ withDefaults(
                                 <span class="text-green-500">✓</span> Стол на 4–8 человек
                             </li>
                             <li class="flex items-center gap-2">
-                                <span class="text-green-500">✓</span>
-                                Приоритетное место
+                                <span class="text-green-500">✓</span> Приоритетное место
                             </li>
                             <li class="flex items-center gap-2">
-                                <span class="text-green-500">✓</span>
-                                Приветственные напитки
+                                <span class="text-green-500">✓</span> Приветственные напитки
                             </li>
                             <li class="flex items-center gap-2">
-                                <span class="text-green-500">✓</span>
-                                Персональный официант
+                                <span class="text-green-500">✓</span> Персональный официант
                             </li>
                         </ul>
                     </div>
@@ -294,19 +236,9 @@ withDefaults(
                     Столики расходятся быстро — особенно в выходные. Не откладывайте на потом.
                 </p>
                 <BookingRequestModal v-if="$page.props.auth.user">
-                    <button
-                        class="inline-block rounded-lg bg-white px-8 py-3 text-base font-medium text-[#453c77] hover:bg-[#f0eef9] dark:bg-[#453c77] dark:text-white dark:hover:bg-[#362f5f]"
-                    >
-                        Забронировать стол
-                    </button>
+                    <button class="btn-cta-inverse">Забронировать стол</button>
                 </BookingRequestModal>
-                <Link
-                    v-else
-                    :href="login()"
-                    class="inline-block rounded-lg bg-white px-8 py-3 text-base font-medium text-[#453c77] hover:bg-[#f0eef9] dark:bg-[#453c77] dark:text-white dark:hover:bg-[#362f5f]"
-                >
-                    Забронировать стол
-                </Link>
+                <Link v-else :href="login()" class="btn-cta-inverse">Забронировать стол</Link>
             </div>
         </section>
 

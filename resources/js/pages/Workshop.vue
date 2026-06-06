@@ -20,12 +20,7 @@ defineProps<{
                 </div>
                 <span class="text-lg font-semibold tracking-tight">Кочующий стол</span>
             </Link>
-            <Link
-                href="/"
-                class="text-sm text-[#6b6585] hover:text-[#453c77] dark:text-[#9b98af] dark:hover:text-[#e8e6f0]"
-            >
-                ← На главную
-            </Link>
+            <Link href="/" class="link-nav">← На главную</Link>
         </header>
 
         <!-- Hero -->
@@ -42,12 +37,8 @@ defineProps<{
             <div class="mx-auto max-w-5xl">
                 <h2 class="mb-10 text-2xl font-bold">Услуги и цены</h2>
                 <div class="grid gap-6 sm:grid-cols-3">
-                    <div
-                        class="rounded-xl border border-[#dddaf0] bg-white p-6 dark:border-[#352f5a] dark:bg-[#171428]"
-                    >
-                        <div
-                            class="mb-4 flex size-10 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                    <div class="card-service">
+                        <div class="icon-service">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"
@@ -69,12 +60,8 @@ defineProps<{
                         <p class="text-xl font-bold">от 300 ₽</p>
                         <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">за фигурку</p>
                     </div>
-                    <div
-                        class="rounded-xl border border-[#dddaf0] bg-white p-6 dark:border-[#352f5a] dark:bg-[#171428]"
-                    >
-                        <div
-                            class="mb-4 flex size-10 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                    <div class="card-service">
+                        <div class="icon-service">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"
@@ -97,14 +84,8 @@ defineProps<{
                         <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">за фигурку</p>
                     </div>
                     <div class="relative rounded-xl border-2 border-[#453c77] p-6 dark:border-[#a096d0]">
-                        <span
-                            class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#453c77] px-3 py-0.5 text-xs font-medium text-white dark:bg-[#a096d0] dark:text-[#1e1a35]"
-                        >
-                            Популярно
-                        </span>
-                        <div
-                            class="mb-4 flex size-10 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                        <span class="badge-popular">Популярно</span>
+                        <div class="icon-service">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"
@@ -164,15 +145,8 @@ defineProps<{
                 <h2 class="mb-3 text-2xl font-bold">Связаться с нами</h2>
                 <p class="mb-10 text-[#6b6585] dark:text-[#9b98af]">Обсудим детали заказа — напишите или позвоните</p>
                 <div class="grid gap-4 sm:grid-cols-3">
-                    <a
-                        href="https://t.me/example"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex items-center gap-4 rounded-xl border border-[#dddaf0] bg-white p-5 transition-colors hover:border-[#453c77] dark:border-[#352f5a] dark:bg-[#171428] dark:hover:border-[#a096d0]"
-                    >
-                        <div
-                            class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                    <a href="https://t.me/example" target="_blank" rel="noopener noreferrer" class="card-contact">
+                        <div class="icon-contact">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="currentColor"
@@ -189,13 +163,8 @@ defineProps<{
                         </div>
                     </a>
 
-                    <a
-                        href="tel:+70000000000"
-                        class="flex items-center gap-4 rounded-xl border border-[#dddaf0] bg-white p-5 transition-colors hover:border-[#453c77] dark:border-[#352f5a] dark:bg-[#171428] dark:hover:border-[#a096d0]"
-                    >
-                        <div
-                            class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                    <a href="tel:+70000000000" class="card-contact">
+                        <div class="icon-contact">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"
@@ -216,13 +185,8 @@ defineProps<{
                         </div>
                     </a>
 
-                    <a
-                        href="mailto:workshop@example.com"
-                        class="flex items-center gap-4 rounded-xl border border-[#dddaf0] bg-white p-5 transition-colors hover:border-[#453c77] dark:border-[#352f5a] dark:bg-[#171428] dark:hover:border-[#a096d0]"
-                    >
-                        <div
-                            class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35]"
-                        >
+                    <a href="mailto:workshop@example.com" class="card-contact">
+                        <div class="icon-contact">
                             <svg
                                 class="size-5 text-[#453c77] dark:text-[#c4bfdf]"
                                 fill="none"

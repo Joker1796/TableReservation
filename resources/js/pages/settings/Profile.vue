@@ -74,11 +74,7 @@ const user = computed(() => page.props.auth.user);
             <div v-if="mustVerifyEmail && !user.email_verified_at">
                 <p class="-mt-4 text-sm text-muted-foreground">
                     Ваш адрес электронной почты не подтвержден.
-                    <Link
-                        :href="send()"
-                        as="button"
-                        class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-                    >
+                    <Link :href="send()" as="button" class="link-text">
                         Нажмите здесь, чтобы повторно отправить письмо с подтверждением.
                     </Link>
                 </p>

@@ -201,4 +201,48 @@
     .empty-state {
         @apply flex flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/70 py-20 text-center dark:border-sidebar-border;
     }
+
+    .btn-primary {
+        @apply rounded-lg bg-[#453c77] px-7 py-3 text-base font-medium text-white hover:bg-[#362f5f] dark:bg-[#e8e6f0] dark:text-[#453c77] dark:hover:bg-white;
+    }
+
+    .btn-nav {
+        @apply rounded-md bg-[#453c77] px-4 py-1.5 text-sm text-white hover:bg-[#362f5f] dark:bg-[#e8e6f0] dark:text-[#453c77] dark:hover:bg-white;
+    }
+
+    .btn-cta-inverse {
+        @apply inline-block rounded-lg bg-white px-8 py-3 text-base font-medium text-[#453c77] hover:bg-[#f0eef9] dark:bg-[#453c77] dark:text-white dark:hover:bg-[#362f5f];
+    }
+
+    .link-nav {
+        @apply text-sm text-[#6b6585] hover:text-[#453c77] dark:text-[#9b98af] dark:hover:text-[#e8e6f0];
+    }
+
+    .link-text {
+        @apply text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500;
+    }
+
+    .card-service {
+        @apply rounded-xl border border-[#dddaf0] bg-white p-6 dark:border-[#352f5a] dark:bg-[#171428];
+    }
+
+    .card-contact {
+        @apply flex items-center gap-4 rounded-xl border border-[#dddaf0] bg-white p-5 transition-colors hover:border-[#453c77] dark:border-[#352f5a] dark:bg-[#171428] dark:hover:border-[#a096d0];
+    }
+
+    .icon-service {
+        @apply mb-4 flex size-10 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35];
+    }
+
+    .icon-contact {
+        @apply flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#f0eef9] dark:bg-[#1e1a35];
+    }
+
+    .badge-popular {
+        @apply absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#453c77] px-3 py-0.5 text-xs font-medium text-white dark:bg-[#a096d0] dark:text-[#1e1a35];
+    }
+
+    .picker-trigger {
+        @apply flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none;
+    }
 }

@@ -31,11 +31,7 @@ function toggleUser(id: number): void {
 
 <template>
     <div ref="pickerRef" class="relative">
-        <button
-            type="button"
-            class="flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-            @click="open = !open"
-        >
+        <button type="button" class="picker-trigger" @click="open = !open">
             <span class="flex items-center gap-2 text-muted-foreground">
                 <Users class="h-4 w-4 shrink-0" />
                 {{ modelValue.length === 0 ? 'Добавить участников' : `Выбрано: ${modelValue.length}` }}
