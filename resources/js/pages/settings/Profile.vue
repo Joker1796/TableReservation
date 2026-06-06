@@ -41,11 +41,7 @@ const user = computed(() => page.props.auth.user);
     <div class="flex flex-col space-y-6">
         <Heading variant="small" title="Общая информация" />
 
-        <Form
-            v-bind="ProfileController.update.form()"
-            class="space-y-6"
-            v-slot="{ errors, processing }"
-        >
+        <Form v-bind="ProfileController.update.form()" class="space-y-6" v-slot="{ errors, processing }">
             <div class="grid gap-2">
                 <Label for="name">Имя</Label>
                 <Input
@@ -83,24 +79,17 @@ const user = computed(() => page.props.auth.user);
                         as="button"
                         class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                     >
-                        Нажмите здесь, чтобы повторно отправить письмо с
-                        подтверждением.
+                        Нажмите здесь, чтобы повторно отправить письмо с подтверждением.
                     </Link>
                 </p>
 
-                <div
-                    v-if="status === 'verification-link-sent'"
-                    class="mt-2 text-sm font-medium text-green-600"
-                >
-                    На ваш электронный адрес отправлена новая ссылка для
-                    подтверждения.
+                <div v-if="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600">
+                    На ваш электронный адрес отправлена новая ссылка для подтверждения.
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
-                <Button :disabled="processing" data-test="update-profile-button"
-                    >Сохранить</Button
-                >
+                <Button :disabled="processing" data-test="update-profile-button">Сохранить</Button>
             </div>
         </Form>
     </div>

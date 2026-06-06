@@ -24,23 +24,14 @@ const passwordInput = useTemplateRef('passwordInput');
 <template>
     <div class="space-y-6">
         <Heading variant="small" title="Удаление аккаунта" />
-        <div
-            class="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10"
-        >
+        <div class="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10">
             <div class="relative space-y-0.5 text-red-600 dark:text-red-100">
                 <p class="font-medium">Внимание!</p>
-                <p class="text-sm">
-                    Пожалуйста, будьте осторожны, это уже не исправить.
-                </p>
+                <p class="text-sm">Пожалуйста, будьте осторожны, это уже не исправить.</p>
             </div>
             <Dialog>
                 <DialogTrigger as-child>
-                    <Button
-                        variant="destructive"
-                        data-test="delete-user-button"
-                    >
-                        Удалить аккаунт
-                    </Button>
+                    <Button variant="destructive" data-test="delete-user-button"> Удалить аккаунт </Button>
                 </DialogTrigger>
                 <DialogContent>
                     <Form
@@ -54,26 +45,17 @@ const passwordInput = useTemplateRef('passwordInput');
                         v-slot="{ errors, processing, reset, clearErrors }"
                     >
                         <DialogHeader class="space-y-3">
-                            <DialogTitle>
-                                Вы уверены, что хотите удалить свой аккаунт?
-                            </DialogTitle>
+                            <DialogTitle> Вы уверены, что хотите удалить свой аккаунт? </DialogTitle>
                             <DialogDescription>
-                                После удаления вашей учетной записи все ее
-                                ресурсы и данные также будут безвозвратно
-                                удалены. Пожалуйста, введите свой пароль, чтобы
-                                подтвердить, что вы хотите безвозвратно удалить
-                                свою учетную запись.
+                                После удаления вашей учетной записи все ее ресурсы и данные также будут безвозвратно
+                                удалены. Пожалуйста, введите свой пароль, чтобы подтвердить, что вы хотите безвозвратно
+                                удалить свою учетную запись.
                             </DialogDescription>
                         </DialogHeader>
 
                         <div class="grid gap-2">
                             <Label for="password" class="sr-only">Пароль</Label>
-                            <PasswordInput
-                                id="password"
-                                name="password"
-                                ref="passwordInput"
-                                placeholder="Пароль"
-                            />
+                            <PasswordInput id="password" name="password" ref="passwordInput" placeholder="Пароль" />
                             <InputError :message="errors.password" />
                         </div>
 

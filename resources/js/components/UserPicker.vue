@@ -38,16 +38,9 @@ function toggleUser(id: number): void {
         >
             <span class="flex items-center gap-2 text-muted-foreground">
                 <Users class="h-4 w-4 shrink-0" />
-                {{
-                    modelValue.length === 0
-                        ? 'Добавить участников'
-                        : `Выбрано: ${modelValue.length}`
-                }}
+                {{ modelValue.length === 0 ? 'Добавить участников' : `Выбрано: ${modelValue.length}` }}
             </span>
-            <ChevronDown
-                class="h-4 w-4 shrink-0 text-muted-foreground"
-                :class="{ 'rotate-180': open }"
-            />
+            <ChevronDown class="h-4 w-4 shrink-0 text-muted-foreground" :class="{ 'rotate-180': open }" />
         </button>
 
         <div
@@ -63,16 +56,10 @@ function toggleUser(id: number): void {
             >
                 <Check
                     class="h-4 w-4 shrink-0"
-                    :class="
-                        modelValue.includes(user.id)
-                            ? 'text-primary'
-                            : 'text-transparent'
-                    "
+                    :class="modelValue.includes(user.id) ? 'text-primary' : 'text-transparent'"
                 />
                 <span class="font-medium">{{ user.name }}</span>
-                <span class="ml-auto text-xs text-muted-foreground">{{
-                    user.email
-                }}</span>
+                <span class="ml-auto text-xs text-muted-foreground">{{ user.email }}</span>
             </button>
         </div>
     </div>

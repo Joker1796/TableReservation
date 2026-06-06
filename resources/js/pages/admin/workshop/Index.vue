@@ -120,21 +120,12 @@ function deletePhoto(id: number): void {
 
         <!-- Drop zone -->
         <div>
-            <input
-                ref="fileInput"
-                type="file"
-                accept="image/*"
-                multiple
-                class="hidden"
-                @change="onFileInputChange"
-            />
+            <input ref="fileInput" type="file" accept="image/*" multiple class="hidden" @change="onFileInputChange" />
 
             <div
                 class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 transition-colors"
                 :class="
-                    dragOver
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border hover:border-primary/50 hover:bg-muted/40'
+                    dragOver ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50 hover:bg-muted/40'
                 "
                 @click="openPicker"
                 @dragover="onDragOver"
@@ -161,7 +152,10 @@ function deletePhoto(id: number): void {
                             {{ (file.size / 1024 / 1024).toFixed(2) }} МБ
                         </span>
                     </div>
-                    <button class="ml-3 shrink-0 text-muted-foreground hover:text-foreground" @click="removeFile(index)">
+                    <button
+                        class="ml-3 shrink-0 text-muted-foreground hover:text-foreground"
+                        @click="removeFile(index)"
+                    >
                         <X class="h-4 w-4" />
                     </button>
                 </li>
@@ -169,13 +163,12 @@ function deletePhoto(id: number): void {
 
             <p v-if="uploadError" class="mt-2 text-xs text-destructive">{{ uploadError }}</p>
 
-            <Button
-                v-if="selectedFiles.length > 0"
-                class="mt-3"
-                :disabled="uploading"
-                @click="upload"
-            >
-                {{ uploading ? 'Загружается...' : `Загрузить ${selectedFiles.length > 1 ? selectedFiles.length + ' файла' : 'файл'}` }}
+            <Button v-if="selectedFiles.length > 0" class="mt-3" :disabled="uploading" @click="upload">
+                {{
+                    uploading
+                        ? 'Загружается...'
+                        : `Загрузить ${selectedFiles.length > 1 ? selectedFiles.length + ' файла' : 'файл'}`
+                }}
             </Button>
         </div>
 
@@ -191,12 +184,10 @@ function deletePhoto(id: number): void {
                 :key="photo.id"
                 class="group relative overflow-hidden rounded-lg border border-border"
             >
-                <img
-                    :src="photo.url"
-                    :alt="photo.original_name"
-                    class="aspect-square w-full object-cover"
-                />
-                <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                <img :src="photo.url" :alt="photo.original_name" class="aspect-square w-full object-cover" />
+                <div
+                    class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100"
+                >
                     <Button variant="destructive" size="icon" @click="deletePhoto(photo.id)">
                         <Trash2 class="h-4 w-4" />
                     </Button>

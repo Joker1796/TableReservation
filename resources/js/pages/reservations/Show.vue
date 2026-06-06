@@ -15,9 +15,7 @@ type Props = {
 
 const props = defineProps<Props>();
 
-const isMine = computed(() =>
-    props.reservation.users.some((u) => u.id === props.authUserId),
-);
+const isMine = computed(() => props.reservation.users.some((u) => u.id === props.authUserId));
 
 defineOptions({
     layout: {
@@ -48,9 +46,7 @@ function deleteReservation(): void {
 
     <div class="flex flex-col gap-6 p-4">
         <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-semibold">
-                Резервирование #{{ reservation.id }}
-            </h1>
+            <h1 class="text-2xl font-semibold">Резервирование #{{ reservation.id }}</h1>
             <div v-if="isMine" class="flex items-center gap-2">
                 <Button variant="outline" size="sm" as-child>
                     <Link :href="`/reservations/${reservation.id}/edit`">
@@ -58,12 +54,7 @@ function deleteReservation(): void {
                         Редактировать
                     </Link>
                 </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    class="btn-danger"
-                    @click="deleteReservation"
-                >
+                <Button variant="outline" size="sm" class="btn-danger" @click="deleteReservation">
                     <Trash2 class="h-4 w-4" />
                     Удалить
                 </Button>
@@ -88,10 +79,7 @@ function deleteReservation(): void {
 
                     <Separator />
 
-                    <div
-                        v-if="reservation.table"
-                        class="flex items-center gap-3"
-                    >
+                    <div v-if="reservation.table" class="flex items-center gap-3">
                         <Table2 class="h-4 w-4 text-muted-foreground" />
                         <div>
                             <p class="text-xs text-muted-foreground">Стол</p>
@@ -100,11 +88,7 @@ function deleteReservation(): void {
                                     {{ reservation.table.name }}
                                 </p>
                                 <Badge variant="outline" class="text-xs">
-                                    {{
-                                        reservation.table.status === 'ready'
-                                            ? 'Готов'
-                                            : 'Не готов'
-                                    }}
+                                    {{ reservation.table.status === 'ready' ? 'Готов' : 'Не готов' }}
                                 </Badge>
                             </div>
                         </div>
@@ -126,27 +110,17 @@ function deleteReservation(): void {
                 </CardHeader>
                 <CardContent>
                     <ul class="space-y-3">
-                        <li
-                            v-for="user in reservation.users"
-                            :key="user.id"
-                            class="flex items-center gap-3"
-                        >
+                        <li v-for="user in reservation.users" :key="user.id" class="flex items-center gap-3">
                             <div
                                 class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium"
-                                :class="
-                                    user.id === authUserId
-                                        ? 'bg-primary text-primary-foreground'
-                                        : 'bg-muted'
-                                "
+                                :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted'"
                             >
                                 {{ user.name.charAt(0).toUpperCase() }}
                             </div>
                             <div>
                                 <p class="text-sm font-medium">
                                     {{ user.name }}
-                                    <span
-                                        v-if="user.id === authUserId"
-                                        class="text-xs text-muted-foreground"
+                                    <span v-if="user.id === authUserId" class="text-xs text-muted-foreground"
                                         >(вы)</span
                                     >
                                 </p>

@@ -21,25 +21,16 @@ defineProps<{
 <template>
     <Head title="Подтверждение email" />
 
-    <div
-        v-if="status === 'verification-link-sent'"
-        class="mb-4 text-center text-sm font-medium text-green-600"
-    >
+    <div v-if="status === 'verification-link-sent'" class="mb-4 text-center text-sm font-medium text-green-600">
         Новая ссылка для подтверждения отправлена на ваш email.
     </div>
 
-    <Form
-        v-bind="send.form()"
-        class="space-y-6 text-center"
-        v-slot="{ processing }"
-    >
+    <Form v-bind="send.form()" class="space-y-6 text-center" v-slot="{ processing }">
         <Button :disabled="processing" variant="secondary">
             <Spinner v-if="processing" />
             Отправить письмо повторно
         </Button>
 
-        <TextLink :href="logout()" as="button" class="mx-auto block text-sm">
-            Выйти
-        </TextLink>
+        <TextLink :href="logout()" as="button" class="mx-auto block text-sm"> Выйти </TextLink>
     </Form>
 </template>

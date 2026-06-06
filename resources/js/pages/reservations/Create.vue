@@ -8,13 +8,7 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { DateInput, Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import type { ReservationTable, ReservationUser } from '@/types/reservation';
 
@@ -66,17 +60,11 @@ function submit(): void {
     <Head title="Создать резервирование" />
 
     <div class="space-y-6 p-4">
-        <Heading
-            variant="small"
-            title="Новое резервирование"
-            description="Заполните форму для бронирования стола"
-        />
+        <Heading variant="small" title="Новое резервирование" description="Заполните форму для бронирования стола" />
 
         <form class="max-w-lg space-y-5" @submit.prevent="submit">
             <div class="grid gap-2">
-                <Label for="date"
-                    >Дата <span class="text-destructive">*</span></Label
-                >
+                <Label for="date">Дата <span class="text-destructive">*</span></Label>
                 <DateInput id="date" v-model="form.date" required />
                 <InputError :message="form.errors.date" />
             </div>
@@ -84,24 +72,14 @@ function submit(): void {
             <div class="grid gap-2">
                 <Label for="table_id">Стол</Label>
                 <Select
-                    :model-value="
-                        form.table_id ? String(form.table_id) : undefined
-                    "
-                    @update:model-value="
-                        (v) => (form.table_id = v ? Number(v) : null)
-                    "
+                    :model-value="form.table_id ? String(form.table_id) : undefined"
+                    @update:model-value="(v) => (form.table_id = v ? Number(v) : null)"
                 >
                     <SelectTrigger id="table_id">
-                        <SelectValue
-                            placeholder="Выберите стол (необязательно)"
-                        />
+                        <SelectValue placeholder="Выберите стол (необязательно)" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem
-                            v-for="table in tables"
-                            :key="table.id"
-                            :value="String(table.id)"
-                        >
+                        <SelectItem v-for="table in tables" :key="table.id" :value="String(table.id)">
                             {{ table.name }}
                         </SelectItem>
                     </SelectContent>
@@ -117,14 +95,10 @@ function submit(): void {
                         class="flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                         @click="userPickerOpen = !userPickerOpen"
                     >
-                        <span
-                            class="flex items-center gap-2 text-muted-foreground"
-                        >
+                        <span class="flex items-center gap-2 text-muted-foreground">
                             <Users class="h-4 w-4 shrink-0" />
                             {{
-                                form.user_ids.length === 0
-                                    ? 'Добавить участников'
-                                    : `Выбрано: ${form.user_ids.length}`
+                                form.user_ids.length === 0 ? 'Добавить участников' : `Выбрано: ${form.user_ids.length}`
                             }}
                         </span>
                         <ChevronDown
@@ -132,29 +106,16 @@ function submit(): void {
                             :class="{ 'rotate-180': userPickerOpen }"
                         />
                     </button>
-                    <div
-                        v-if="userPickerOpen"
-                        class="absolute z-50 mt-1 w-full rounded-md border bg-popover shadow-md"
-                    >
+                    <div v-if="userPickerOpen" class="absolute z-50 mt-1 w-full rounded-md border bg-popover shadow-md">
                         <div class="p-2">
-                            <Input
-                                v-model="userSearch"
-                                placeholder="Поиск..."
-                                class="h-8 text-sm"
-                            />
+                            <Input v-model="userSearch" placeholder="Поиск..." class="h-8 text-sm" />
                         </div>
                         <div class="max-h-48 overflow-y-auto">
                             <button
                                 v-for="user in users.filter(
                                     (u) =>
-                                        u.name
-                                            .toLowerCase()
-                                            .includes(
-                                                userSearch.toLowerCase(),
-                                            ) ||
-                                        u.email
-                                            .toLowerCase()
-                                            .includes(userSearch.toLowerCase()),
+                                        u.name.toLowerCase().includes(userSearch.toLowerCase()) ||
+                                        u.email.toLowerCase().includes(userSearch.toLowerCase()),
                                 )"
                                 :key="user.id"
                                 type="button"
@@ -163,32 +124,17 @@ function submit(): void {
                             >
                                 <Check
                                     class="h-4 w-4 shrink-0"
-                                    :class="
-                                        form.user_ids.includes(user.id)
-                                            ? 'text-primary'
-                                            : 'text-transparent'
-                                    "
+                                    :class="form.user_ids.includes(user.id) ? 'text-primary' : 'text-transparent'"
                                 />
                                 <span class="font-medium">{{ user.name }}</span>
-                                <span
-                                    class="ml-auto text-xs text-muted-foreground"
-                                    >{{ user.email }}</span
-                                >
+                                <span class="ml-auto text-xs text-muted-foreground">{{ user.email }}</span>
                             </button>
                             <p
                                 v-if="
                                     !users.some(
                                         (u) =>
-                                            u.name
-                                                .toLowerCase()
-                                                .includes(
-                                                    userSearch.toLowerCase(),
-                                                ) ||
-                                            u.email
-                                                .toLowerCase()
-                                                .includes(
-                                                    userSearch.toLowerCase(),
-                                                ),
+                                            u.name.toLowerCase().includes(userSearch.toLowerCase()) ||
+                                            u.email.toLowerCase().includes(userSearch.toLowerCase()),
                                     )
                                 "
                                 class="px-3 py-3 text-center text-sm text-muted-foreground"
@@ -198,14 +144,9 @@ function submit(): void {
                         </div>
                     </div>
                 </div>
-                <div
-                    v-if="form.user_ids.length > 0"
-                    class="flex flex-wrap gap-1.5"
-                >
+                <div v-if="form.user_ids.length > 0" class="flex flex-wrap gap-1.5">
                     <span
-                        v-for="user in users.filter((u) =>
-                            form.user_ids.includes(u.id),
-                        )"
+                        v-for="user in users.filter((u) => form.user_ids.includes(u.id))"
                         :key="user.id"
                         class="flex items-center gap-1 rounded-full border bg-muted/50 py-0.5 pr-2 pl-0.5 text-xs"
                     >
@@ -229,26 +170,13 @@ function submit(): void {
 
             <div class="grid gap-2">
                 <Label for="comment">Комментарий</Label>
-                <Textarea
-                    id="comment"
-                    v-model="form.comment"
-                    rows="3"
-                    placeholder="Дополнительная информация..."
-                />
+                <Textarea id="comment" v-model="form.comment" rows="3" placeholder="Дополнительная информация..." />
                 <InputError :message="form.errors.comment" />
             </div>
 
             <div class="flex items-center gap-3">
-                <Button type="submit" :disabled="form.processing"
-                    >Создать резервирование</Button
-                >
-                <Button
-                    variant="outline"
-                    type="button"
-                    as="a"
-                    href="/reservations"
-                    >Отмена</Button
-                >
+                <Button type="submit" :disabled="form.processing">Создать резервирование</Button>
+                <Button variant="outline" type="button" as="a" href="/reservations">Отмена</Button>
             </div>
         </form>
     </div>

@@ -11,24 +11,14 @@ defineProps<{
 <template>
     <Head title="Мастерская — 3D-печать и покрас миниатюр" />
 
-    <div
-        class="min-h-screen bg-white text-[#2a2448] dark:bg-[#0d0b17] dark:text-[#e8e6f0]"
-    >
+    <div class="min-h-screen bg-white text-[#2a2448] dark:bg-[#0d0b17] dark:text-[#e8e6f0]">
         <!-- Header -->
-        <header
-            class="mx-auto flex max-w-5xl items-center justify-between px-6 py-5"
-        >
+        <header class="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
             <Link href="/" class="flex items-center gap-2.5">
-                <div
-                    class="flex size-9 items-center justify-center rounded-lg bg-[#453c77] dark:bg-[#e8e6f0]"
-                >
-                    <AppLogoIcon
-                        class="size-5 text-white dark:text-[#453c77]"
-                    />
+                <div class="flex size-9 items-center justify-center rounded-lg bg-[#453c77] dark:bg-[#e8e6f0]">
+                    <AppLogoIcon class="size-5 text-white dark:text-[#453c77]" />
                 </div>
-                <span class="text-lg font-semibold tracking-tight"
-                    >Кочующий стол</span
-                >
+                <span class="text-lg font-semibold tracking-tight">Кочующий стол</span>
             </Link>
             <Link
                 href="/"
@@ -42,9 +32,8 @@ defineProps<{
         <section class="mx-auto max-w-5xl px-6 py-16">
             <h1 class="mb-4 text-4xl font-bold lg:text-5xl">Мастерская</h1>
             <p class="max-w-2xl text-lg text-[#6b6585] dark:text-[#9b98af]">
-                3D-печать и профессиональный покрас миниатюр. Создаём
-                коллекционных персонажей, игровые фигурки и декоративные
-                элементы — от единичных работ до тиражей.
+                3D-печать и профессиональный покрас миниатюр. Создаём коллекционных персонажей, игровые фигурки и
+                декоративные элементы — от единичных работ до тиражей.
             </p>
         </section>
 
@@ -74,16 +63,11 @@ defineProps<{
                             </svg>
                         </div>
                         <h3 class="mb-2 font-semibold">3D-печать</h3>
-                        <p
-                            class="mb-4 text-sm text-[#6b6585] dark:text-[#9b98af]"
-                        >
-                            Печать миниатюр по вашим файлам или нашим моделям.
-                            Высокая детализация, смола или FDM.
+                        <p class="mb-4 text-sm text-[#6b6585] dark:text-[#9b98af]">
+                            Печать миниатюр по вашим файлам или нашим моделям. Высокая детализация, смола или FDM.
                         </p>
                         <p class="text-xl font-bold">от 300 ₽</p>
-                        <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">
-                            за фигурку
-                        </p>
+                        <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">за фигурку</p>
                     </div>
                     <div
                         class="rounded-xl border border-[#dddaf0] bg-white p-6 dark:border-[#352f5a] dark:bg-[#171428]"
@@ -106,20 +90,13 @@ defineProps<{
                             </svg>
                         </div>
                         <h3 class="mb-2 font-semibold">Базовый покрас</h3>
-                        <p
-                            class="mb-4 text-sm text-[#6b6585] dark:text-[#9b98af]"
-                        >
-                            Качественная покраска для игровых столов — быстро и
-                            аккуратно. Подходит для больших отрядов.
+                        <p class="mb-4 text-sm text-[#6b6585] dark:text-[#9b98af]">
+                            Качественная покраска для игровых столов — быстро и аккуратно. Подходит для больших отрядов.
                         </p>
                         <p class="text-xl font-bold">от 500 ₽</p>
-                        <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">
-                            за фигурку
-                        </p>
+                        <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">за фигурку</p>
                     </div>
-                    <div
-                        class="relative rounded-xl border-2 border-[#453c77] p-6 dark:border-[#a096d0]"
-                    >
+                    <div class="relative rounded-xl border-2 border-[#453c77] p-6 dark:border-[#a096d0]">
                         <span
                             class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#453c77] px-3 py-0.5 text-xs font-medium text-white dark:bg-[#a096d0] dark:text-[#1e1a35]"
                         >
@@ -148,16 +125,11 @@ defineProps<{
                             </svg>
                         </div>
                         <h3 class="mb-2 font-semibold">Коллекционный покрас</h3>
-                        <p
-                            class="mb-4 text-sm text-[#6b6585] dark:text-[#9b98af]"
-                        >
-                            Детализированная ручная роспись с эффектами NMM,
-                            OSL, тонирование и постобработка.
+                        <p class="mb-4 text-sm text-[#6b6585] dark:text-[#9b98af]">
+                            Детализированная ручная роспись с эффектами NMM, OSL, тонирование и постобработка.
                         </p>
                         <p class="text-xl font-bold">от 1 500 ₽</p>
-                        <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">
-                            за фигурку
-                        </p>
+                        <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">за фигурку</p>
                     </div>
                 </div>
             </div>
@@ -172,25 +144,15 @@ defineProps<{
                     v-if="photos.length === 0"
                     class="flex flex-col items-center justify-center rounded-xl border border-dashed border-[#dddaf0] py-16 dark:border-[#352f5a]"
                 >
-                    <p class="text-[#6b6585] dark:text-[#9b98af]">
-                        Скоро здесь появятся работы
-                    </p>
+                    <p class="text-[#6b6585] dark:text-[#9b98af]">Скоро здесь появятся работы</p>
                 </div>
 
                 <div
                     v-else
                     class="flex [scroll-snap-type:x_mandatory] [scrollbar-width:thin] gap-4 overflow-x-auto pb-4"
                 >
-                    <div
-                        v-for="photo in photos"
-                        :key="photo.id"
-                        class="w-64 shrink-0 [scroll-snap-align:start]"
-                    >
-                        <img
-                            :src="photo.url"
-                            :alt="photo.original_name"
-                            class="h-64 w-full rounded-xl object-cover"
-                        />
+                    <div v-for="photo in photos" :key="photo.id" class="w-64 shrink-0 [scroll-snap-align:start]">
+                        <img :src="photo.url" :alt="photo.original_name" class="h-64 w-full rounded-xl object-cover" />
                     </div>
                 </div>
             </div>
@@ -200,9 +162,7 @@ defineProps<{
         <section class="bg-[#f7f6fc] px-6 py-16 dark:bg-[#120f20]">
             <div class="mx-auto max-w-5xl">
                 <h2 class="mb-3 text-2xl font-bold">Связаться с нами</h2>
-                <p class="mb-10 text-[#6b6585] dark:text-[#9b98af]">
-                    Обсудим детали заказа — напишите или позвоните
-                </p>
+                <p class="mb-10 text-[#6b6585] dark:text-[#9b98af]">Обсудим детали заказа — напишите или позвоните</p>
                 <div class="grid gap-4 sm:grid-cols-3">
                     <a
                         href="https://t.me/example"
@@ -224,11 +184,7 @@ defineProps<{
                             </svg>
                         </div>
                         <div>
-                            <p
-                                class="text-xs text-[#6b6585] dark:text-[#9b98af]"
-                            >
-                                Telegram
-                            </p>
+                            <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">Telegram</p>
                             <p class="font-medium">@example</p>
                         </div>
                     </a>
@@ -255,11 +211,7 @@ defineProps<{
                             </svg>
                         </div>
                         <div>
-                            <p
-                                class="text-xs text-[#6b6585] dark:text-[#9b98af]"
-                            >
-                                Телефон
-                            </p>
+                            <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">Телефон</p>
                             <p class="font-medium">+7 (000) 000-00-00</p>
                         </div>
                     </a>
@@ -286,11 +238,7 @@ defineProps<{
                             </svg>
                         </div>
                         <div>
-                            <p
-                                class="text-xs text-[#6b6585] dark:text-[#9b98af]"
-                            >
-                                Email
-                            </p>
+                            <p class="text-xs text-[#6b6585] dark:text-[#9b98af]">Email</p>
                             <p class="font-medium">workshop@example.com</p>
                         </div>
                     </a>
@@ -299,23 +247,15 @@ defineProps<{
         </section>
 
         <!-- Footer -->
-        <footer
-            class="border-t border-[#dddaf0] px-6 py-8 dark:border-[#352f5a]"
-        >
+        <footer class="border-t border-[#dddaf0] px-6 py-8 dark:border-[#352f5a]">
             <div class="mx-auto flex max-w-5xl items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <div
-                        class="flex size-7 items-center justify-center rounded-md bg-[#453c77] dark:bg-[#e8e6f0]"
-                    >
-                        <AppLogoIcon
-                            class="size-4 text-white dark:text-[#453c77]"
-                        />
+                    <div class="flex size-7 items-center justify-center rounded-md bg-[#453c77] dark:bg-[#e8e6f0]">
+                        <AppLogoIcon class="size-4 text-white dark:text-[#453c77]" />
                     </div>
                     <span class="text-sm font-medium">Кочующий стол</span>
                 </div>
-                <p class="text-sm text-[#6b6585] dark:text-[#9b98af]">
-                    © 2025 Все права защищены
-                </p>
+                <p class="text-sm text-[#6b6585] dark:text-[#9b98af]">© 2025 Все права защищены</p>
             </div>
         </footer>
     </div>

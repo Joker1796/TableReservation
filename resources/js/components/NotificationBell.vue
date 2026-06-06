@@ -20,12 +20,8 @@ const page = usePage<{
     pendingBookingRequests: BookingRequest[];
 }>();
 const invites = computed<Invite[]>(() => page.props.pendingInvites ?? []);
-const bookingRequests = computed<BookingRequest[]>(
-    () => page.props.pendingBookingRequests ?? [],
-);
-const totalCount = computed(
-    () => invites.value.length + bookingRequests.value.length,
-);
+const bookingRequests = computed<BookingRequest[]>(() => page.props.pendingBookingRequests ?? []);
+const totalCount = computed(() => invites.value.length + bookingRequests.value.length);
 
 function formatDate(date: string): string {
     return new Date(date).toLocaleDateString('ru-RU', {
@@ -62,40 +58,25 @@ function reject(id: number): void {
             <DropdownMenuLabel class="flex items-center gap-2">
                 <Bell class="h-4 w-4" />
                 Уведомления
-                <Badge
-                    v-if="totalCount > 0"
-                    variant="secondary"
-                    class="ml-auto"
-                >
+                <Badge v-if="totalCount > 0" variant="secondary" class="ml-auto">
                     {{ totalCount }}
                 </Badge>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            <div
-                v-if="totalCount === 0"
-                class="px-3 py-6 text-center text-sm text-muted-foreground"
-            >
+            <div v-if="totalCount === 0" class="px-3 py-6 text-center text-sm text-muted-foreground">
                 Нет новых уведомлений
             </div>
 
             <!-- Приглашения -->
             <div v-if="invites.length > 0" class="max-h-80 overflow-y-auto">
-                <div
-                    v-for="invite in invites"
-                    :key="invite.id"
-                    class="border-b px-3 py-3 last:border-0"
-                >
+                <div v-for="invite in invites" :key="invite.id" class="border-b px-3 py-3 last:border-0">
                     <p class="mb-1 text-sm">
-                        <span class="font-medium">{{
-                            invite.author?.name
-                        }}</span>
+                        <span class="font-medium">{{ invite.author?.name }}</span>
                         приглашает вас
                     </p>
                     <div v-if="invite.reservation" class="mb-2 space-y-0.5">
-                        <div
-                            class="flex items-center gap-1.5 text-xs text-muted-foreground"
-                        >
+                        <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
                             <CalendarDays class="h-3 w-3" />
                             {{ formatDate(invite.reservation.date) }}
                         </div>
@@ -108,11 +89,7 @@ function reject(id: number): void {
                         </div>
                     </div>
                     <div class="flex gap-2">
-                        <Button
-                            size="sm"
-                            class="h-7 flex-1 gap-1 text-xs"
-                            @click="accept(invite.id)"
-                        >
+                        <Button size="sm" class="h-7 flex-1 gap-1 text-xs" @click="accept(invite.id)">
                             <Check class="h-3 w-3" />
                             Принять
                         </Button>
@@ -133,28 +110,17 @@ function reject(id: number): void {
             <template v-if="bookingRequests.length > 0">
                 <DropdownMenuSeparator v-if="invites.length > 0" />
                 <div class="max-h-60 overflow-y-auto">
-                    <div
-                        v-for="req in bookingRequests"
-                        :key="`br-${req.id}`"
-                        class="border-b px-3 py-3 last:border-0"
-                    >
+                    <div v-for="req in bookingRequests" :key="`br-${req.id}`" class="border-b px-3 py-3 last:border-0">
                         <p class="mb-1 text-sm">
-                            <span class="font-medium">{{
-                                req.author?.name
-                            }}</span>
+                            <span class="font-medium">{{ req.author?.name }}</span>
                             подал заявку на бронирование
                         </p>
                         <div class="mb-2 space-y-0.5">
-                            <div
-                                class="flex items-center gap-1.5 text-xs text-muted-foreground"
-                            >
+                            <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
                                 <CalendarDays class="h-3 w-3" />
                                 {{ formatDate(req.date) }}
                             </div>
-                            <div
-                                v-if="req.table"
-                                class="flex items-center gap-1.5 text-xs text-muted-foreground"
-                            >
+                            <div v-if="req.table" class="flex items-center gap-1.5 text-xs text-muted-foreground">
                                 <Table2 class="h-3 w-3" />
                                 {{ req.table.name }}
                             </div>

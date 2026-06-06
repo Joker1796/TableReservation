@@ -29,10 +29,7 @@ defineProps<{
 <template>
     <Head title="Вход" />
 
-    <div
-        v-if="status"
-        class="mb-4 text-center text-sm font-medium text-green-600"
-    >
+    <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
         {{ status }}
     </div>
 
@@ -61,12 +58,7 @@ defineProps<{
             <div class="grid gap-2">
                 <div class="flex items-center justify-between">
                     <Label for="password">Пароль</Label>
-                    <TextLink
-                        v-if="canResetPassword"
-                        :href="request()"
-                        class="text-sm"
-                        :tabindex="5"
-                    >
+                    <TextLink v-if="canResetPassword" :href="request()" class="text-sm" :tabindex="5">
                         Забыли пароль?
                     </TextLink>
                 </div>
@@ -88,26 +80,15 @@ defineProps<{
                 </Label>
             </div>
 
-            <Button
-                type="submit"
-                class="mt-4 w-full"
-                :tabindex="4"
-                :disabled="processing"
-                data-test="login-button"
-            >
+            <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="processing" data-test="login-button">
                 <Spinner v-if="processing" />
                 Войти
             </Button>
         </div>
 
-        <div
-            class="text-center text-sm text-muted-foreground"
-            v-if="canRegister"
-        >
+        <div class="text-center text-sm text-muted-foreground" v-if="canRegister">
             Нет аккаунта?
-            <TextLink :href="register()" :tabindex="5"
-                >Зарегистрироваться</TextLink
-            >
+            <TextLink :href="register()" :tabindex="5">Зарегистрироваться</TextLink>
         </div>
     </Form>
 </template>

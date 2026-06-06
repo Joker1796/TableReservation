@@ -36,9 +36,7 @@ function deleteTable(id: number): void {
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-2xl font-semibold">Столы</h1>
-                <p class="text-sm text-muted-foreground">
-                    Управление столами клуба
-                </p>
+                <p class="text-sm text-muted-foreground">Управление столами клуба</p>
             </div>
             <Button as-child>
                 <Link href="/admin/tables/create">
@@ -70,35 +68,17 @@ function deleteTable(id: number): void {
                         <tr v-for="table in tables.data" :key="table.id">
                             <td class="col-td font-medium">{{ table.name }}</td>
                             <td class="col-td max-w-xs text-muted-foreground">
-                                <span class="line-clamp-1">{{
-                                    table.description || '—'
-                                }}</span>
+                                <span class="line-clamp-1">{{ table.description || '—' }}</span>
                             </td>
                             <td class="col-td">
-                                <Badge
-                                    :variant="
-                                        table.status === 'ready'
-                                            ? 'default'
-                                            : 'secondary'
-                                    "
-                                >
-                                    {{
-                                        table.status === 'ready'
-                                            ? 'Готов'
-                                            : 'Не готов'
-                                    }}
+                                <Badge :variant="table.status === 'ready' ? 'default' : 'secondary'">
+                                    {{ table.status === 'ready' ? 'Готов' : 'Не готов' }}
                                 </Badge>
                             </td>
                             <td class="col-td">
                                 <div class="flex justify-end gap-2">
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        as-child
-                                    >
-                                        <Link
-                                            :href="`/admin/tables/${table.id}/edit`"
-                                        >
+                                    <Button variant="outline" size="icon" as-child>
+                                        <Link :href="`/admin/tables/${table.id}/edit`">
                                             <Edit class="h-4 w-4" />
                                         </Link>
                                     </Button>

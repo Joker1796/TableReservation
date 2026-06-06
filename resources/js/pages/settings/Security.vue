@@ -62,11 +62,7 @@ onUnmounted(() => clearTwoFactorAuthData());
                 preserveScroll: true,
             }"
             reset-on-success
-            :reset-on-error="[
-                'password',
-                'password_confirmation',
-                'current_password',
-            ]"
+            :reset-on-error="['password', 'password_confirmation', 'current_password']"
             class="space-y-6"
             v-slot="{ errors, processing }"
         >
@@ -107,12 +103,7 @@ onUnmounted(() => clearTwoFactorAuthData());
             </div>
 
             <div class="flex items-center gap-4">
-                <Button
-                    :disabled="processing"
-                    data-test="update-password-button"
-                >
-                    Сохранить пароль
-                </Button>
+                <Button :disabled="processing" data-test="update-password-button"> Сохранить пароль </Button>
             </div>
         </Form>
     </div>
@@ -120,49 +111,31 @@ onUnmounted(() => clearTwoFactorAuthData());
     <div v-if="canManageTwoFactor" class="space-y-6">
         <Heading variant="small" title="Двухфакторная аутентификация" />
 
-        <div
-            v-if="!twoFactorEnabled"
-            class="flex flex-col items-start justify-start space-y-4"
-        >
+        <div v-if="!twoFactorEnabled" class="flex flex-col items-start justify-start space-y-4">
             <p class="text-sm text-muted-foreground">
-                При включении двухфакторной аутентификации вам будет предложено
-                ввести безопасный PIN-код при входе в систему. Этот PIN-код
-                можно получить в приложении на вашем телефоне, поддерживающем
-                TOTP.
+                При включении двухфакторной аутентификации вам будет предложено ввести безопасный PIN-код при входе в
+                систему. Этот PIN-код можно получить в приложении на вашем телефоне, поддерживающем TOTP.
             </p>
 
             <div>
                 <Button v-if="hasSetupData" @click="showSetupModal = true">
                     <ShieldCheck />Продолжить настройку
                 </Button>
-                <Form
-                    v-else
-                    v-bind="enable.form()"
-                    @success="showSetupModal = true"
-                    #default="{ processing }"
-                >
-                    <Button type="submit" :disabled="processing">
-                        Включить двухфакторную аутентификацию
-                    </Button>
+                <Form v-else v-bind="enable.form()" @success="showSetupModal = true" #default="{ processing }">
+                    <Button type="submit" :disabled="processing"> Включить двухфакторную аутентификацию </Button>
                 </Form>
             </div>
         </div>
 
         <div v-else class="flex flex-col items-start justify-start space-y-4">
             <p class="text-sm text-muted-foreground">
-                При входе вам будет предложено ввести случайный PIN-код, который
-                можно получить в TOTP-приложении на вашем телефоне.
+                При входе вам будет предложено ввести случайный PIN-код, который можно получить в TOTP-приложении на
+                вашем телефоне.
             </p>
 
             <div class="relative inline">
                 <Form v-bind="disable.form()" #default="{ processing }">
-                    <Button
-                        variant="destructive"
-                        type="submit"
-                        :disabled="processing"
-                    >
-                        Отключить 2FA
-                    </Button>
+                    <Button variant="destructive" type="submit" :disabled="processing"> Отключить 2FA </Button>
                 </Form>
             </div>
 

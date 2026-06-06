@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import {
-    CalendarDays,
-    ClipboardList,
-    Paintbrush,
-    Settings,
-    Table2,
-} from 'lucide-vue-next';
+import { CalendarDays, ClipboardList, Paintbrush, Settings, Table2 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -89,10 +83,7 @@ const footerNavItems: NavItem[] = [];
                         Администрирование
                     </SidebarGroupLabel>
                     <SidebarMenu>
-                        <SidebarMenuItem
-                            v-for="item in adminNavItems"
-                            :key="item.title"
-                        >
+                        <SidebarMenuItem v-for="item in adminNavItems" :key="item.title">
                             <SidebarMenuButton as-child :tooltip="item.title">
                                 <Link :href="item.href">
                                     <component :is="item.icon" />

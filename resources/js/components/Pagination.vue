@@ -20,17 +20,9 @@ function decodeLabel(label: string): string {
                 class="h-8 min-w-8 px-2 text-xs"
                 as-child
             >
-                <Link :href="link.url" preserve-scroll>{{
-                    decodeLabel(link.label)
-                }}</Link>
+                <Link :href="link.url" preserve-scroll>{{ decodeLabel(link.label) }}</Link>
             </Button>
-            <Button
-                v-else
-                variant="outline"
-                size="sm"
-                class="h-8 min-w-8 px-2 text-xs"
-                disabled
-            >
+            <Button v-else variant="outline" size="sm" class="h-8 min-w-8 px-2 text-xs" disabled>
                 {{ decodeLabel(link.label) }}
             </Button>
         </template>

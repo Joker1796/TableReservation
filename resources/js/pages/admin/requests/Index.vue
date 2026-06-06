@@ -4,13 +4,7 @@ import { Check, Trash2, X } from 'lucide-vue-next';
 import Pagination from '@/components/Pagination.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { Paginated } from '@/types/pagination';
 import type { BookingRequest, ReservationTable } from '@/types/reservation';
 
@@ -35,10 +29,7 @@ const statusLabel: Record<number, string> = {
     1: 'Одобрена',
     2: 'Отклонена',
 };
-const statusVariant: Record<
-    number,
-    'default' | 'secondary' | 'destructive' | 'outline'
-> = {
+const statusVariant: Record<number, 'default' | 'secondary' | 'destructive' | 'outline'> = {
     0: 'secondary',
     1: 'default',
     2: 'destructive',
@@ -57,9 +48,7 @@ function updateStatus(id: number, status: number): void {
 }
 
 function assignTable(id: number, tableId: string | undefined): void {
-    useForm({ table_id: tableId ? Number(tableId) : null }).put(
-        `/admin/requests/${id}/table`,
-    );
+    useForm({ table_id: tableId ? Number(tableId) : null }).put(`/admin/requests/${id}/table`);
 }
 
 function deleteRequest(id: number): void {
@@ -75,9 +64,7 @@ function deleteRequest(id: number): void {
     <div class="flex flex-col gap-6 p-4">
         <div>
             <h1 class="text-2xl font-semibold">Заявки на бронирование</h1>
-            <p class="text-sm text-muted-foreground">
-                Управление входящими заявками от пользователей
-            </p>
+            <p class="text-sm text-muted-foreground">Управление входящими заявками от пользователей</p>
         </div>
 
         <div class="flex flex-wrap gap-2">
@@ -112,66 +99,35 @@ function deleteRequest(id: number): void {
                                         {{ req.author.email }}
                                     </p>
                                 </div>
-                                <span v-else class="text-muted-foreground"
-                                    >—</span
-                                >
+                                <span v-else class="text-muted-foreground">—</span>
                             </td>
                             <td class="col-td font-medium">
                                 {{ formatDate(req.date) }}
                             </td>
                             <td class="col-td">
                                 <!-- Одобренная заявка: показываем только badge -->
-                                <Badge
-                                    v-if="req.status === 1 && req.table"
-                                    variant="outline"
-                                >
+                                <Badge v-if="req.status === 1 && req.table" variant="outline">
                                     {{ req.table.name }}
                                 </Badge>
-                                <span
-                                    v-else-if="req.status === 1"
-                                    class="text-muted-foreground"
-                                    >—</span
-                                >
+                                <span v-else-if="req.status === 1" class="text-muted-foreground">—</span>
                                 <!-- Остальные: inline-выбор стола -->
                                 <Select
                                     v-else
-                                    :model-value="
-                                        req.table_id
-                                            ? String(req.table_id)
-                                            : undefined
-                                    "
-                                    @update:model-value="
-                                        (v) =>
-                                            assignTable(
-                                                req.id,
-                                                v != null
-                                                    ? String(v)
-                                                    : undefined,
-                                            )
-                                    "
+                                    :model-value="req.table_id ? String(req.table_id) : undefined"
+                                    @update:model-value="(v) => assignTable(req.id, v != null ? String(v) : undefined)"
                                 >
                                     <SelectTrigger class="h-8 w-36 text-xs">
-                                        <SelectValue
-                                            placeholder="Выбрать стол"
-                                        />
+                                        <SelectValue placeholder="Выбрать стол" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem
-                                            v-for="table in tables"
-                                            :key="table.id"
-                                            :value="String(table.id)"
-                                        >
+                                        <SelectItem v-for="table in tables" :key="table.id" :value="String(table.id)">
                                             {{ table.name }}
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </td>
-                            <td
-                                class="col-td max-w-[180px] text-muted-foreground"
-                            >
-                                <span class="line-clamp-2">{{
-                                    req.comment || '—'
-                                }}</span>
+                            <td class="col-td max-w-[180px] text-muted-foreground">
+                                <span class="line-clamp-2">{{ req.comment || '—' }}</span>
                             </td>
                             <td class="col-td">
                                 <Badge :variant="statusVariant[req.status]">

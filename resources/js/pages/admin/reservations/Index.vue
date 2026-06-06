@@ -80,9 +80,7 @@ function deleteReservation(id: number): void {
     <div class="flex flex-col gap-6 p-4">
         <div>
             <h1 class="text-2xl font-semibold">Резервирования</h1>
-            <p class="text-sm text-muted-foreground">
-                Все подтверждённые бронирования
-            </p>
+            <p class="text-sm text-muted-foreground">Все подтверждённые бронирования</p>
         </div>
 
         <div v-if="reservations.data.length === 0" class="empty-state">
@@ -108,26 +106,18 @@ function deleteReservation(id: number): void {
                             </td>
                             <td class="col-td">
                                 <span v-if="res.table">
-                                    <Badge variant="outline">{{
-                                        res.table.name
-                                    }}</Badge>
+                                    <Badge variant="outline">{{ res.table.name }}</Badge>
                                 </span>
-                                <span v-else class="text-muted-foreground"
-                                    >—</span
-                                >
+                                <span v-else class="text-muted-foreground">—</span>
                             </td>
                             <td class="col-td">
-                                <div
-                                    class="flex items-center gap-1 text-muted-foreground"
-                                >
+                                <div class="flex items-center gap-1 text-muted-foreground">
                                     <Users class="h-3.5 w-3.5" />
                                     {{ res.users.length }}
                                 </div>
                             </td>
                             <td class="col-td max-w-xs text-muted-foreground">
-                                <span class="line-clamp-1">{{
-                                    res.comment || '—'
-                                }}</span>
+                                <span class="line-clamp-1">{{ res.comment || '—' }}</span>
                             </td>
                             <td class="col-td">
                                 <div class="flex justify-end gap-2">
@@ -162,10 +152,7 @@ function deleteReservation(id: number): void {
         <DialogContent class="sm:max-w-md">
             <DialogHeader>
                 <DialogTitle>Пригласить пользователя</DialogTitle>
-                <DialogDescription
-                    >Выберите пользователя, которому будет отправлено
-                    приглашение</DialogDescription
-                >
+                <DialogDescription>Выберите пользователя, которому будет отправлено приглашение</DialogDescription>
             </DialogHeader>
             <div class="grid gap-4 py-2">
                 <div class="grid gap-2">
@@ -178,16 +165,8 @@ function deleteReservation(id: number): void {
                 </div>
             </div>
             <DialogFooter>
-                <Button variant="outline" @click="inviteDialogOpen = false"
-                    >Отмена</Button
-                >
-                <Button
-                    :disabled="
-                        inviteForm.user_ids.length === 0 ||
-                        inviteForm.processing
-                    "
-                    @click="sendInvite"
-                >
+                <Button variant="outline" @click="inviteDialogOpen = false">Отмена</Button>
+                <Button :disabled="inviteForm.user_ids.length === 0 || inviteForm.processing" @click="sendInvite">
                     Отправить приглашение
                 </Button>
             </DialogFooter>
