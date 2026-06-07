@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { Loader2 } from 'lucide-vue-next';
 import EventModal from '@/components/feed/EventModal.vue';
 import PostCard from '@/components/feed/PostCard.vue';
-import { useInfiniteScroll } from '@/composables/useInfiniteScroll';
+import { Button } from '@/components/ui/button';
 import { home } from '@/routes';
 import type { Event } from '@/types/event';
 import type { FeedItem } from '@/types/feed';
@@ -26,7 +27,31 @@ defineOptions({
     },
 });
 
-const { items, loading, hasMore, sentinel } = useInfiniteScroll(props.items, props.nextCursor, '/api/V1/feed');
+const items = ref<FeedItem[]>([...props.items]);
+const cursor = ref<string | null>(props.nextCursor);
+const loading = ref(false);
+const hasMore = ref(props.nextCursor !== null);
+
+async function loadMore(): Promise<void> {
+    if (loading.value || !hasMore.value || !cursor.value) return;
+    loading.value = true;
+    try {
+        const url = `/feed?cursor=${encodeURIComponent(cursor.value)}`;
+        const response = await fetch(url, {
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        items.value.push(...(data.data as FeedItem[]));
+        cursor.value = data.next_cursor ?? null;
+        hasMore.value = data.next_cursor !== null;
+    } catch {
+        // stop on error
+    } finally {
+        loading.value = false;
+    }
+}
 </script>
 
 <template>
@@ -42,9 +67,10 @@ const { items, loading, hasMore, sentinel } = useInfiniteScroll(props.items, pro
                 <PostCard v-for="item in items" :key="item.id" :item="item" />
             </div>
 
-            <div ref="sentinel" class="flex justify-center py-4">
+            <div class="flex justify-center py-4">
                 <Loader2 v-if="loading" class="h-5 w-5 animate-spin text-muted-foreground" />
-                <p v-else-if="!hasMore && items.length > 0" class="text-sm text-muted-foreground">Больше публикаций нет</p>
+                <Button v-else-if="hasMore" variant="outline" @click="loadMore">Подгрузить ещё</Button>
+                <p v-else-if="items.length > 0" class="text-sm text-muted-foreground">Больше публикаций нет</p>
             </div>
         </section>
 

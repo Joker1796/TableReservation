@@ -77,7 +77,7 @@ const user = computed(() => page.props.auth.user);
                     id="phone"
                     class="mt-1 block w-full"
                     name="phone"
-                    :default-value="user.phone"
+                    :default-value="user.phone ?? undefined"
                     autocomplete="tel"
                     placeholder="+7 (999) 000-00-00"
                 />
@@ -90,7 +90,7 @@ const user = computed(() => page.props.auth.user);
                     id="contacts"
                     class="mt-1 block w-full"
                     name="contacts"
-                    :default-value="user.contacts"
+                    :default-value="user.contacts ?? undefined"
                     placeholder="Telegram, VK и др."
                 />
                 <InputError class="mt-2" :message="errors.contacts" />

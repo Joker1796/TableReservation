@@ -14,7 +14,7 @@ class FeedService
             ->where('published_at', '<=', now())
             ->orderByDesc('published_at')
             ->orderByDesc('id')
-            ->cursorPaginate(15);
+            ->cursorPaginate(15, ['*'], 'cursor', $cursor);
 
         $result = $paginator->toArray();
         $result['data'] = array_map(

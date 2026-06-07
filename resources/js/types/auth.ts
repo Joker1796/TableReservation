@@ -6,6 +6,8 @@ export type User = {
     is_admin: boolean;
     is_api: boolean;
     email_verified_at: string | null;
+    phone: string | null;
+    contacts: string | null;
     created_at: string;
     updated_at: string;
     [key: string]: unknown;
