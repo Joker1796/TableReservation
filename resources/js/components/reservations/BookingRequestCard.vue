@@ -11,11 +11,14 @@ defineProps<{
 }>();
 
 function formatDate(date: string): string {
-    return new Date(date).toLocaleDateString('ru-RU', {
+    const normalized = date.replace(' ', 'T');
+    const timePart = normalized.substring(11, 16);
+    const dateStr = new Date(normalized).toLocaleDateString('ru-RU', {
         day: '2-digit',
         month: 'long',
         year: 'numeric',
     });
+    return timePart && timePart !== '00:00' ? `${dateStr}, ${timePart}` : dateStr;
 }
 
 function getInitial(name: string): string {

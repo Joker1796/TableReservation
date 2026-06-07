@@ -26,7 +26,7 @@ defineOptions({
 });
 
 const form = useForm({
-    date: `${props.reservation.date.substring(0, 10)}T00:00`,
+    date: props.reservation.date.replace(' ', 'T').substring(0, 16),
     comment: props.reservation.comment,
     table_id: props.reservation.table_id,
 });
