@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 defineOptions({
     layout: {
         breadcrumbs: [
+            { title: 'Админ', href: '/admin' },
             { title: 'Публикации', href: '/admin/posts' },
             { title: 'Создать', href: '/admin/posts/create' },
         ],

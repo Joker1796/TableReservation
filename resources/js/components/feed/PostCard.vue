@@ -13,13 +13,13 @@ function formatDate(iso: string): string {
 </script>
 
 <template>
-    <article class="rounded-lg border border-border bg-card p-5 shadow-sm">
-        <div class="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
+    <article class="border border-border bg-card p-4">
+        <div class="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
             <span class="font-medium text-foreground">{{ item.author.name }}</span>
             <span>·</span>
             <time :datetime="item.published_at">{{ formatDate(item.published_at) }}</time>
         </div>
-        <h2 class="mb-3 text-lg font-semibold leading-snug">{{ item.title }}</h2>
-        <div class="prose prose-sm max-w-none text-muted-foreground" v-html="item.content" />
+        <h2 class="mb-4 text-xl font-semibold leading-snug">{{ item.title }}</h2>
+        <div class="prose max-w-none text-base text-muted-foreground" v-html="item.content" />
     </article>
 </template>

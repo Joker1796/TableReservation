@@ -39,11 +39,6 @@ const mainNavItems: NavItem[] = [
 
 const adminNavItems: NavItem[] = [
     {
-        title: 'Публикации',
-        href: '/admin/posts',
-        icon: FileText,
-    },
-    {
         title: 'Заявки',
         href: '/admin/requests',
         icon: ClipboardList,
@@ -57,6 +52,11 @@ const adminNavItems: NavItem[] = [
         title: 'Столы',
         href: '/admin/tables',
         icon: Table2,
+    },
+    {
+        title: 'Публикации',
+        href: '/admin/posts',
+        icon: FileText,
     },
     {
         title: 'Мастерская',
