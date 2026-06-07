@@ -10,6 +10,7 @@ use App\Models\Invite;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -61,6 +62,16 @@ class HandleInertiaRequests extends Middleware
                 ? BookingRequest::with(['author', 'table'])
                     ->where('status', BookingRequestStatus::PENDING)
                     ->latest()
+                    ->get()
+                : [],
+            'pendingEventRegistrations' => fn () => auth()->check() && auth()->user()->is_admin
+                ? DB::table('event_user')
+                    ->join('users', 'users.id', '=', 'event_user.user_id')
+                    ->join('events', 'events.id', '=', 'event_user.event_id')
+                    ->where('event_user.seen_by_admin', false)
+                    ->whereNull('events.deleted_at')
+                    ->select('event_user.id', 'users.name as user_name', 'events.title as event_title', 'event_user.created_at')
+                    ->latest('event_user.created_at')
                     ->get()
                 : [],
             'bookingFormData' => fn () => auth()->check() ? [

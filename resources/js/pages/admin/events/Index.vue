@@ -68,6 +68,7 @@ function deleteEvent(id: number): void {
                             <th class="col-th text-left">Название</th>
                             <th class="col-th text-left">Начало</th>
                             <th class="col-th text-left">Конец</th>
+                            <th class="col-th text-left">Участники</th>
                             <th class="col-th text-right">Действия</th>
                         </tr>
                     </thead>
@@ -78,6 +79,14 @@ function deleteEvent(id: number): void {
                             </td>
                             <td class="col-td text-muted-foreground">{{ formatDate(event.starts_at) }}</td>
                             <td class="col-td text-muted-foreground">{{ formatDate(event.ends_at) }}</td>
+                            <td class="col-td">
+                                <div v-if="event.participants.length > 0" class="flex flex-wrap gap-1">
+                                    <span v-for="p in event.participants" :key="p.id" class="inline-block rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+                                        {{ p.name }}
+                                    </span>
+                                </div>
+                                <span v-else class="text-muted-foreground">—</span>
+                            </td>
                             <td class="col-td">
                                 <div class="flex justify-end gap-2">
                                     <Button variant="outline" size="icon" as-child>

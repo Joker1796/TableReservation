@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\BookingRequestWebController;
+use App\Http\Controllers\Web\EventRegistrationController;
 use App\Http\Controllers\Web\FeedController;
 use App\Http\Controllers\Web\InviteWebController;
 use App\Http\Controllers\Web\WorkshopController;
@@ -20,6 +21,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('invites.accept');
     Route::put('invites/{id}/reject', [InviteWebController::class, 'reject'])
         ->name('invites.reject');
+    Route::post('events/{id}/register', [EventRegistrationController::class, 'store'])
+        ->name('events.register');
+    Route::delete('events/{id}/register', [EventRegistrationController::class, 'destroy'])
+        ->name('events.unregister');
+});
+
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+    Route::post('admin/events/registrations/seen', [EventRegistrationController::class, 'markSeen'])
+        ->name('admin.events.registrations.seen');
 });
 
 require __DIR__.'/settings.php';

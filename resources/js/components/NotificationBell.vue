@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { router, usePage } from '@inertiajs/vue3';
-import { Bell, CalendarDays, Check, Table2, X } from 'lucide-vue-next';
+import { Bell, CalendarCheck, CalendarDays, Check, Table2, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import type { EventRegistration } from '@/types/event';
 import type { BookingRequest, Invite } from '@/types/reservation';
 
 const open = ref(false);
@@ -18,10 +19,12 @@ const open = ref(false);
 const page = usePage<{
     pendingInvites: Invite[];
     pendingBookingRequests: BookingRequest[];
+    pendingEventRegistrations: EventRegistration[];
 }>();
 const invites = computed<Invite[]>(() => page.props.pendingInvites ?? []);
 const bookingRequests = computed<BookingRequest[]>(() => page.props.pendingBookingRequests ?? []);
-const totalCount = computed(() => invites.value.length + bookingRequests.value.length);
+const eventRegistrations = computed<EventRegistration[]>(() => page.props.pendingEventRegistrations ?? []);
+const totalCount = computed(() => invites.value.length + bookingRequests.value.length + eventRegistrations.value.length);
 
 function formatDate(date: string): string {
     return new Date(date).toLocaleDateString('ru-RU', {
@@ -37,6 +40,11 @@ function accept(id: number): void {
 
 function reject(id: number): void {
     router.put(`/invites/${id}/reject`);
+}
+
+function openEvents(): void {
+    open.value = false;
+    router.post('/admin/events/registrations/seen');
 }
 </script>
 
@@ -132,6 +140,26 @@ function reject(id: number): void {
                             "
                         >
                             Рассмотреть
+                        </Button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Записи на события (только для админов) -->
+            <template v-if="eventRegistrations.length > 0">
+                <DropdownMenuSeparator v-if="invites.length > 0 || bookingRequests.length > 0" />
+                <div class="max-h-60 overflow-y-auto">
+                    <div v-for="reg in eventRegistrations" :key="`er-${reg.id}`" class="border-b px-3 py-3 last:border-0">
+                        <p class="mb-1 text-sm">
+                            <span class="font-medium">{{ reg.user_name }}</span>
+                            записался на событие
+                        </p>
+                        <div class="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <CalendarCheck class="h-3 w-3" />
+                            {{ reg.event_title }}
+                        </div>
+                        <Button size="sm" variant="outline" class="h-7 w-full text-xs" @click="openEvents">
+                            Открыть события
                         </Button>
                     </div>
                 </div>

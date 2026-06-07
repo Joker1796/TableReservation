@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { router, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { Event } from '@/types/event';
 
-defineProps<{ event: Event }>();
+const props = defineProps<{ event: Event }>();
 
+const page = usePage<{ auth: { user: { id: number } | null } }>();
 const open = ref(false);
+
+const isRegistered = computed(() =>
+    props.event.participants.some((p) => p.id === page.props.auth.user?.id),
+);
 
 function formatDate(iso: string): string {
     return new Date(iso).toLocaleDateString('ru-RU', {
@@ -15,6 +22,14 @@ function formatDate(iso: string): string {
         hour: '2-digit',
         minute: '2-digit',
     });
+}
+
+function toggleRegistration(): void {
+    if (isRegistered.value) {
+        router.delete(`/events/${props.event.id}/register`, { preserveScroll: true });
+    } else {
+        router.post(`/events/${props.event.id}/register`, {}, { preserveScroll: true });
+    }
 }
 </script>
 
@@ -41,6 +56,15 @@ function formatDate(iso: string): string {
                 <p v-else-if="event.short_description" class="leading-relaxed">{{ event.short_description }}</p>
                 <p v-else class="text-muted-foreground">Описание не указано</p>
             </div>
+
+            <DialogFooter v-if="page.props.auth.user">
+                <Button
+                    :variant="isRegistered ? 'outline' : 'default'"
+                    @click="toggleRegistration(); open = false"
+                >
+                    {{ isRegistered ? 'Отписаться' : 'Записаться' }}
+                </Button>
+            </DialogFooter>
         </DialogContent>
     </Dialog>
 </template>

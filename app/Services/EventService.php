@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventService
 {
@@ -41,10 +43,27 @@ class EventService
         $event->delete();
     }
 
+    public static function register(Event $event, User $user): void
+    {
+        if (! $event->participants()->where('user_id', $user->id)->exists()) {
+            $event->participants()->attach($user->id);
+        }
+    }
+
+    public static function unregister(Event $event, User $user): void
+    {
+        $event->participants()->detach($user->id);
+    }
+
+    public static function markAllRegistrationsSeen(): void
+    {
+        DB::table('event_user')->update(['seen_by_admin' => true]);
+    }
+
     /** @return Collection<int, Event> */
     public static function upcoming(): Collection
     {
-        return Event::with('author:id,name')
+        return Event::with(['author:id,name', 'participants:id'])
             ->where('starts_at', '>=', now())
             ->orderBy('starts_at')
             ->limit(5)
@@ -54,7 +73,7 @@ class EventService
     /** @return Collection<int, Event> */
     public static function recent(): Collection
     {
-        return Event::with('author:id,name')
+        return Event::with(['author:id,name', 'participants:id'])
             ->where('starts_at', '<', now())
             ->orderByDesc('starts_at')
             ->limit(2)
