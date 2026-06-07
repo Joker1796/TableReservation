@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { CalendarDays, ClipboardList, Paintbrush, Settings, Table2 } from 'lucide-vue-next';
+import { CalendarDays, ClipboardList, FileText, Newspaper, Paintbrush, Settings, Table2 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -26,6 +26,11 @@ const isAdmin = computed(() => page.props.auth?.user?.is_admin === true);
 
 const mainNavItems: NavItem[] = [
     {
+        title: 'Лента',
+        href: '/feed',
+        icon: Newspaper,
+    },
+    {
         title: 'Резервирования',
         href: '/reservations',
         icon: CalendarDays,
@@ -33,6 +38,11 @@ const mainNavItems: NavItem[] = [
 ];
 
 const adminNavItems: NavItem[] = [
+    {
+        title: 'Публикации',
+        href: '/admin/posts',
+        icon: FileText,
+    },
     {
         title: 'Заявки',
         href: '/admin/requests',

@@ -1,12 +1,18 @@
 <?php
 
 use App\Http\Controllers\API\BookingRequestController;
+use App\Http\Controllers\API\FeedController;
 use App\Http\Controllers\API\InviteController;
 use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\TableController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::get('/feed', [FeedController::class, 'index']);
+    });
 
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('reservation')

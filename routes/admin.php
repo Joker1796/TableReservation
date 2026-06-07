@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminBookingRequestController;
+use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminReservationController;
 use App\Http\Controllers\Admin\AdminTableController;
 use App\Http\Controllers\Admin\AdminWorkshopController;
@@ -49,4 +50,18 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('workshop.store');
         Route::delete('/workshop/{id}', [AdminWorkshopController::class, 'destroy'])
             ->name('workshop.destroy');
+
+        // Posts
+        Route::get('/posts', [AdminPostController::class, 'index'])
+            ->name('posts.index');
+        Route::get('/posts/create', [AdminPostController::class, 'create'])
+            ->name('posts.create');
+        Route::post('/posts', [AdminPostController::class, 'store'])
+            ->name('posts.store');
+        Route::get('/posts/{id}/edit', [AdminPostController::class, 'edit'])
+            ->name('posts.edit');
+        Route::put('/posts/{id}', [AdminPostController::class, 'update'])
+            ->name('posts.update');
+        Route::delete('/posts/{id}', [AdminPostController::class, 'destroy'])
+            ->name('posts.destroy');
     });

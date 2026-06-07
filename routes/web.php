@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\BookingRequestWebController;
+use App\Http\Controllers\Web\FeedController;
 use App\Http\Controllers\Web\InviteWebController;
 use App\Http\Controllers\Web\WorkshopController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,7 @@ Route::inertia('/', 'Welcome', ['canRegister' => Features::enabled(Features::reg
 Route::get('/workshop', [WorkshopController::class, 'index'])->name('workshop');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed');
     Route::post('booking-requests', [BookingRequestWebController::class, 'store'])
         ->name('booking-requests.store');
     Route::put('invites/{id}/accept', [InviteWebController::class, 'accept'])
