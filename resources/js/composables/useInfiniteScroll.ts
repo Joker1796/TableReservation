@@ -12,10 +12,12 @@ export function useInfiniteScroll<T>(
     const hasMore = ref(initialCursor !== null);
     const sentinel = ref<HTMLElement | null>(null);
 
+    let isIntersecting = false;
+
     async function loadMore(): Promise<void> {
         if (loading.value || !hasMore.value || !cursor.value) {
-return;
-}
+            return;
+        }
 
         loading.value = true;
 
@@ -31,6 +33,9 @@ return;
             hasMore.value = data.next_cursor !== null;
         } finally {
             loading.value = false;
+            if (isIntersecting && hasMore.value) {
+                void loadMore();
+            }
         }
     }
 
@@ -38,13 +43,14 @@ return;
 
     onMounted(() => {
         if (!sentinel.value) {
-return;
-}
+            return;
+        }
 
         observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-void loadMore();
-}
+            isIntersecting = entries[0].isIntersecting;
+            if (isIntersecting) {
+                void loadMore();
+            }
         });
         observer.observe(sentinel.value);
     });
