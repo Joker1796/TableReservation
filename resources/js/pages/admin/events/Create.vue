@@ -51,6 +51,12 @@ function submit(): void {
             </div>
 
             <div class="grid gap-2">
+                <Label for="description">Описание</Label>
+                <Textarea id="description" v-model="form.description" placeholder="Подробное описание события" rows="4" />
+                <InputError :message="form.errors.description" />
+            </div>
+
+            <div class="grid gap-2">
                 <Label>Начало <span class="text-destructive">*</span></Label>
                 <DateTimePicker v-model="form.starts_at" />
                 <InputError :message="form.errors.starts_at" />
@@ -60,12 +66,6 @@ function submit(): void {
                 <Label>Конец</Label>
                 <DateTimePicker v-model="form.ends_at" />
                 <InputError :message="form.errors.ends_at" />
-            </div>
-
-            <div class="grid gap-2">
-                <Label for="description">Описание</Label>
-                <Textarea id="description" v-model="form.description" placeholder="Краткое описание события" rows="4" />
-                <InputError :message="form.errors.description" />
             </div>
 
             <div class="flex items-center gap-3">
