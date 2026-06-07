@@ -37,7 +37,10 @@ function toggleRegistration(): void {
 <template>
     <button type="button" class="block w-full rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-accent" @click="open = true">
         <p class="text-sm font-medium leading-snug">{{ event.title }}</p>
-        <p class="mt-1 text-xs text-muted-foreground">{{ new Date(event.starts_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) }}</p>
+        <p class="mt-1 text-xs text-muted-foreground">
+            {{ new Date(event.starts_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) }}
+            <template v-if="event.ends_at"> — {{ new Date(event.ends_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) }}</template>
+        </p>
         <p v-if="event.short_description" class="mt-1.5 line-clamp-4 text-xs text-muted-foreground">{{ event.short_description }}</p>
     </button>
 

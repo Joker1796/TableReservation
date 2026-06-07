@@ -36,7 +36,7 @@ class EventFactory extends Factory
             'title' => fake()->sentence(4),
             'description' => fake()->paragraph(),
             'starts_at' => $start,
-            'ends_at' => fake()->optional()->dateTimeBetween($start, '+1 day'),
+            'ends_at' => fake()->optional()->dateTimeBetween($start, (clone $start)->modify('+1 day')),
             'author_id' => User::factory(),
         ];
     }
