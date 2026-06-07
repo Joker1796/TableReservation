@@ -26,7 +26,7 @@ class AdminWorkshopController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'photos'   => ['required', 'array', 'min:1'],
+            'photos' => ['required', 'array', 'min:1'],
             'photos.*' => ['image', 'max:5120'],
         ]);
 
@@ -34,7 +34,7 @@ class AdminWorkshopController extends Controller
             $filename = basename(Storage::disk('public')->putFile('workshop', $file));
 
             WorkshopPhoto::create([
-                'filename'      => $filename,
+                'filename' => $filename,
                 'original_name' => $file->getClientOriginalName(),
             ]);
         }

@@ -79,6 +79,25 @@ class ProfileUpdateTest extends TestCase
         $this->assertNull($user->fresh());
     }
 
+    public function test_phone_and_contacts_can_be_updated()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->patch(route('profile.update'), [
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => '+7 999 000 00 00',
+                'contacts' => 'Telegram: @example',
+            ])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('profile.edit'));
+
+        $user->refresh();
+        $this->assertSame('+7 999 000 00 00', $user->phone);
+        $this->assertSame('Telegram: @example', $user->contacts);
+    }
+
     public function test_correct_password_must_be_provided_to_delete_account()
     {
         $user = User::factory()->create();

@@ -67,4 +67,28 @@ class FeedTest extends TestCase
                 ->where('items.0.type', 'post')
             );
     }
+
+    public function test_feed_returns_json_when_requested(): void
+    {
+        $this->actingAs(User::factory()->create());
+        Post::factory()->create(['published_at' => now()->subHour()]);
+
+        $this->getJson(route('feed'))
+            ->assertOk()
+            ->assertJsonStructure(['data', 'next_cursor', 'per_page']);
+    }
+
+    public function test_feed_cursor_pagination_loads_next_page(): void
+    {
+        $this->actingAs(User::factory()->create());
+        Post::factory()->count(20)->create(['published_at' => now()->subHour()]);
+
+        $first = $this->getJson(route('feed'))->json();
+        $this->assertCount(15, $first['data']);
+        $this->assertNotNull($first['next_cursor']);
+
+        $second = $this->getJson(route('feed').'?cursor='.urlencode($first['next_cursor']))->json();
+        $this->assertCount(5, $second['data']);
+        $this->assertNull($second['next_cursor']);
+    }
 }
