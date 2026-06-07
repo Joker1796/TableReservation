@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Services\EventService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class EventRegistrationController extends Controller
@@ -18,12 +19,14 @@ class EventRegistrationController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-        EventService::register($event, $user);
+        DB::transaction(function () use ($event, $user): void {
+            EventService::register($event, $user);
 
-        $admins = User::where('is_admin', true)->get();
-        foreach ($admins as $admin) {
-            Mail::to($admin)->queue(new NewEventRegistrationMail($event, $user));
-        }
+            $admins = User::where('is_admin', true)->get();
+            foreach ($admins as $admin) {
+                Mail::to($admin)->queue(new NewEventRegistrationMail($event, $user));
+            }
+        });
 
         return back();
     }

@@ -8,6 +8,7 @@ use App\Models\Table;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Enum;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -113,7 +114,6 @@ class BookingRequestService
     public static function deleteTable(BookingRequest $bookingRequest): Response
     {
         $bookingRequest->table()->dissociate();
-        $bookingRequest->table()->delete();
         $bookingRequest->save();
 
         $bookingRequest->load('table');
@@ -136,24 +136,27 @@ class BookingRequestService
         ]);
 
         $newStatus = BookingRequestStatus::from((int) $validated['status']);
-        $br->status = $newStatus;
-        $br->save();
 
-        if ($newStatus === BookingRequestStatus::APPROVED) {
-            $reservation = ReservationService::createFromBookingRequest($br);
+        DB::transaction(function () use ($br, $newStatus, $adminId): void {
+            $br->status = $newStatus;
+            $br->save();
 
-            if ($br->author_id) {
-                $reservation->users()->attach($br->author_id);
-            }
+            if ($newStatus === BookingRequestStatus::APPROVED) {
+                $reservation = ReservationService::createFromBookingRequest($br);
 
-            foreach ($br->users as $user) {
-                if ($user->id === $br->author_id) {
-                    continue;
+                if ($br->author_id) {
+                    $reservation->users()->attach($br->author_id);
                 }
 
-                InviteService::createPending($adminId, $user->id, $reservation->id);
+                foreach ($br->users as $user) {
+                    if ($user->id === $br->author_id) {
+                        continue;
+                    }
+
+                    InviteService::createPending($adminId, $user->id, $reservation->id);
+                }
             }
-        }
+        });
     }
 
     public static function assignTable(Request $request, BookingRequest $br): void
