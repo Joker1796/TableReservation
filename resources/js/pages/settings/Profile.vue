@@ -71,6 +71,31 @@ const user = computed(() => page.props.auth.user);
                 <InputError class="mt-2" :message="errors.email" />
             </div>
 
+            <div class="grid gap-2">
+                <Label for="phone">Номер телефона</Label>
+                <Input
+                    id="phone"
+                    class="mt-1 block w-full"
+                    name="phone"
+                    :default-value="user.phone"
+                    autocomplete="tel"
+                    placeholder="+7 (999) 000-00-00"
+                />
+                <InputError class="mt-2" :message="errors.phone" />
+            </div>
+
+            <div class="grid gap-2">
+                <Label for="contacts">Другие контакты</Label>
+                <Input
+                    id="contacts"
+                    class="mt-1 block w-full"
+                    name="contacts"
+                    :default-value="user.contacts"
+                    placeholder="Telegram, VK и др."
+                />
+                <InputError class="mt-2" :message="errors.contacts" />
+            </div>
+
             <div v-if="mustVerifyEmail && !user.email_verified_at">
                 <p class="-mt-4 text-sm text-muted-foreground">
                     Ваш адрес электронной почты не подтвержден.
