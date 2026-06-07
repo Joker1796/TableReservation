@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { CalendarDays, ClipboardList, FileText, Newspaper, Paintbrush, Settings, Table2 } from 'lucide-vue-next';
+import { CalendarCheck, CalendarDays, ClipboardList, FileText, Newspaper, Paintbrush, Settings, Table2 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -57,6 +57,11 @@ const adminNavItems: NavItem[] = [
         title: 'Публикации',
         href: '/admin/posts',
         icon: FileText,
+    },
+    {
+        title: 'События',
+        href: '/admin/events',
+        icon: CalendarCheck,
     },
     {
         title: 'Мастерская',
