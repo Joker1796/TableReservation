@@ -7,7 +7,7 @@ export type Event = {
     ends_at: string | null;
     author_id: number;
     author: { id: number; name: string } | null;
-    participants: { id: number; name?: string }[];
+    participants: { id: number; name?: string; phone?: string | null; contacts?: string | null }[];
     created_at: string;
     updated_at: string;
 };
