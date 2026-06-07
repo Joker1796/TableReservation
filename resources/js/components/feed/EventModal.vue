@@ -16,7 +16,7 @@ const isRegistered = computed(() =>
 );
 
 function formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('ru-RU', {
+    return new Date(iso).toLocaleString('ru-RU', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',

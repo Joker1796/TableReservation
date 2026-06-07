@@ -22,7 +22,7 @@ export type Reservation = {
     updated_at: string;
 };
 
-export type BookingRequestStatus = 'pending' | 'approved' | 'rejected';
+export type BookingRequestStatus = 0 | 1 | 2;
 
 export type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
 
@@ -47,7 +47,7 @@ export type BookingRequest = {
     table_id: number | null;
     table: ReservationTable | null;
     users: ReservationUser[];
-    status: number;
+    status: BookingRequestStatus;
     created_at: string;
     updated_at: string;
 };

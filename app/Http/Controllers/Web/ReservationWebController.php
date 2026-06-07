@@ -88,6 +88,11 @@ class ReservationWebController extends Controller
     {
         $reservation = Reservation::with(['table', 'users'])->findOrFail($id);
 
+        abort_unless(
+            $reservation->users()->where('user_id', auth()->id())->exists() || auth()->user()->is_admin,
+            403
+        );
+
         return Inertia::render('reservations/Show', [
             'reservation' => $reservation,
             'authUserId' => auth()->id(),

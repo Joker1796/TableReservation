@@ -64,7 +64,9 @@ Route::middleware('auth:sanctum')
     ->prefix('user')
     ->name('user.')
     ->group(function () {
-        Route::get('/', fn (Request $request) => $request->user());
+        Route::get('/', fn (Request $request) => $request->user()->only([
+            'id', 'name', 'email', 'is_admin', 'is_api', 'phone', 'contacts', 'email_verified_at',
+        ]));
         Route::put('/{user}/reservation/{reservation}', [UserController::class, 'attachReservation']);
         Route::delete('/{user}/reservation/{reservation}', [UserController::class, 'detachReservation']);
         Route::put('/{user}/booking-request/{bookingRequest}', [UserController::class, 'attachBookingRequest']);

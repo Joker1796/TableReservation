@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\WorkshopPhoto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -45,8 +46,11 @@ class AdminWorkshopController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         $photo = WorkshopPhoto::findOrFail($id);
-        Storage::disk('public')->delete('workshop/'.$photo->filename);
-        $photo->delete();
+
+        DB::transaction(function () use ($photo): void {
+            $photo->delete();
+            Storage::disk('public')->delete('workshop/'.$photo->filename);
+        });
 
         return redirect()->route('admin.workshop.index');
     }

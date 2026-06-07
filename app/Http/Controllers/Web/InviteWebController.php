@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\InviteStatus;
 use App\Models\Invite;
 use App\Services\InviteService;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,7 @@ class InviteWebController
     {
         $invite = Invite::where('id', $id)
             ->where('target_id', auth()->id())
+            ->where('status', InviteStatus::PENDING)
             ->firstOrFail();
 
         InviteService::accept($invite);
@@ -23,6 +25,7 @@ class InviteWebController
     {
         $invite = Invite::where('id', $id)
             ->where('target_id', auth()->id())
+            ->where('status', InviteStatus::PENDING)
             ->firstOrFail();
 
         InviteService::revoke($invite);

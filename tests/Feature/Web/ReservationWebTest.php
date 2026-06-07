@@ -193,11 +193,21 @@ class ReservationWebTest extends TestCase
 
     public function test_user_can_view_reservation(): void
     {
+        $user = $this->actingAsUser();
+        $reservation = Reservation::factory()->create();
+        $reservation->users()->attach($user->id);
+
+        $this->get(route('reservations.show', $reservation->id))
+            ->assertOk();
+    }
+
+    public function test_non_participant_cannot_view_reservation(): void
+    {
         $this->actingAsUser();
         $reservation = Reservation::factory()->create();
 
         $this->get(route('reservations.show', $reservation->id))
-            ->assertOk();
+            ->assertForbidden();
     }
 
     public function test_admin_can_view_create_form(): void

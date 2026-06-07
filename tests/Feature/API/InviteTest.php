@@ -110,7 +110,7 @@ class InviteTest extends TestCase
     {
         $this->acting();
 
-        $invite = Invite::factory()->create();
+        $invite = Invite::factory()->create(['status' => InviteStatus::PENDING]);
 
         $response = $this->call(
             'PUT',

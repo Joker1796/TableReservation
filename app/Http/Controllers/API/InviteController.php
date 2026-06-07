@@ -27,6 +27,8 @@ class InviteController extends Controller
 
     public function accept(Invite $invite)
     {
+        abort_unless($invite->status === InviteStatus::PENDING, 422);
+
         return InviteService::accept($invite);
     }
 
