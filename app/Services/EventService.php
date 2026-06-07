@@ -63,7 +63,7 @@ class EventService
     /** @return Collection<int, Event> */
     public static function upcoming(): Collection
     {
-        return Event::with(['author:id,name', 'participants:id'])
+        return Event::with(['author:id,name', 'participants:id,name,phone,contacts'])
             ->where('starts_at', '>=', now())
             ->orderBy('starts_at')
             ->limit(5)
@@ -73,7 +73,7 @@ class EventService
     /** @return Collection<int, Event> */
     public static function recent(): Collection
     {
-        return Event::with(['author:id,name', 'participants:id'])
+        return Event::with(['author:id,name', 'participants:id,name,phone,contacts'])
             ->where('starts_at', '<', now())
             ->orderByDesc('starts_at')
             ->limit(2)

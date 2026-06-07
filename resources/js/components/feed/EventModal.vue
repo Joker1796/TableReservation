@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { router, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import ParticipantBadge from '@/components/ParticipantBadge.vue';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { Event } from '@/types/event';
@@ -55,6 +56,14 @@ function toggleRegistration(): void {
                 <p v-if="event.description" class="whitespace-pre-wrap leading-relaxed">{{ event.description }}</p>
                 <p v-else-if="event.short_description" class="leading-relaxed">{{ event.short_description }}</p>
                 <p v-else class="text-muted-foreground">Описание не указано</p>
+
+                <div>
+                    <p class="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">Участники</p>
+                    <div v-if="event.participants.length > 0" class="flex flex-wrap gap-1">
+                        <ParticipantBadge v-for="p in event.participants" :key="p.id" :participant="p" />
+                    </div>
+                    <p v-else class="text-muted-foreground">Участников пока нет</p>
+                </div>
             </div>
 
             <DialogFooter v-if="page.props.auth.user">

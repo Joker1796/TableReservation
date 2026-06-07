@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Edit, Plus, Trash2 } from 'lucide-vue-next';
+import ParticipantBadge from '@/components/ParticipantBadge.vue';
 import Pagination from '@/components/Pagination.vue';
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import type { Event } from '@/types/event';
 import type { Paginated } from '@/types/pagination';
 
@@ -82,19 +82,7 @@ function deleteEvent(id: number): void {
                             <td class="col-td text-muted-foreground">{{ formatDate(event.ends_at) }}</td>
                             <td class="col-td">
                                 <div v-if="event.participants.length > 0" class="flex flex-wrap gap-1">
-                                    <Popover v-for="p in event.participants" :key="p.id">
-                                        <PopoverTrigger as-child>
-                                            <button class="inline-block cursor-pointer rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground hover:bg-muted/70">
-                                                {{ p.name }}
-                                            </button>
-                                        </PopoverTrigger>
-                                        <PopoverContent class="w-56 space-y-1.5 p-3 text-sm">
-                                            <p class="font-medium">{{ p.name }}</p>
-                                            <p v-if="p.phone" class="text-muted-foreground">{{ p.phone }}</p>
-                                            <p v-if="p.contacts" class="text-muted-foreground">{{ p.contacts }}</p>
-                                            <p v-if="!p.phone && !p.contacts" class="text-muted-foreground">Контакты не указаны</p>
-                                        </PopoverContent>
-                                    </Popover>
+                                    <ParticipantBadge v-for="p in event.participants" :key="p.id" :participant="p" />
                                 </div>
                                 <span v-else class="text-muted-foreground">—</span>
                             </td>
