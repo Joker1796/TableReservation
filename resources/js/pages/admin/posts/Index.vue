@@ -3,8 +3,8 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { Edit, Plus, Trash2 } from 'lucide-vue-next';
 import Pagination from '@/components/Pagination.vue';
 import { Button } from '@/components/ui/button';
-import type { Paginated } from '@/types/pagination';
 import type { Post } from '@/types/feed';
+import type { Paginated } from '@/types/pagination';
 
 type Props = {
     posts: Paginated<Post>;
@@ -21,7 +21,10 @@ defineOptions({
 });
 
 function formatDate(iso: string | null): string {
-    if (!iso) return '—';
+    if (!iso) {
+return '—';
+}
+
     return new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 

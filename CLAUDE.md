@@ -33,6 +33,15 @@ npm run types:check            # TypeScript type checking (vue-tsc)
 composer run ci:check          # Full CI check: JS lint, format, types, PHP lint + tests
 ```
 
+**Class bindings in Vue templates:**
+- Always write `:class` on a single line — `cn(...)` must not be split across multiple lines in the template.
+- The line must be ≤ 120 characters total.
+- If the single-line binding would exceed 120 chars, extract `cn(...)` into `<script setup>`:
+  - Uses reactive values (props, refs, etc.) → `computed(() => cn(...))`
+  - Pure static strings → plain `const`
+- Then use `:class="computedName"` in the template.
+- Use `class="..."` for static classes (no `cn()` needed).
+
 ### Database
 ```bash
 php artisan migrate

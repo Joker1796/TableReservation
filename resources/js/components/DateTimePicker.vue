@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { CalendarDate, type DateValue } from '@internationalized/date';
+import { CalendarDate  } from '@internationalized/date';
+import type {DateValue} from '@internationalized/date';
 import { CalendarIcon } from 'lucide-vue-next';
 import { computed } from 'vue';
 import Calendar from '@/components/ui/calendar/Calendar.vue';
@@ -11,19 +12,44 @@ const props = defineProps<{ modelValue: string }>();
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
 
 const calendarDate = computed<CalendarDate | undefined>(() => {
-    if (!props.modelValue) return undefined;
+    if (!props.modelValue) {
+        return undefined;
+    }
+
     const [datePart] = props.modelValue.split('T');
     const [y, m, d] = datePart.split('-').map(Number);
-    if (!y || !m || !d) return undefined;
+
+    if (!y || !m || !d) {
+        return undefined;
+    }
+
     return new CalendarDate(y, m, d);
 });
 
 const timeStr = computed(() => props.modelValue?.split('T')[1] ?? '00:00');
 
+const triggerClass = computed(() =>
+    cn(
+        'flex h-9 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs transition-colors',
+        'hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        props.modelValue ? 'text-foreground' : 'text-muted-foreground',
+    ),
+);
+
+const timeFieldClass = cn(
+    'h-8 w-full rounded-md border border-input bg-background px-2 text-sm',
+    'focus:outline-none focus:ring-2 focus:ring-ring',
+);
+
 const formatted = computed(() => {
     const date = calendarDate.value;
-    if (!date) return '';
+
+    if (!date) {
+        return '';
+    }
+
     const d = new Date(date.year, date.month - 1, date.day);
+
     return `${d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}, ${timeStr.value}`;
 });
 
@@ -36,13 +62,20 @@ function emitDateTime(date: CalendarDate, time: string): void {
 }
 
 function onDateSelect(date: DateValue | undefined): void {
-    if (!date) return;
+    if (!date) {
+        return;
+    }
+
     emitDateTime(new CalendarDate(date.year, date.month, date.day), timeStr.value);
 }
 
 function onTimeChange(e: Event): void {
     const date = calendarDate.value;
-    if (!date) return;
+
+    if (!date) {
+        return;
+    }
+
     emitDateTime(date, (e.target as HTMLInputElement).value);
 }
 </script>
@@ -52,13 +85,7 @@ function onTimeChange(e: Event): void {
         <PopoverTrigger as-child>
             <button
                 type="button"
-                :class="
-                    cn(
-                        'flex h-9 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs transition-colors',
-                        'hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                        modelValue ? 'text-foreground' : 'text-muted-foreground',
-                    )
-                "
+                :class="triggerClass"
             >
                 <span>{{ formatted || 'Выберите дату и время' }}</span>
                 <CalendarIcon class="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -71,12 +98,7 @@ function onTimeChange(e: Event): void {
                 <input
                     type="time"
                     :value="timeStr"
-                    :class="
-                        cn(
-                            'h-8 w-full rounded-md border border-input bg-background px-2 text-sm',
-                            'focus:outline-none focus:ring-2 focus:ring-ring',
-                        )
-                    "
+                    :class="timeFieldClass"
                     @change="onTimeChange"
                 />
             </div>

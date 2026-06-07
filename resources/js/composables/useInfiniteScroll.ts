@@ -1,4 +1,5 @@
-import { onMounted, onUnmounted, ref, type Ref } from 'vue';
+import { onMounted, onUnmounted, ref  } from 'vue';
+import type {Ref} from 'vue';
 
 export function useInfiniteScroll<T>(
     initialItems: T[],
@@ -12,9 +13,12 @@ export function useInfiniteScroll<T>(
     const sentinel = ref<HTMLElement | null>(null);
 
     async function loadMore(): Promise<void> {
-        if (loading.value || !hasMore.value || !cursor.value) return;
+        if (loading.value || !hasMore.value || !cursor.value) {
+return;
+}
 
         loading.value = true;
+
         try {
             const url = `${apiUrl}?cursor=${encodeURIComponent(cursor.value)}`;
             const response = await fetch(url, {
@@ -33,9 +37,14 @@ export function useInfiniteScroll<T>(
     let observer: IntersectionObserver | null = null;
 
     onMounted(() => {
-        if (!sentinel.value) return;
+        if (!sentinel.value) {
+return;
+}
+
         observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) void loadMore();
+            if (entries[0].isIntersecting) {
+void loadMore();
+}
         });
         observer.observe(sentinel.value);
     });

@@ -32,31 +32,35 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<CalendarRootEmits>();
 const forwarded = useForwardPropsEmits(props, emits);
+
+const navBtnClass = cn(
+    'inline-flex h-7 w-7 items-center justify-center rounded-md border border-input bg-background text-foreground',
+    'hover:bg-accent hover:text-accent-foreground',
+    'disabled:pointer-events-none disabled:opacity-50',
+);
+
+const cellClass = cn(
+    'inline-flex h-9 w-9 items-center justify-center rounded-md text-sm font-normal transition-colors',
+    'hover:bg-accent hover:text-accent-foreground',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:hover:bg-primary/90',
+    'data-[today]:border data-[today]:border-primary',
+    'data-[outside-month]:text-muted-foreground data-[outside-month]:opacity-40',
+    'data-[disabled]:pointer-events-none data-[disabled]:opacity-30',
+);
 </script>
 
 <template>
     <CalendarRoot v-bind="forwarded" class="p-3" v-slot="{ grid, weekDays }">
         <CalendarHeader class="mb-4 flex items-center justify-between">
             <CalendarPrev
-                :class="
-                    cn(
-                        'inline-flex h-7 w-7 items-center justify-center rounded-md border border-input bg-background text-foreground',
-                        'hover:bg-accent hover:text-accent-foreground',
-                        'disabled:pointer-events-none disabled:opacity-50',
-                    )
-                "
+                :class="navBtnClass"
             >
                 <ChevronLeft class="h-4 w-4" />
             </CalendarPrev>
             <CalendarHeading class="text-sm font-medium capitalize" />
             <CalendarNext
-                :class="
-                    cn(
-                        'inline-flex h-7 w-7 items-center justify-center rounded-md border border-input bg-background text-foreground',
-                        'hover:bg-accent hover:text-accent-foreground',
-                        'disabled:pointer-events-none disabled:opacity-50',
-                    )
-                "
+                :class="navBtnClass"
             >
                 <ChevronRight class="h-4 w-4" />
             </CalendarNext>
@@ -90,17 +94,7 @@ const forwarded = useForwardPropsEmits(props, emits);
                             <CalendarCellTrigger
                                 :day="day"
                                 :month="month.value"
-                                :class="
-                                    cn(
-                                        'inline-flex h-9 w-9 items-center justify-center rounded-md text-sm font-normal transition-colors',
-                                        'hover:bg-accent hover:text-accent-foreground',
-                                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                                        'data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:hover:bg-primary/90',
-                                        'data-[today]:border data-[today]:border-primary',
-                                        'data-[outside-month]:text-muted-foreground data-[outside-month]:opacity-40',
-                                        'data-[disabled]:pointer-events-none data-[disabled]:opacity-30',
-                                    )
-                                "
+                                :class="cellClass"
                             />
                         </CalendarCell>
                     </CalendarGridRow>

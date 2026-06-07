@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuViewportProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
+import { computed } from "vue"
 import { reactiveOmit } from "@vueuse/core"
 import {
   NavigationMenuViewport,
@@ -13,6 +14,8 @@ const props = defineProps<NavigationMenuViewportProps & { class?: HTMLAttributes
 const delegatedProps = reactiveOmit(props, "class")
 
 const forwardedProps = useForwardProps(delegatedProps)
+
+const classes = computed(() => cn('origin-top-center bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 relative mt-1.5 h-[var(--reka-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border shadow md:w-[var(--reka-navigation-menu-viewport-width)] left-[var(--reka-navigation-menu-viewport-left)]', props.class))
 </script>
 
 <template>
@@ -20,12 +23,7 @@ const forwardedProps = useForwardProps(delegatedProps)
     <NavigationMenuViewport
       data-slot="navigation-menu-viewport"
       v-bind="forwardedProps"
-      :class="
-        cn(
-          'origin-top-center bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 relative mt-1.5 h-[var(--reka-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border shadow md:w-[var(--reka-navigation-menu-viewport-width)] left-[var(--reka-navigation-menu-viewport-left)]',
-          props.class,
-        )
-      "
+      :class="classes"
     />
   </div>
 </template>

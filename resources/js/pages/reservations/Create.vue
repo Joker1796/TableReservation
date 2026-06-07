@@ -3,10 +3,11 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { onClickOutside } from '@vueuse/core';
 import { Check, ChevronDown, Users, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import DateTimePicker from '@/components/DateTimePicker.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
-import { DateInput, Input } from '@/components/ui/input';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
@@ -73,7 +74,7 @@ function submit(): void {
         <form class="max-w-lg space-y-5" @submit.prevent="submit">
             <div class="grid gap-2">
                 <Label for="date">Дата <span class="text-destructive">*</span></Label>
-                <DateInput id="date" v-model="form.date" required />
+                <DateTimePicker v-model="form.date" />
                 <InputError :message="form.errors.date" />
             </div>
 

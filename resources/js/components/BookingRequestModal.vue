@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import DateTimePicker from '@/components/DateTimePicker.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +13,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { DateInput } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
@@ -70,7 +70,7 @@ function onOpenChange(value: boolean): void {
                 <!-- Date -->
                 <div class="grid gap-2">
                     <Label for="modal-date">Дата <span class="text-destructive">*</span></Label>
-                    <DateInput id="modal-date" v-model="form.date" required />
+                    <DateTimePicker v-model="form.date" />
                     <InputError :message="form.errors.date" />
                 </div>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Eye, EyeOff } from 'lucide-vue-next';
-import { ref, useTemplateRef } from 'vue';
+import { computed, ref, useTemplateRef } from 'vue';
 import type { HTMLAttributes } from 'vue';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -12,6 +12,10 @@ const props = defineProps<{
 }>();
 
 const showPassword = ref(false);
+
+const classes = computed(() =>
+    cn('absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:outline-none'),
+);
 const inputRef = useTemplateRef('inputRef');
 
 defineExpose({
@@ -31,11 +35,7 @@ defineExpose({
         <button
             type="button"
             @click="showPassword = !showPassword"
-            :class="
-                cn(
-                    'absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:outline-none',
-                )
-            "
+            :class="classes"
             :aria-label="showPassword ? 'Hide password' : 'Show password'"
             :tabindex="-1"
         >
