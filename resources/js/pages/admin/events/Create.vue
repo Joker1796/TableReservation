@@ -44,7 +44,8 @@ function submit(): void {
 
             <div class="grid gap-2">
                 <Label for="short_description">Краткое описание <span class="text-muted-foreground text-xs">(для ленты)</span></Label>
-                <Textarea id="short_description" v-model="form.short_description" placeholder="Пара предложений для анонса" rows="2" maxlength="500" />
+                <Textarea id="short_description" v-model="form.short_description" placeholder="Пара предложений для анонса" rows="2" maxlength="150" />
+                <div class="flex justify-end text-xs text-muted-foreground">{{ form.short_description?.length ?? 0 }}/150</div>
                 <InputError :message="form.errors.short_description" />
             </div>
 

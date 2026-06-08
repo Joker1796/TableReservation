@@ -84,7 +84,7 @@ class EventService
     {
         return $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'short_description' => ['nullable', 'string', 'max:500'],
+            'short_description' => ['nullable', 'string', 'max:150'],
             'description' => ['nullable', 'string'],
             'starts_at' => ['required', 'date'],
             'ends_at' => ['nullable', 'date', 'after:starts_at'],
