@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import { Edit, Plus, Trash2 } from 'lucide-vue-next';
+import { Check, Edit, Plus, Trash2 } from 'lucide-vue-next';
 import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import Pagination from '@/components/Pagination.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Post } from '@/types/feed';
 import type { Paginated } from '@/types/pagination';
@@ -21,8 +22,8 @@ defineOptions({
 
 function formatDate(iso: string | null): string {
     if (!iso) {
-return '—';
-}
+        return '—';
+    }
 
     return new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
@@ -31,6 +32,10 @@ function deletePost(id: number): void {
     if (confirm('Удалить публикацию?')) {
         router.delete(`/admin/posts/${id}`);
     }
+}
+
+function approvePost(id: number): void {
+    router.put(`/admin/posts/${id}/approve`);
 }
 </script>
 
@@ -65,7 +70,7 @@ function deletePost(id: number): void {
                         <tr>
                             <th class="col-th text-left">Заголовок</th>
                             <th class="col-th text-left">Автор</th>
-                            <th class="col-th text-left">Опубликовано</th>
+                            <th class="col-th text-left">Статус</th>
                             <th class="col-th text-right">Действия</th>
                         </tr>
                     </thead>
@@ -75,9 +80,26 @@ function deletePost(id: number): void {
                                 <span class="line-clamp-1">{{ post.title }}</span>
                             </td>
                             <td class="col-td text-muted-foreground">{{ post.author?.name ?? '—' }}</td>
-                            <td class="col-td text-muted-foreground">{{ formatDate(post.published_at) }}</td>
+                            <td class="col-td">
+                                <Badge v-if="post.is_suggestion && !post.published_at" variant="secondary">
+                                    Предложено
+                                </Badge>
+                                <span v-else class="text-sm text-muted-foreground">
+                                    {{ formatDate(post.published_at) }}
+                                </span>
+                            </td>
                             <td class="col-td">
                                 <div class="flex justify-end gap-2">
+                                    <Button
+                                        v-if="post.is_suggestion && !post.published_at"
+                                        variant="outline"
+                                        size="sm"
+                                        class="gap-1 text-xs"
+                                        @click="approvePost(post.id)"
+                                    >
+                                        <Check class="h-3 w-3" />
+                                        Одобрить
+                                    </Button>
                                     <Button variant="outline" size="icon" as-child>
                                         <Link :href="`/admin/posts/${post.id}/edit`">
                                             <Edit class="h-4 w-4" />

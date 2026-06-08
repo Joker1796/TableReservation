@@ -32,6 +32,15 @@ class FeedContentController extends Controller
         return redirect()->route('feed');
     }
 
+    public function storeSuggestion(Request $request): RedirectResponse
+    {
+        PostService::suggest($request, auth()->id());
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Предложение отправлено. Спасибо!']);
+
+        return redirect()->route('feed');
+    }
+
     public function vote(Request $request, Poll $poll): JsonResponse
     {
         $request->validate([

@@ -79,6 +79,8 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('posts.edit');
         Route::put('/posts/{id}', [AdminPostController::class, 'update'])
             ->name('posts.update');
+        Route::put('/posts/{id}/approve', [AdminPostController::class, 'approve'])
+            ->name('posts.approve');
         Route::delete('/posts/{id}', [AdminPostController::class, 'destroy'])
             ->name('posts.destroy');
     });

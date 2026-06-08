@@ -50,6 +50,17 @@ class AdminPostController extends Controller
         return redirect()->route('admin.posts.index');
     }
 
+    public function approve(int $id): RedirectResponse
+    {
+        $post = Post::findOrFail($id);
+        abort_unless($post->is_suggestion, 404);
+        PostService::approve($post);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Предложение опубликовано.']);
+
+        return redirect()->route('admin.posts.index');
+    }
+
     public function destroy(int $id): RedirectResponse
     {
         $post = Post::findOrFail($id);

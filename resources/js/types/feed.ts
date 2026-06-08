@@ -48,6 +48,13 @@ export type Post = {
     author_id: number;
     author: { id: number; name: string } | null;
     published_at: string | null;
+    is_suggestion: boolean;
     created_at: string;
     updated_at: string;
+};
+
+export type PostSuggestion = {
+    id: number;
+    title: string;
+    author: { id: number; name: string } | null;
 };
