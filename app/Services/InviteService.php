@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\InviteStatus;
 use App\Models\Invite;
 use App\Models\Reservation;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rules\Enum;
@@ -26,6 +27,13 @@ class InviteService
 
     public static function createPending(int $authorId, int $targetId, int $reservationId): void
     {
+        $author = User::find($authorId);
+        $target = User::find($targetId);
+
+        if ($target?->is_invisible && ! $author?->is_admin) {
+            abort(422, 'Пользователь недоступен для приглашений.');
+        }
+
         self::make($authorId, $targetId, $reservationId);
     }
 
@@ -37,6 +45,13 @@ class InviteService
             'target_id' => ['required', 'exists:users,id'],
             'reservation_id' => ['required', 'exists:reservations,id'],
         ]);
+
+        $author = User::find($validated['author_id']);
+        $target = User::find($validated['target_id']);
+
+        if ($target?->is_invisible && ! $author?->is_admin) {
+            abort(422, 'Пользователь недоступен для приглашений.');
+        }
 
         $status = ! empty($validated['status']) ? InviteStatus::from($validated['status']) : InviteStatus::PENDING;
         $invite = self::make($validated['author_id'], $validated['target_id'], $validated['reservation_id'], $status);

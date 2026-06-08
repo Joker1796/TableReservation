@@ -14,7 +14,13 @@ class BookingRequestWebController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
-        $bookingRequest = BookingRequestService::createFromWeb($request, auth()->id());
+        $user = auth()->user();
+
+        if ($user->is_invisible) {
+            $user->update(['is_invisible' => false]);
+        }
+
+        $bookingRequest = BookingRequestService::createFromWeb($request, $user->id);
 
         $admins = User::where('is_admin', true)->get();
 

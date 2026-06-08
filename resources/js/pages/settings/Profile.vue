@@ -6,6 +6,7 @@ import DeleteUser from '@/components/DeleteUser.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { edit } from '@/routes/profile';
@@ -107,6 +108,22 @@ const user = computed(() => page.props.auth.user);
                 <div v-if="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600">
                     На ваш электронный адрес отправлена новая ссылка для подтверждения.
                 </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <Label class="text-base font-medium">Режим невидимки</Label>
+                <div class="flex items-center gap-3">
+                    <Checkbox
+                        id="is_invisible"
+                        name="is_invisible"
+                        :default-checked="user.is_invisible ?? false"
+                        value="1"
+                    />
+                    <Label for="is_invisible" class="font-normal text-muted-foreground">
+                        Скрыть себя из списков участников и запретить приглашения
+                    </Label>
+                </div>
+                <InputError :message="errors.is_invisible" />
             </div>
 
             <div class="flex items-center gap-4">

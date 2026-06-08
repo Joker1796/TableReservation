@@ -20,6 +20,7 @@ trait ProfileValidationRules
             'email' => $this->emailRules($userId),
             'phone' => ['nullable', 'string', 'max:50'],
             'contacts' => ['nullable', 'string', 'max:500'],
+            'is_invisible' => ['boolean'],
         ];
     }
 

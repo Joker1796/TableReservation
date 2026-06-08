@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Enums\InviteStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileDeleteRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
@@ -30,13 +31,24 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $validated = $request->validated();
+        $validated['is_invisible'] = $request->boolean('is_invisible');
+        $turningInvisible = ! $user->is_invisible && $validated['is_invisible'];
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user->fill($validated);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
+
+        if ($turningInvisible) {
+            $user->receivedInvites()
+                ->where('status', InviteStatus::PENDING)
+                ->each(fn ($invite) => $invite->revoke());
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
 
