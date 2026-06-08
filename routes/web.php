@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'editor'])->group(function () {
     Route::post('/feed/posts', [FeedContentController::class, 'storePost'])->name('feed.posts.store');
     Route::post('/feed/polls', [FeedContentController::class, 'storePoll'])->name('feed.polls.store');
+    Route::post('/feed/events', [FeedContentController::class, 'storeEvent'])->name('feed.events.store');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

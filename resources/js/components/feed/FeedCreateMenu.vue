@@ -2,6 +2,7 @@
 import { usePage } from '@inertiajs/vue3';
 import { Settings } from 'lucide-vue-next';
 import { ref } from 'vue';
+import CreateEventModal from '@/components/feed/CreateEventModal.vue';
 import CreatePollModal from '@/components/feed/CreatePollModal.vue';
 import CreatePostModal from '@/components/feed/CreatePostModal.vue';
 import SuggestPostModal from '@/components/feed/SuggestPostModal.vue';
@@ -19,6 +20,7 @@ const canCreate = page.props.auth.user.is_admin || page.props.auth.user.is_edito
 
 const postOpen = ref(false);
 const pollOpen = ref(false);
+const eventOpen = ref(false);
 const suggestOpen = ref(false);
 </script>
 
@@ -34,11 +36,13 @@ const suggestOpen = ref(false);
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem @select.prevent="postOpen = true">Создать новость</DropdownMenuItem>
                     <DropdownMenuItem @select.prevent="pollOpen = true">Создать опрос</DropdownMenuItem>
+                    <DropdownMenuItem @select.prevent="eventOpen = true">Создать событие</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
 
             <CreatePostModal :open="postOpen" @update:open="postOpen = $event" />
             <CreatePollModal :open="pollOpen" @update:open="pollOpen = $event" />
+            <CreateEventModal :open="eventOpen" @update:open="eventOpen = $event" />
         </template>
 
         <template v-else>

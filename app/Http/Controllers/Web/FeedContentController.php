@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Poll;
+use App\Services\EventService;
 use App\Services\FeedService;
 use App\Services\PollService;
 use App\Services\PostService;
@@ -28,6 +29,15 @@ class FeedContentController extends Controller
         PollService::create($request, auth()->id());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Опрос создан.']);
+
+        return redirect()->route('feed');
+    }
+
+    public function storeEvent(Request $request): RedirectResponse
+    {
+        EventService::create($request, auth()->id());
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Событие создано.']);
 
         return redirect()->route('feed');
     }
