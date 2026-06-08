@@ -22,6 +22,7 @@ type Props = {
     myRequestDates: string[];
     myInviteDates: string[];
     myBookingRequests: BookingRequest[];
+    bookingRequestsToday: number;
 };
 
 defineProps<Props>();
@@ -31,6 +32,13 @@ const loading = ref(false);
 const page = usePage<{ auth: Auth }>();
 const isAdmin = computed(() => page.props.auth?.user?.is_admin === true);
 const hasContacts = useHasContacts();
+const bookingLimitReached = computed(() => !isAdmin.value && props.bookingRequestsToday >= 3);
+const isBookingDisabled = computed(() => !hasContacts.value || bookingLimitReached.value);
+const bookingDisabledReason = computed(() => {
+    if (!hasContacts.value) return 'Заполните контактные данные в профиле';
+    if (bookingLimitReached.value) return 'Лимит заявок на сегодня исчерпан (максимум 3)';
+    return null;
+});
 
 defineOptions({
     layout: {
@@ -131,12 +139,12 @@ return;
                     <Tooltip>
                         <TooltipTrigger as-child>
                             <span>
-                                <BookingRequestModal :disabled="!hasContacts">
-                                    <Button variant="outline" :disabled="!hasContacts">Забронировать стол</Button>
+                                <BookingRequestModal>
+                                    <Button variant="outline" :disabled="isBookingDisabled">Забронировать стол</Button>
                                 </BookingRequestModal>
                             </span>
                         </TooltipTrigger>
-                        <TooltipContent v-if="!hasContacts">Заполните контактные данные в профиле</TooltipContent>
+                        <TooltipContent v-if="bookingDisabledReason">{{ bookingDisabledReason }}</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
                 <Button v-if="isAdmin" as-child>

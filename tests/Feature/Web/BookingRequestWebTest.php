@@ -182,4 +182,73 @@ class BookingRequestWebTest extends TestCase
                 && str_starts_with($mail->bookingRequest->date, '2026-06-15');
         });
     }
+
+    // --- daily limit ---
+
+    public function test_user_cannot_create_fourth_booking_request_in_one_day(): void
+    {
+        Mail::fake();
+        $user = User::factory()->create(['phone' => '79001234567']);
+        $this->actingAs($user);
+
+        for ($i = 1; $i <= 3; $i++) {
+            $this->post(route('booking-requests.store'), ['date' => "2026-01-0{$i}"])
+                ->assertRedirect(route('reservations.index'));
+        }
+
+        $this->assertDatabaseCount('booking_requests', 3);
+
+        $this->post(route('booking-requests.store'), ['date' => '2026-01-04'])
+            ->assertRedirect(route('reservations.index'));
+
+        $this->assertDatabaseCount('booking_requests', 3);
+    }
+
+    public function test_admin_is_not_limited_to_3_requests_per_day(): void
+    {
+        Mail::fake();
+        $admin = User::factory()->create(['is_admin' => true, 'phone' => '79001234567']);
+        $this->actingAs($admin);
+
+        for ($i = 1; $i <= 4; $i++) {
+            $this->post(route('booking-requests.store'), ['date' => "2026-01-0{$i}"])
+                ->assertRedirect(route('reservations.index'));
+        }
+
+        $this->assertDatabaseCount('booking_requests', 4);
+    }
+
+    public function test_editor_is_not_limited_to_3_requests_per_day(): void
+    {
+        Mail::fake();
+        $editor = User::factory()->create(['is_editor' => true, 'phone' => '79001234567']);
+        $this->actingAs($editor);
+
+        for ($i = 1; $i <= 4; $i++) {
+            $this->post(route('booking-requests.store'), ['date' => "2026-01-0{$i}"])
+                ->assertRedirect(route('reservations.index'));
+        }
+
+        $this->assertDatabaseCount('booking_requests', 4);
+    }
+
+    public function test_daily_limit_resets_the_next_day(): void
+    {
+        Mail::fake();
+        $user = User::factory()->create(['phone' => '79001234567']);
+        $this->actingAs($user);
+
+        for ($i = 1; $i <= 3; $i++) {
+            $this->post(route('booking-requests.store'), ['date' => "2026-01-0{$i}"]);
+        }
+
+        $this->assertDatabaseCount('booking_requests', 3);
+
+        $this->travel(1)->days();
+
+        $this->post(route('booking-requests.store'), ['date' => '2026-01-04'])
+            ->assertRedirect(route('reservations.index'));
+
+        $this->assertDatabaseCount('booking_requests', 4);
+    }
 }

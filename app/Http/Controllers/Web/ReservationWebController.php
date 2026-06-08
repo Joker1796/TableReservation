@@ -11,6 +11,7 @@ use App\Models\Invite;
 use App\Models\Reservation;
 use App\Models\Table;
 use App\Models\User;
+use App\Services\BookingRequestService;
 use App\Services\ReservationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -63,6 +64,7 @@ class ReservationWebController extends Controller
             'myRequestDates' => $myRequestDates,
             'myInviteDates' => $myInviteDates,
             'myBookingRequests' => $myBookingRequests,
+            'bookingRequestsToday' => BookingRequestService::dailyCountForUser($userId),
         ]);
     }
 

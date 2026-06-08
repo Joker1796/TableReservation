@@ -121,6 +121,13 @@ class BookingRequestService
         return response($bookingRequest, ResponseAlias::HTTP_OK);
     }
 
+    public static function dailyCountForUser(int $userId): int
+    {
+        return BookingRequest::where('author_id', $userId)
+            ->whereDate('created_at', today())
+            ->count();
+    }
+
     public static function createFromWeb(Request $request, int $authorId): BookingRequest
     {
         $br = self::createOrUpdate($request, new BookingRequest, $authorId);
