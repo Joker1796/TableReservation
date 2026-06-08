@@ -35,7 +35,7 @@ class EventRegistrationTest extends TestCase
     {
         Mail::fake();
         $user = User::factory()->create();
-        $event = Event::factory()->create();
+        $event = Event::factory()->create(['starts_at' => now()->addDay()]);
 
         $this->actingAs($user)
             ->post(route('events.register', $event->id));
@@ -51,7 +51,7 @@ class EventRegistrationTest extends TestCase
         Mail::fake();
         $admin = User::factory()->create(['is_admin' => true]);
         $user = User::factory()->create();
-        $event = Event::factory()->create();
+        $event = Event::factory()->create(['starts_at' => now()->addDay()]);
 
         $this->actingAs($user)
             ->post(route('events.register', $event->id));
@@ -64,7 +64,7 @@ class EventRegistrationTest extends TestCase
     {
         Mail::fake();
         $user = User::factory()->create();
-        $event = Event::factory()->create();
+        $event = Event::factory()->create(['starts_at' => now()->addDay()]);
 
         $this->actingAs($user)->post(route('events.register', $event->id));
         $this->actingAs($user)->post(route('events.register', $event->id));
@@ -72,18 +72,46 @@ class EventRegistrationTest extends TestCase
         $this->assertDatabaseCount('event_user', 1);
     }
 
+    public function test_cannot_register_for_past_event(): void
+    {
+        $user = User::factory()->create();
+        $event = Event::factory()->create(['starts_at' => now()->subDay()]);
+
+        $this->actingAs($user)
+            ->post(route('events.register', $event->id))
+            ->assertStatus(422);
+
+        $this->assertDatabaseEmpty('event_user');
+    }
+
     // --- unregistration ---
 
     public function test_user_can_unregister_from_event(): void
     {
         $user = User::factory()->create();
-        $event = Event::factory()->create();
+        $event = Event::factory()->create(['starts_at' => now()->addDay()]);
         $event->participants()->attach($user->id);
 
         $this->actingAs($user)
             ->delete(route('events.unregister', $event->id));
 
         $this->assertDatabaseMissing('event_user', [
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+        ]);
+    }
+
+    public function test_cannot_unregister_from_past_event(): void
+    {
+        $user = User::factory()->create();
+        $event = Event::factory()->create(['starts_at' => now()->subDay()]);
+        $event->participants()->attach($user->id);
+
+        $this->actingAs($user)
+            ->delete(route('events.unregister', $event->id))
+            ->assertStatus(422);
+
+        $this->assertDatabaseHas('event_user', [
             'event_id' => $event->id,
             'user_id' => $user->id,
         ]);

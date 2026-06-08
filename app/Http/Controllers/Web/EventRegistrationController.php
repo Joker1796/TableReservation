@@ -16,6 +16,8 @@ class EventRegistrationController extends Controller
     public function store(int $id): RedirectResponse
     {
         $event = Event::findOrFail($id);
+        abort_if($event->starts_at->isPast(), 422, 'Регистрация на прошедшие события недоступна.');
+
         /** @var User $user */
         $user = auth()->user();
 
@@ -34,6 +36,8 @@ class EventRegistrationController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         $event = Event::findOrFail($id);
+        abort_if($event->starts_at->isPast(), 422, 'Изменение записи на прошедшие события недоступно.');
+
         /** @var User $user */
         $user = auth()->user();
 

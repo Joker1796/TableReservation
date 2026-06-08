@@ -14,6 +14,7 @@ const open = ref(false);
 const isRegistered = computed(() =>
     props.event.participants.some((p) => p.id === page.props.auth.user?.id),
 );
+const isPast = computed(() => new Date(props.event.starts_at) < new Date());
 
 function formatDate(iso: string): string {
     return new Date(iso).toLocaleString('ru-RU', {
@@ -70,7 +71,9 @@ function toggleRegistration(): void {
             </div>
 
             <DialogFooter v-if="page.props.auth.user">
+                <p v-if="isPast" class="text-sm text-muted-foreground">Событие уже прошло</p>
                 <Button
+                    v-else
                     :variant="isRegistered ? 'outline' : 'default'"
                     @click="toggleRegistration(); open = false"
                 >
