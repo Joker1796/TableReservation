@@ -17,12 +17,11 @@ const props = defineProps<Props>();
 
 const isMine = computed(() => props.reservation.users.some((u) => u.id === props.authUserId));
 
+import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
+
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Резервирования', href: '/reservations' },
-            { title: 'Подробнее', href: '#' },
-        ],
+        breadcrumbs: reservationBreadcrumbs.show,
     },
 });
 

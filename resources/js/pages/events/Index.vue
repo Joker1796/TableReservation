@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import EventsList from '@/components/feed/EventsList.vue';
-import { home } from '@/routes';
+import { appBreadcrumbs } from '@/breadcrumbs/app';
 import type { Event } from '@/types/event';
 
 defineProps<{
@@ -11,10 +11,7 @@ defineProps<{
 
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Главная', href: home() },
-            { title: 'События', href: '/events' },
-        ],
+        breadcrumbs: appBreadcrumbs.events,
     },
 });
 </script>

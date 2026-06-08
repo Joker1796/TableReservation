@@ -8,7 +8,7 @@ import BookingRequestCard from '@/components/reservations/BookingRequestCard.vue
 import ReservationCard from '@/components/reservations/ReservationCard.vue';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { home } from '@/routes';
+import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
 import type { Auth } from '@/types/auth';
 import type { BookingRequest, Reservation, ReservationUser } from '@/types/reservation';
 
@@ -31,10 +31,7 @@ const isAdmin = computed(() => page.props.auth?.user?.is_admin === true);
 
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Главная', href: home() },
-            { title: 'Резервирования', href: '/reservations' },
-        ],
+        breadcrumbs: reservationBreadcrumbs.index,
     },
 });
 

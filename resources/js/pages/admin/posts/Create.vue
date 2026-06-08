@@ -8,13 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
+
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Админ', href: '/admin' },
-            { title: 'Публикации', href: '/admin/posts' },
-            { title: 'Создать', href: '/admin/posts/create' },
-        ],
+        breadcrumbs: adminBreadcrumbs.posts.create,
     },
 });
 

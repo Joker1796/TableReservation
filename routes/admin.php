@@ -12,6 +12,8 @@ Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+        Route::redirect('/', '/admin/requests')->name('index');
+
         // Tables
         Route::get('/tables', [AdminTableController::class, 'index'])
             ->name('tables.index');

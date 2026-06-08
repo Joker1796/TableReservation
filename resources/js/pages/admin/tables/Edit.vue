@@ -15,12 +15,11 @@ type Props = {
 
 const props = defineProps<Props>();
 
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
+
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Столы', href: '/admin/tables' },
-            { title: 'Редактировать', href: '#' },
-        ],
+        breadcrumbs: adminBreadcrumbs.tables.edit,
     },
 });
 

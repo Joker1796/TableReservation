@@ -4,6 +4,7 @@ import { Edit, Plus, Trash2 } from 'lucide-vue-next';
 import Pagination from '@/components/Pagination.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import type { Paginated } from '@/types/pagination';
 import type { ReservationTable } from '@/types/reservation';
 
@@ -15,10 +16,7 @@ defineProps<Props>();
 
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Админ', href: '/admin/requests' },
-            { title: 'Столы', href: '/admin/tables' },
-        ],
+        breadcrumbs: adminBreadcrumbs.tables.index,
     },
 });
 

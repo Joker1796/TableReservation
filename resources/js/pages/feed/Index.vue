@@ -5,7 +5,7 @@ import { ref } from 'vue';
 import EventsList from '@/components/feed/EventsList.vue';
 import PostCard from '@/components/feed/PostCard.vue';
 import { Button } from '@/components/ui/button';
-import { home } from '@/routes';
+import { appBreadcrumbs } from '@/breadcrumbs/app';
 import type { Event } from '@/types/event';
 import type { FeedItem } from '@/types/feed';
 
@@ -20,10 +20,7 @@ const props = defineProps<Props>();
 
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Главная', href: home() },
-            { title: 'Лента', href: '/feed' },
-        ],
+        breadcrumbs: appBreadcrumbs.feed,
     },
 });
 

@@ -11,12 +11,11 @@ type Props = {
 
 defineProps<Props>();
 
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
+
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Админ', href: '/admin/requests' },
-            { title: 'Мастерская', href: '/admin/workshop' },
-        ],
+        breadcrumbs: adminBreadcrumbs.workshop.index,
     },
 });
 

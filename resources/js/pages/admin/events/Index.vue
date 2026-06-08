@@ -4,6 +4,7 @@ import { Edit, Plus, Trash2 } from 'lucide-vue-next';
 import Pagination from '@/components/Pagination.vue';
 import ParticipantBadge from '@/components/ParticipantBadge.vue';
 import { Button } from '@/components/ui/button';
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import type { Event } from '@/types/event';
 import type { Paginated } from '@/types/pagination';
 
@@ -15,10 +16,7 @@ defineProps<Props>();
 
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Админ', href: '/admin' },
-            { title: 'События', href: '/admin/events' },
-        ],
+        breadcrumbs: adminBreadcrumbs.events.index,
     },
 });
 

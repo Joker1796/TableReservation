@@ -20,12 +20,11 @@ type Props = {
 
 const props = defineProps<Props>();
 
+import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
+
 defineOptions({
     layout: {
-        breadcrumbs: [
-            { title: 'Резервирования', href: '/reservations' },
-            { title: 'Создать', href: '/reservations/create' },
-        ],
+        breadcrumbs: reservationBreadcrumbs.create,
     },
 });
 
