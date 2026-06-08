@@ -2,6 +2,7 @@
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Trash2, UserPlus, Users } from 'lucide-vue-next';
 import { ref } from 'vue';
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import Pagination from '@/components/Pagination.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,7 +26,6 @@ type Props = {
 
 defineProps<Props>();
 
-import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 
 defineOptions({
     layout: {

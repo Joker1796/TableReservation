@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password', 'is_admin', 'is_api', 'is_invisible', 'phone', 'contacts'])]
+#[Fillable(['name', 'email', 'password', 'is_admin', 'is_editor', 'is_api', 'is_invisible', 'phone', 'contacts'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -34,6 +34,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
             'is_admin' => 'boolean',
+            'is_editor' => 'boolean',
             'is_api' => 'boolean',
             'is_invisible' => 'boolean',
         ];

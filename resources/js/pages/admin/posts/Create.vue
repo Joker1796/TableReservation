@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import DateTimePicker from '@/components/DateTimePicker.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
@@ -8,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 
 defineOptions({
     layout: {

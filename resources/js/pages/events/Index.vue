@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import EventsList from '@/components/feed/EventsList.vue';
 import { appBreadcrumbs } from '@/breadcrumbs/app';
+import EventsList from '@/components/feed/EventsList.vue';
 import type { Event } from '@/types/event';
 
 defineProps<{

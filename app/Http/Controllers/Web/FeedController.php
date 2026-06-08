@@ -15,7 +15,7 @@ class FeedController extends Controller
     public function index(Request $request): Response|JsonResponse
     {
         $cursor = $request->query('cursor');
-        $page = FeedService::paginate($cursor);
+        $page = FeedService::paginate($cursor, $request->user());
 
         if ($request->expectsJson()) {
             return response()->json($page);

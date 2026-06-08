@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\BookingRequestWebController;
+use App\Http\Controllers\Web\FeedContentController;
 use App\Http\Controllers\Web\EventController;
 use App\Http\Controllers\Web\EventRegistrationController;
 use App\Http\Controllers\Web\FeedController;
@@ -29,6 +30,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('throttle:10,1');
     Route::delete('events/{id}/register', [EventRegistrationController::class, 'destroy'])
         ->name('events.unregister');
+});
+
+Route::middleware(['auth', 'verified', 'editor'])->group(function () {
+    Route::post('/feed/posts', [FeedContentController::class, 'storePost'])->name('feed.posts.store');
+    Route::post('/feed/polls', [FeedContentController::class, 'storePoll'])->name('feed.polls.store');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/feed/polls/{poll}/vote', [FeedContentController::class, 'vote'])->name('feed.polls.vote');
+    Route::delete('/feed/polls/{poll}/vote', [FeedContentController::class, 'unvote'])->name('feed.polls.unvote');
 });
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {

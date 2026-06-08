@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { Loader2 } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { appBreadcrumbs } from '@/breadcrumbs/app';
 import EventsList from '@/components/feed/EventsList.vue';
+import FeedCreateMenu from '@/components/feed/FeedCreateMenu.vue';
+import PollCard from '@/components/feed/PollCard.vue';
 import PostCard from '@/components/feed/PostCard.vue';
 import { Button } from '@/components/ui/button';
-import { appBreadcrumbs } from '@/breadcrumbs/app';
 import type { Event } from '@/types/event';
-import type { FeedItem } from '@/types/feed';
+import type { FeedItem, PollFeedItem, PostFeedItem } from '@/types/feed';
 
 type Props = {
     items: FeedItem[];
@@ -29,10 +31,19 @@ const cursor = ref<string | null>(props.nextCursor);
 const loading = ref(false);
 const hasMore = ref(props.nextCursor !== null);
 
+watch(
+    () => props.items,
+    (newItems) => {
+        items.value = [...newItems];
+        cursor.value = props.nextCursor;
+        hasMore.value = props.nextCursor !== null;
+    },
+);
+
 async function loadMore(): Promise<void> {
     if (loading.value || !hasMore.value || !cursor.value) {
-return;
-}
+        return;
+    }
 
     loading.value = true;
 
@@ -44,8 +55,8 @@ return;
         });
 
         if (!response.ok) {
-return;
-}
+            return;
+        }
 
         const data = await response.json();
         items.value.push(...(data.data as FeedItem[]));
@@ -64,12 +75,18 @@ return;
 
     <div class="flex flex-col gap-4 p-4 lg:flex-row lg:items-start lg:gap-6">
         <section class="min-w-0 w-full flex-1">
-            <h1 class="mb-4 text-2xl font-semibold">Лента</h1>
+            <div class="mb-4 flex items-center justify-between">
+                <h1 class="text-2xl font-semibold">Лента</h1>
+                <FeedCreateMenu />
+            </div>
 
             <div v-if="items.length === 0 && !loading" class="py-12 text-center text-muted-foreground">Публикаций пока нет</div>
 
             <div class="flex flex-col gap-2">
-                <PostCard v-for="item in items" :key="item.id" :item="item" />
+                <template v-for="item in items" :key="`${item.type}-${item.id}`">
+                    <PollCard v-if="item.type === 'poll'" :item="(item as PollFeedItem)" />
+                    <PostCard v-else :item="(item as PostFeedItem)" />
+                </template>
             </div>
 
             <div class="flex justify-center py-4">

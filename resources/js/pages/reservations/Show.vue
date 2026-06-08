@@ -2,6 +2,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import { CalendarDays, Edit, Table2, Trash2, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +18,6 @@ const props = defineProps<Props>();
 
 const isMine = computed(() => props.reservation.users.some((u) => u.id === props.authUserId));
 
-import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
 
 defineOptions({
     layout: {

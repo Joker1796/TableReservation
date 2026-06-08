@@ -3,12 +3,12 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3';
 import { CalendarDays, ClipboardList, Plus } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
+import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
 import BookingRequestModal from '@/components/BookingRequestModal.vue';
 import BookingRequestCard from '@/components/reservations/BookingRequestCard.vue';
 import ReservationCard from '@/components/reservations/ReservationCard.vue';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
 import type { Auth } from '@/types/auth';
 import type { BookingRequest, Reservation, ReservationUser } from '@/types/reservation';
 

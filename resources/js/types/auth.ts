@@ -4,6 +4,7 @@ export type User = {
     email: string;
     avatar?: string;
     is_admin: boolean;
+    is_editor: boolean;
     is_api: boolean;
     email_verified_at: string | null;
     phone: string | null;

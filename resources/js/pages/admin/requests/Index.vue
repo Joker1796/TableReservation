@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Check, Trash2, X } from 'lucide-vue-next';
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import Pagination from '@/components/Pagination.vue';
 import RequestStatusBadge from '@/components/RequestStatusBadge.vue';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +17,6 @@ type Props = {
 
 defineProps<Props>();
 
-import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 
 defineOptions({
     layout: {

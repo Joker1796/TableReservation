@@ -1,4 +1,4 @@
-export type FeedItemType = 'post';
+export type FeedItemType = 'post' | 'poll';
 
 export type PostFeedItem = {
     type: Extract<FeedItemType, 'post'>;
@@ -10,7 +10,30 @@ export type PostFeedItem = {
     created_at: string;
 };
 
-export type FeedItem = PostFeedItem;
+export type PollOption = {
+    id: number;
+    text: string;
+    sort_order: number;
+    votes_count: number;
+};
+
+export type PollFeedItem = {
+    type: Extract<FeedItemType, 'poll'>;
+    id: number;
+    question: string;
+    description: string | null;
+    allow_multiple: boolean;
+    author: { id: number; name: string } | null;
+    published_at: string;
+    closes_at: string | null;
+    is_open: boolean;
+    has_voted: boolean;
+    user_vote_ids: number[];
+    total_votes: number;
+    options: PollOption[];
+};
+
+export type FeedItem = PostFeedItem | PollFeedItem;
 
 export type CursorPage<T> = {
     data: T[];

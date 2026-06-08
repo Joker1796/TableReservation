@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Edit, Plus, Trash2 } from 'lucide-vue-next';
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import Pagination from '@/components/Pagination.vue';
 import { Button } from '@/components/ui/button';
-import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import type { Post } from '@/types/feed';
 import type { Paginated } from '@/types/pagination';
 
