@@ -14,6 +14,7 @@ class FeedEventSuggestionTest extends TestCase
 
     private array $validData = [
         'title' => 'Предложенное событие',
+        'short_description' => 'Краткое описание события',
         'description' => 'Описание предлагаемого события',
     ];
 
@@ -25,12 +26,24 @@ class FeedEventSuggestionTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
+    // --- no contacts redirect ---
+
+    public function test_user_without_contacts_cannot_suggest_event(): void
+    {
+        $this->actingAs(User::factory()->create(['phone' => null, 'contacts' => null]));
+
+        $this->post(route('feed.events.suggest'), $this->validData)
+            ->assertRedirect(route('profile.edit'));
+
+        $this->assertDatabaseEmpty('events');
+    }
+
     // --- regular user can suggest ---
 
     public function test_regular_user_can_suggest_event(): void
     {
         Mail::fake();
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
         $this->post(route('feed.events.suggest'), $this->validData)
             ->assertRedirect(route('feed'));
@@ -44,7 +57,7 @@ class FeedEventSuggestionTest extends TestCase
     public function test_suggestion_has_null_starts_at(): void
     {
         Mail::fake();
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
         $this->post(route('feed.events.suggest'), $this->validData);
 
@@ -55,7 +68,7 @@ class FeedEventSuggestionTest extends TestCase
     public function test_suggestion_stores_author_id(): void
     {
         Mail::fake();
-        $user = User::factory()->create();
+        $user = User::factory()->create(['phone' => '79001234567']);
         $this->actingAs($user);
 
         $this->post(route('feed.events.suggest'), $this->validData);
@@ -70,17 +83,34 @@ class FeedEventSuggestionTest extends TestCase
 
     public function test_title_is_required(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
-        $this->post(route('feed.events.suggest'), ['description' => 'Текст'])
+        $data = $this->validData;
+        unset($data['title']);
+
+        $this->post(route('feed.events.suggest'), $data)
             ->assertSessionHasErrors('title');
+    }
+
+    public function test_short_description_is_required(): void
+    {
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
+
+        $data = $this->validData;
+        unset($data['short_description']);
+
+        $this->post(route('feed.events.suggest'), $data)
+            ->assertSessionHasErrors('short_description');
     }
 
     public function test_description_is_required(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
-        $this->post(route('feed.events.suggest'), ['title' => 'Заголовок'])
+        $data = $this->validData;
+        unset($data['description']);
+
+        $this->post(route('feed.events.suggest'), $data)
             ->assertSessionHasErrors('description');
     }
 
@@ -89,7 +119,7 @@ class FeedEventSuggestionTest extends TestCase
     public function test_suggestion_does_not_appear_in_upcoming_events(): void
     {
         Mail::fake();
-        $user = User::factory()->create();
+        $user = User::factory()->create(['phone' => '79001234567']);
         $this->actingAs($user);
 
         $this->post(route('feed.events.suggest'), $this->validData);
@@ -104,7 +134,7 @@ class FeedEventSuggestionTest extends TestCase
     {
         Mail::fake();
         $admin = User::factory()->create(['is_admin' => true]);
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
         $this->post(route('feed.events.suggest'), $this->validData);
 
@@ -116,7 +146,7 @@ class FeedEventSuggestionTest extends TestCase
     public function test_no_email_when_no_admins(): void
     {
         Mail::fake();
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
         $this->post(route('feed.events.suggest'), $this->validData);
 

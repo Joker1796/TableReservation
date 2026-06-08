@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button';
 import type { Auth } from '@/types/auth';
 import type { Event } from '@/types/event';
 
-defineProps<{ upcomingEvents: Event[]; recentEvents: Event[] }>();
+withDefaults(defineProps<{ upcomingEvents: Event[]; recentEvents: Event[]; showSuggest?: boolean }>(), {
+    showSuggest: true,
+});
 
 const page = usePage<{ auth: Auth }>();
 const canCreate = page.props.auth.user.is_admin || page.props.auth.user.is_editor;
@@ -38,7 +40,7 @@ const suggestOpen = ref(false);
         </template>
     </template>
 
-    <template v-if="!canCreate">
+    <template v-if="!canCreate && showSuggest">
         <Button variant="outline" size="sm" class="mt-2 w-full" @click="suggestOpen = true">
             Предложить событие
         </Button>

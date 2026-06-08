@@ -29,12 +29,26 @@ class EventRegistrationTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
+    // --- no contacts redirect ---
+
+    public function test_user_without_contacts_cannot_register_for_event(): void
+    {
+        $user = User::factory()->create(['phone' => null, 'contacts' => null]);
+        $event = Event::factory()->create(['starts_at' => now()->addDay()]);
+
+        $this->actingAs($user)
+            ->post(route('events.register', $event->id))
+            ->assertRedirect(route('profile.edit'));
+
+        $this->assertDatabaseEmpty('event_user');
+    }
+
     // --- registration ---
 
     public function test_user_can_register_for_event(): void
     {
         Mail::fake();
-        $user = User::factory()->create();
+        $user = User::factory()->create(['phone' => '79001234567']);
         $event = Event::factory()->create(['starts_at' => now()->addDay()]);
 
         $this->actingAs($user)
@@ -50,7 +64,7 @@ class EventRegistrationTest extends TestCase
     {
         Mail::fake();
         $admin = User::factory()->create(['is_admin' => true]);
-        $user = User::factory()->create();
+        $user = User::factory()->create(['phone' => '79001234567']);
         $event = Event::factory()->create(['starts_at' => now()->addDay()]);
 
         $this->actingAs($user)
@@ -63,7 +77,7 @@ class EventRegistrationTest extends TestCase
     public function test_duplicate_registration_is_ignored(): void
     {
         Mail::fake();
-        $user = User::factory()->create();
+        $user = User::factory()->create(['phone' => '79001234567']);
         $event = Event::factory()->create(['starts_at' => now()->addDay()]);
 
         $this->actingAs($user)->post(route('events.register', $event->id));
@@ -74,7 +88,7 @@ class EventRegistrationTest extends TestCase
 
     public function test_cannot_register_for_past_event(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['phone' => '79001234567']);
         $event = Event::factory()->create(['starts_at' => now()->subDay()]);
 
         $this->actingAs($user)

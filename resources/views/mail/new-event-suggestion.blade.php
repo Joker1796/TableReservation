@@ -7,6 +7,8 @@
 
 **Название:** {{ $event->title }}
 
+**Короткое описание:** {{ $event->short_description }}
+
 @if($event->description)
 **Описание:**
 {{ Str::limit($event->description, 300) }}

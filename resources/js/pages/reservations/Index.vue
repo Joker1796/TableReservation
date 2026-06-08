@@ -9,6 +9,8 @@ import BookingRequestCard from '@/components/reservations/BookingRequestCard.vue
 import ReservationCard from '@/components/reservations/ReservationCard.vue';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useHasContacts } from '@/composables/useHasContacts';
 import type { Auth } from '@/types/auth';
 import type { BookingRequest, Reservation, ReservationUser } from '@/types/reservation';
 
@@ -28,6 +30,7 @@ const loading = ref(false);
 
 const page = usePage<{ auth: Auth }>();
 const isAdmin = computed(() => page.props.auth?.user?.is_admin === true);
+const hasContacts = useHasContacts();
 
 defineOptions({
     layout: {
@@ -124,9 +127,18 @@ return;
                 <p class="text-sm text-muted-foreground">Бронирования столов по датам</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-                <BookingRequestModal>
-                    <Button variant="outline">Забронировать стол</Button>
-                </BookingRequestModal>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger as-child>
+                            <span>
+                                <BookingRequestModal :disabled="!hasContacts">
+                                    <Button variant="outline" :disabled="!hasContacts">Забронировать стол</Button>
+                                </BookingRequestModal>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent v-if="!hasContacts">Заполните контактные данные в профиле</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
                 <Button v-if="isAdmin" as-child>
                     <Link href="/reservations/create">
                         <Plus class="h-4 w-4" />

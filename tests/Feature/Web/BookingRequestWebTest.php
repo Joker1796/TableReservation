@@ -21,9 +21,20 @@ class BookingRequestWebTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
+    public function test_user_without_contacts_cannot_create_booking_request(): void
+    {
+        $user = User::factory()->create(['phone' => null, 'contacts' => null]);
+
+        $this->actingAs($user)
+            ->post(route('booking-requests.store'), ['date' => '2026-01-01'])
+            ->assertRedirect(route('profile.edit'));
+
+        $this->assertDatabaseEmpty('booking_requests');
+    }
+
     public function test_user_can_create_booking_request(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
         $this->post(route('booking-requests.store'), [
             'date' => '2026-01-01',
@@ -36,7 +47,7 @@ class BookingRequestWebTest extends TestCase
 
     public function test_author_is_automatically_attached_as_participant(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['phone' => '79001234567']);
         $this->actingAs($user);
 
         $this->post(route('booking-requests.store'), [
@@ -50,7 +61,7 @@ class BookingRequestWebTest extends TestCase
 
     public function test_booking_request_not_created_without_date(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
         $this->post(route('booking-requests.store'), [
             'comment' => 'no date here',
@@ -60,7 +71,7 @@ class BookingRequestWebTest extends TestCase
 
     public function test_user_can_specify_table_in_booking_request(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['phone' => '79001234567']);
         $this->actingAs($user);
         $table = Table::factory()->create();
 
@@ -74,7 +85,7 @@ class BookingRequestWebTest extends TestCase
 
     public function test_user_can_add_participants_to_booking_request(): void
     {
-        $author = User::factory()->create();
+        $author = User::factory()->create(['phone' => '79001234567']);
         $participant = User::factory()->create();
         $this->actingAs($author);
 
@@ -90,7 +101,7 @@ class BookingRequestWebTest extends TestCase
 
     public function test_invalid_table_id_fails_validation(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
         $this->post(route('booking-requests.store'), [
             'date' => '2026-01-01',
@@ -101,7 +112,7 @@ class BookingRequestWebTest extends TestCase
 
     public function test_invalid_user_id_in_user_ids_fails_validation(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['phone' => '79001234567']));
 
         $this->post(route('booking-requests.store'), [
             'date' => '2026-01-01',
@@ -116,7 +127,7 @@ class BookingRequestWebTest extends TestCase
 
         $admin1 = User::factory()->create(['is_admin' => true]);
         $admin2 = User::factory()->create(['is_admin' => true]);
-        $user = User::factory()->create(['is_admin' => false]);
+        $user = User::factory()->create(['is_admin' => false, 'phone' => '79001234567']);
 
         $this->actingAs($user);
 
@@ -132,7 +143,7 @@ class BookingRequestWebTest extends TestCase
         Mail::fake();
 
         User::factory()->create(['is_admin' => true]);
-        $regularUser = User::factory()->create(['is_admin' => false]);
+        $regularUser = User::factory()->create(['is_admin' => false, 'phone' => '79001234567']);
 
         $this->actingAs($regularUser);
 
@@ -145,7 +156,7 @@ class BookingRequestWebTest extends TestCase
     {
         Mail::fake();
 
-        $this->actingAs(User::factory()->create(['is_admin' => false]));
+        $this->actingAs(User::factory()->create(['is_admin' => false, 'phone' => '79001234567']));
 
         $this->post(route('booking-requests.store'), ['date' => '2026-01-01']);
 
@@ -157,7 +168,7 @@ class BookingRequestWebTest extends TestCase
         Mail::fake();
 
         User::factory()->create(['is_admin' => true]);
-        $author = User::factory()->create();
+        $author = User::factory()->create(['phone' => '79001234567']);
 
         $this->actingAs($author);
 

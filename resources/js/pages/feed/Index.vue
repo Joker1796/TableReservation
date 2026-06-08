@@ -98,7 +98,7 @@ async function loadMore(): Promise<void> {
 
         <aside class="hidden lg:block lg:sticky lg:top-4 lg:w-56 lg:shrink-0 space-y-3">
             <h2 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Ближайшие события</h2>
-            <EventsList :upcoming-events="upcomingEvents" :recent-events="recentEvents" />
+            <EventsList :upcoming-events="upcomingEvents" :recent-events="recentEvents" :show-suggest="false" />
         </aside>
     </div>
 </template>

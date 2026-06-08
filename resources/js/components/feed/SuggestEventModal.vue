@@ -19,6 +19,7 @@ const emit = defineEmits<{ 'update:open': [value: boolean] }>();
 
 const form = useForm({
     title: '',
+    short_description: '',
     description: '',
 });
 
@@ -61,6 +62,21 @@ function onOpenChange(value: boolean): void {
                         maxlength="255"
                     />
                     <InputError :message="form.errors.title" />
+                </div>
+
+                <div class="grid gap-2">
+                    <Label for="suggest-event-short-desc">
+                        Короткое описание <span class="text-destructive">*</span>
+                        <span class="text-muted-foreground ml-1 text-xs font-normal">({{ form.short_description.length }}/150)</span>
+                    </Label>
+                    <Input
+                        id="suggest-event-short-desc"
+                        v-model="form.short_description"
+                        placeholder="Кратко о событии (до 150 символов)"
+                        required
+                        maxlength="150"
+                    />
+                    <InputError :message="form.errors.short_description" />
                 </div>
 
                 <div class="grid gap-2">

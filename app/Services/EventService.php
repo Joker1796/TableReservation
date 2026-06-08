@@ -44,11 +44,13 @@ class EventService
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'short_description' => ['required', 'string', 'max:150'],
             'description' => ['required', 'string', 'max:5000'],
         ]);
 
         $event = new Event;
         $event->title = $validated['title'];
+        $event->short_description = $validated['short_description'];
         $event->description = $validated['description'];
         $event->is_suggestion = true;
         $event->author_id = $authorId;

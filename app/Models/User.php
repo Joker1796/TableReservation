@@ -40,6 +40,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function hasContacts(): bool
+    {
+        return filled($this->phone) || filled($this->contacts);
+    }
+
     public function scopeVisible(Builder $query): Builder
     {
         return $query->where('is_invisible', false);

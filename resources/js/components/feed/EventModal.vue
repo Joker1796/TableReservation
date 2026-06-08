@@ -4,12 +4,15 @@ import { computed, ref } from 'vue';
 import ParticipantBadge from '@/components/ParticipantBadge.vue';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useHasContacts } from '@/composables/useHasContacts';
 import type { Event } from '@/types/event';
 
 const props = defineProps<{ event: Event }>();
 
 const page = usePage<{ auth: { user: { id: number } | null } }>();
 const open = ref(false);
+const hasContacts = useHasContacts();
 
 const isRegistered = computed(() =>
     props.event.participants.some((p) => p.id === page.props.auth.user?.id),
@@ -76,13 +79,26 @@ function toggleRegistration(): void {
 
             <DialogFooter v-if="page.props.auth.user">
                 <p v-if="isPast" class="text-sm text-muted-foreground">Событие уже прошло</p>
-                <Button
-                    v-else
-                    :variant="isRegistered ? 'outline' : 'default'"
-                    @click="toggleRegistration(); open = false"
-                >
-                    {{ isRegistered ? 'Отписаться' : 'Записаться' }}
-                </Button>
+                <template v-else>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger as-child>
+                                <span>
+                                    <Button
+                                        :variant="isRegistered ? 'outline' : 'default'"
+                                        :disabled="!hasContacts && !isRegistered"
+                                        @click="!hasContacts && !isRegistered ? undefined : (toggleRegistration(), open = false)"
+                                    >
+                                        {{ isRegistered ? 'Отписаться' : 'Записаться' }}
+                                    </Button>
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent v-if="!hasContacts && !isRegistered">
+                                Заполните контактные данные в профиле
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </template>
             </DialogFooter>
         </DialogContent>
     </Dialog>
