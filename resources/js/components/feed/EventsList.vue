@@ -1,8 +1,18 @@
 <script setup lang="ts">
+import { usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import EventModal from '@/components/feed/EventModal.vue';
+import SuggestEventModal from '@/components/feed/SuggestEventModal.vue';
+import { Button } from '@/components/ui/button';
+import type { Auth } from '@/types/auth';
 import type { Event } from '@/types/event';
 
 defineProps<{ upcomingEvents: Event[]; recentEvents: Event[] }>();
+
+const page = usePage<{ auth: Auth }>();
+const canCreate = page.props.auth.user.is_admin || page.props.auth.user.is_editor;
+
+const suggestOpen = ref(false);
 </script>
 
 <template>
@@ -26,5 +36,12 @@ defineProps<{ upcomingEvents: Event[]; recentEvents: Event[] }>();
                 </div>
             </div>
         </template>
+    </template>
+
+    <template v-if="!canCreate">
+        <Button variant="outline" size="sm" class="mt-2 w-full" @click="suggestOpen = true">
+            Предложить событие
+        </Button>
+        <SuggestEventModal :open="suggestOpen" @update:open="suggestOpen = $event" />
     </template>
 </template>

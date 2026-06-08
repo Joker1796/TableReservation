@@ -50,6 +50,17 @@ class AdminEventController extends Controller
         return redirect()->route('admin.events.index');
     }
 
+    public function approve(int $id): RedirectResponse
+    {
+        $event = Event::findOrFail($id);
+        abort_unless($event->is_suggestion, 404);
+        EventService::approve($event);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Событие одобрено.']);
+
+        return redirect()->route('admin.events.index');
+    }
+
     public function destroy(int $id): RedirectResponse
     {
         $event = Event::findOrFail($id);

@@ -14,9 +14,13 @@ const open = ref(false);
 const isRegistered = computed(() =>
     props.event.participants.some((p) => p.id === page.props.auth.user?.id),
 );
-const isPast = computed(() => new Date(props.event.starts_at) < new Date());
+const isPast = computed(() => props.event.starts_at !== null && new Date(props.event.starts_at) < new Date());
 
-function formatDate(iso: string): string {
+function formatDate(iso: string | null): string {
+    if (!iso) {
+        return '—';
+    }
+
     return new Date(iso).toLocaleString('ru-RU', {
         day: 'numeric',
         month: 'long',
@@ -38,7 +42,7 @@ function toggleRegistration(): void {
 <template>
     <button type="button" class="block w-full rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-accent" @click="open = true">
         <p class="text-sm font-medium leading-snug">{{ event.title }}</p>
-        <p class="mt-1 text-xs text-muted-foreground">
+        <p v-if="event.starts_at" class="mt-1 text-xs text-muted-foreground">
             {{ new Date(event.starts_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) }}
             <template v-if="event.ends_at"> — {{ new Date(event.ends_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) }}</template>
         </p>

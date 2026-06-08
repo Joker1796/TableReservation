@@ -6,6 +6,7 @@ use App\Enums\BookingRequestStatus;
 use App\Enums\InviteStatus;
 use App\Enums\TableStatus;
 use App\Models\BookingRequest;
+use App\Models\Event;
 use App\Models\Invite;
 use App\Models\Post;
 use App\Models\Table;
@@ -74,6 +75,12 @@ class HandleInertiaRequests extends Middleware
                     ->select('event_user.id', 'users.name as user_name', 'events.title as event_title', 'event_user.created_at')
                     ->latest('event_user.created_at')
                     ->get()
+                : [],
+            'pendingEventSuggestions' => fn () => auth()->check() && auth()->user()->is_admin
+                ? Event::with('author:id,name')
+                    ->where('is_suggestion', true)
+                    ->latest()
+                    ->get(['id', 'title', 'author_id'])
                 : [],
             'pendingPostSuggestions' => fn () => auth()->check() && auth()->user()->is_admin
                 ? Post::with('author:id,name')

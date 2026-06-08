@@ -65,6 +65,8 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('events.edit');
         Route::put('/events/{id}', [AdminEventController::class, 'update'])
             ->name('events.update');
+        Route::put('/events/{id}/approve', [AdminEventController::class, 'approve'])
+            ->name('events.approve');
         Route::delete('/events/{id}', [AdminEventController::class, 'destroy'])
             ->name('events.destroy');
 

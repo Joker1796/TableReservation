@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/feed/polls/{poll}/vote', [FeedContentController::class, 'vote'])->name('feed.polls.vote');
     Route::delete('/feed/polls/{poll}/vote', [FeedContentController::class, 'unvote'])->name('feed.polls.unvote');
     Route::post('/feed/suggest', [FeedContentController::class, 'storeSuggestion'])->name('feed.suggest');
+    Route::post('/feed/events/suggest', [FeedContentController::class, 'suggestEvent'])->name('feed.events.suggest');
 });
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {

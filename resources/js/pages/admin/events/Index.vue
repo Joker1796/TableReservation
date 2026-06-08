@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import { Edit, Plus, Trash2 } from 'lucide-vue-next';
+import { Check, Edit, Plus, Trash2 } from 'lucide-vue-next';
 import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import Pagination from '@/components/Pagination.vue';
 import ParticipantBadge from '@/components/ParticipantBadge.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Event } from '@/types/event';
 import type { Paginated } from '@/types/pagination';
@@ -32,6 +33,10 @@ function deleteEvent(id: number): void {
     if (confirm('Удалить событие?')) {
         router.delete(`/admin/events/${id}`);
     }
+}
+
+function approveEvent(id: number): void {
+    router.put(`/admin/events/${id}/approve`);
 }
 </script>
 
@@ -65,7 +70,7 @@ function deleteEvent(id: number): void {
                     <thead>
                         <tr>
                             <th class="col-th text-left">Название</th>
-                            <th class="col-th text-left">Начало</th>
+                            <th class="col-th text-left">Статус / Начало</th>
                             <th class="col-th text-left">Конец</th>
                             <th class="col-th text-left">Участники</th>
                             <th class="col-th text-right">Действия</th>
@@ -76,7 +81,10 @@ function deleteEvent(id: number): void {
                             <td class="col-td font-medium">
                                 <span class="line-clamp-1">{{ event.title }}</span>
                             </td>
-                            <td class="col-td text-muted-foreground">{{ formatDate(event.starts_at) }}</td>
+                            <td class="col-td">
+                                <Badge v-if="event.is_suggestion" variant="secondary">Предложено</Badge>
+                                <span v-else class="text-muted-foreground">{{ formatDate(event.starts_at) }}</span>
+                            </td>
                             <td class="col-td text-muted-foreground">{{ formatDate(event.ends_at) }}</td>
                             <td class="col-td">
                                 <div v-if="event.participants.length > 0" class="flex flex-wrap gap-1">
@@ -86,6 +94,16 @@ function deleteEvent(id: number): void {
                             </td>
                             <td class="col-td">
                                 <div class="flex justify-end gap-2">
+                                    <Button
+                                        v-if="event.is_suggestion"
+                                        variant="outline"
+                                        size="sm"
+                                        class="gap-1 text-xs"
+                                        @click="approveEvent(event.id)"
+                                    >
+                                        <Check class="h-3 w-3" />
+                                        Одобрить
+                                    </Button>
                                     <Button variant="outline" size="icon" as-child>
                                         <Link :href="`/admin/events/${event.id}/edit`">
                                             <Edit class="h-4 w-4" />

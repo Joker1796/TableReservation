@@ -17,6 +17,7 @@ class Event extends Model
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
+        'is_suggestion' => 'boolean',
     ];
 
     public function author(): BelongsTo

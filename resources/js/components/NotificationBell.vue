@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { router, usePage } from '@inertiajs/vue3';
-import { Bell, CalendarCheck, CalendarDays, Check, Newspaper, Table2, X } from 'lucide-vue-next';
+import { Bell, CalendarCheck, CalendarDays, CalendarPlus, Check, Newspaper, Table2, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { EventRegistration } from '@/types/event';
+import type { EventRegistration, EventSuggestion } from '@/types/event';
 import type { PostSuggestion } from '@/types/feed';
 import type { BookingRequest, Invite } from '@/types/reservation';
 
@@ -22,17 +22,20 @@ const page = usePage<{
     pendingBookingRequests: BookingRequest[];
     pendingEventRegistrations: EventRegistration[];
     pendingPostSuggestions: PostSuggestion[];
+    pendingEventSuggestions: EventSuggestion[];
 }>();
 const invites = computed<Invite[]>(() => page.props.pendingInvites ?? []);
 const bookingRequests = computed<BookingRequest[]>(() => page.props.pendingBookingRequests ?? []);
 const eventRegistrations = computed<EventRegistration[]>(() => page.props.pendingEventRegistrations ?? []);
 const postSuggestions = computed<PostSuggestion[]>(() => page.props.pendingPostSuggestions ?? []);
+const eventSuggestions = computed<EventSuggestion[]>(() => page.props.pendingEventSuggestions ?? []);
 const totalCount = computed(
     () =>
         invites.value.length +
         bookingRequests.value.length +
         eventRegistrations.value.length +
-        postSuggestions.value.length,
+        postSuggestions.value.length +
+        eventSuggestions.value.length,
 );
 
 function formatDate(date: string): string {
@@ -59,6 +62,11 @@ function openEvents(): void {
 function openSuggestions(): void {
     open.value = false;
     router.visit('/admin/posts');
+}
+
+function openEventSuggestions(): void {
+    open.value = false;
+    router.visit('/admin/events');
 }
 </script>
 
@@ -197,6 +205,29 @@ function openSuggestions(): void {
                             <span class="line-clamp-1">{{ suggestion.title }}</span>
                         </div>
                         <Button size="sm" variant="outline" class="h-7 w-full text-xs" @click="openSuggestions">
+                            Рассмотреть
+                        </Button>
+                    </div>
+                </div>
+            </template>
+            <!-- Предложения событий (только для админов) -->
+            <template v-if="eventSuggestions.length > 0">
+                <DropdownMenuSeparator v-if="invites.length > 0 || bookingRequests.length > 0 || eventRegistrations.length > 0 || postSuggestions.length > 0" />
+                <div class="max-h-60 overflow-y-auto">
+                    <div
+                        v-for="suggestion in eventSuggestions"
+                        :key="`es-${suggestion.id}`"
+                        class="border-b px-3 py-3 last:border-0"
+                    >
+                        <p class="mb-1 text-sm">
+                            <span class="font-medium">{{ suggestion.author?.name }}</span>
+                            предлагает событие
+                        </p>
+                        <div class="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <CalendarPlus class="h-3 w-3 shrink-0" />
+                            <span class="line-clamp-1">{{ suggestion.title }}</span>
+                        </div>
+                        <Button size="sm" variant="outline" class="h-7 w-full text-xs" @click="openEventSuggestions">
                             Рассмотреть
                         </Button>
                     </div>

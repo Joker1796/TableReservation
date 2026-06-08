@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Mail\NewEventSuggestionMail;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class EventService
 {
@@ -38,6 +40,40 @@ class EventService
         $event->save();
     }
 
+    public static function suggest(Request $request, int $authorId): Event
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:5000'],
+        ]);
+
+        $event = new Event;
+        $event->title = $validated['title'];
+        $event->description = $validated['description'];
+        $event->is_suggestion = true;
+        $event->author_id = $authorId;
+        $event->save();
+
+        $admins = User::where('is_admin', true)->get();
+
+        foreach ($admins as $admin) {
+            Mail::to($admin)->queue(new NewEventSuggestionMail($event));
+        }
+
+        return $event;
+    }
+
+    public static function approve(Event $event): void
+    {
+        $event->is_suggestion = false;
+
+        if (! $event->starts_at) {
+            $event->starts_at = now();
+        }
+
+        $event->save();
+    }
+
     public static function softDelete(Event $event): void
     {
         $event->delete();
@@ -64,6 +100,7 @@ class EventService
     public static function upcoming(int $limit = 5): Collection
     {
         return Event::with(['author:id,name', 'participants:id,name,phone,contacts'])
+            ->where('is_suggestion', false)
             ->where('starts_at', '>=', now())
             ->orderBy('starts_at')
             ->limit($limit)
@@ -74,6 +111,7 @@ class EventService
     public static function recent(int $limit = 2): Collection
     {
         return Event::with(['author:id,name', 'participants:id,name,phone,contacts'])
+            ->where('is_suggestion', false)
             ->where('starts_at', '<', now())
             ->orderByDesc('starts_at')
             ->limit($limit)
