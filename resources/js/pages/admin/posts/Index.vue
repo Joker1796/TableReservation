@@ -40,12 +40,12 @@ function deletePost(id: number): void {
     <Head title="Публикации" />
 
     <div class="flex flex-col gap-6 p-4">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-semibold">Публикации</h1>
                 <p class="text-sm text-muted-foreground">Управление публикациями клуба</p>
             </div>
-            <Button as-child>
+            <Button as-child class="sm:shrink-0">
                 <Link href="/admin/posts/create">
                     <Plus class="h-4 w-4" />
                     Добавить

@@ -15,13 +15,13 @@ defineProps<{
     <div class="min-h-screen bg-white text-[#2a2448] dark:bg-[#0d0b17] dark:text-[#e8e6f0]">
         <!-- Header -->
         <header class="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-            <Link href="/" class="flex items-center gap-2.5">
+            <Link href="/" class="flex flex-1 items-center gap-2.5">
                 <div class="flex size-9 items-center justify-center rounded-lg bg-[#453c77] dark:bg-[#e8e6f0]">
                     <AppLogoIcon class="size-5 text-white dark:text-[#453c77]" />
                 </div>
                 <span class="text-lg font-semibold tracking-tight">Кочующий стол</span>
             </Link>
-            <Link href="/" class="link-nav">← На главную</Link>
+            <Link href="/" class="link-nav shrink-0">← На главную</Link>
         </header>
 
         <!-- Hero -->

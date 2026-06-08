@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import BookingRequestModal from '@/components/BookingRequestModal.vue';
 import PublicFooter from '@/components/PublicFooter.vue';
-import { login, register } from '@/routes';
-import { index as reservationsIndex } from '@/routes/reservations';
+import PublicHeader from '@/components/PublicHeader.vue';
+import { login } from '@/routes';
 
 withDefaults(
     defineProps<{
@@ -20,24 +19,7 @@ withDefaults(
     <Head title="Кочующий стол — бронирование столов" />
 
     <div class="min-h-screen bg-white text-[#2a2448] dark:bg-[#0d0b17] dark:text-[#e8e6f0]">
-        <!-- Header -->
-        <header class="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-            <div class="flex items-center gap-2.5">
-                <div class="flex size-9 items-center justify-center rounded-lg bg-[#453c77] dark:bg-[#e8e6f0]">
-                    <AppLogoIcon class="size-5 text-white dark:text-[#453c77]" />
-                </div>
-                <span class="text-lg font-semibold tracking-tight">Кочующий стол</span>
-            </div>
-            <nav class="flex items-center gap-3">
-                <Link href="/workshop" class="link-nav">Мастерская</Link>
-                <a href="#pricing" class="link-nav">Цены</a>
-                <Link v-if="$page.props.auth.user" :href="reservationsIndex().url" class="btn-nav">Личный кабинет</Link>
-                <template v-else>
-                    <Link :href="login()" class="link-nav">Войти</Link>
-                    <Link v-if="canRegister" :href="register()" class="btn-nav">Регистрация</Link>
-                </template>
-            </nav>
-        </header>
+        <PublicHeader :can-register="canRegister" />
 
         <!-- Hero -->
         <section class="mx-auto max-w-5xl px-6 py-20 text-center">

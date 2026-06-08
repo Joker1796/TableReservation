@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\BookingRequestWebController;
+use App\Http\Controllers\Web\EventController;
 use App\Http\Controllers\Web\EventRegistrationController;
 use App\Http\Controllers\Web\FeedController;
 use App\Http\Controllers\Web\InviteWebController;
@@ -15,6 +16,7 @@ Route::get('/workshop', [WorkshopController::class, 'index'])->name('workshop');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/feed', [FeedController::class, 'index'])->name('feed');
+    Route::get('/events', [EventController::class, 'index'])->name('events');
     Route::post('booking-requests', [BookingRequestWebController::class, 'store'])
         ->name('booking-requests.store')
         ->middleware('throttle:10,1');

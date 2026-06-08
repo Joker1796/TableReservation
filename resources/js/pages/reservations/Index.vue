@@ -121,12 +121,12 @@ return;
 
     <div class="flex h-full flex-1 flex-col gap-4 p-4">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-semibold">Резервирования</h1>
                 <p class="text-sm text-muted-foreground">Бронирования столов по датам</p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 <BookingRequestModal>
                     <Button variant="outline">Забронировать стол</Button>
                 </BookingRequestModal>

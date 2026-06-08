@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Web;
 
+use App\Models\Event;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -76,6 +77,30 @@ class FeedTest extends TestCase
         $this->getJson(route('feed'))
             ->assertOk()
             ->assertJsonStructure(['data', 'next_cursor', 'per_page']);
+    }
+
+    public function test_feed_passes_upcoming_and_recent_events_props(): void
+    {
+        $this->actingAs(User::factory()->create());
+        Event::factory()->create(['starts_at' => now()->addDay()]);
+        Event::factory()->create(['starts_at' => now()->subDay()]);
+
+        $this->get(route('feed'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('upcomingEvents', 1)
+                ->has('recentEvents', 1)
+            );
+    }
+
+    public function test_feed_limits_upcoming_events_to_five(): void
+    {
+        $this->actingAs(User::factory()->create());
+        Event::factory()->count(8)->create(['starts_at' => now()->addDay()]);
+
+        $this->get(route('feed'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('upcomingEvents', 5)
+            );
     }
 
     public function test_feed_cursor_pagination_loads_next_page(): void

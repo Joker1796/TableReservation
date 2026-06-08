@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { Loader2 } from 'lucide-vue-next';
-import EventModal from '@/components/feed/EventModal.vue';
+import { ref } from 'vue';
+import EventsList from '@/components/feed/EventsList.vue';
 import PostCard from '@/components/feed/PostCard.vue';
 import { Button } from '@/components/ui/button';
 import { home } from '@/routes';
@@ -33,15 +33,23 @@ const loading = ref(false);
 const hasMore = ref(props.nextCursor !== null);
 
 async function loadMore(): Promise<void> {
-    if (loading.value || !hasMore.value || !cursor.value) return;
+    if (loading.value || !hasMore.value || !cursor.value) {
+return;
+}
+
     loading.value = true;
+
     try {
         const url = `/feed?cursor=${encodeURIComponent(cursor.value)}`;
         const response = await fetch(url, {
             credentials: 'same-origin',
             headers: { Accept: 'application/json' },
         });
-        if (!response.ok) return;
+
+        if (!response.ok) {
+return;
+}
+
         const data = await response.json();
         items.value.push(...(data.data as FeedItem[]));
         cursor.value = data.next_cursor ?? null;
@@ -57,8 +65,8 @@ async function loadMore(): Promise<void> {
 <template>
     <Head title="Лента" />
 
-    <div class="flex items-start gap-6 p-4">
-        <section class="min-w-0 flex-1">
+    <div class="flex flex-col gap-4 p-4 lg:flex-row lg:items-start lg:gap-6">
+        <section class="min-w-0 w-full flex-1">
             <h1 class="mb-4 text-2xl font-semibold">Лента</h1>
 
             <div v-if="items.length === 0 && !loading" class="py-12 text-center text-muted-foreground">Публикаций пока нет</div>
@@ -74,27 +82,9 @@ async function loadMore(): Promise<void> {
             </div>
         </section>
 
-        <aside class="sticky top-4 w-56 shrink-0 space-y-3">
+        <aside class="hidden lg:block lg:sticky lg:top-4 lg:w-56 lg:shrink-0 space-y-3">
             <h2 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Ближайшие события</h2>
-
-            <div v-if="upcomingEvents.length === 0 && recentEvents.length === 0" class="rounded-lg border border-border bg-card p-4 text-sm text-muted-foreground">
-                События появятся здесь
-            </div>
-
-            <template v-else>
-                <div v-if="upcomingEvents.length > 0" class="flex flex-col gap-2">
-                    <EventModal v-for="event in upcomingEvents" :key="event.id" :event="event" />
-                </div>
-
-                <template v-if="recentEvents.length > 0">
-                    <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground/60">Прошедшие</p>
-                    <div class="flex flex-col gap-2">
-                        <div v-for="event in recentEvents" :key="event.id" class="opacity-60">
-                            <EventModal :event="event" />
-                        </div>
-                    </div>
-                </template>
-            </template>
+            <EventsList :upcoming-events="upcomingEvents" :recent-events="recentEvents" />
         </aside>
     </div>
 </template>

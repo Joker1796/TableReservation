@@ -20,9 +20,9 @@ withDefaults(
     >
         <div class="flex items-center gap-2">
             <SidebarTrigger class="-ml-1" />
-            <template v-if="breadcrumbs && breadcrumbs.length > 0">
+            <div v-if="breadcrumbs && breadcrumbs.length > 0" class="hidden md:block">
                 <Breadcrumbs :breadcrumbs="breadcrumbs" />
-            </template>
+            </div>
         </div>
         <div class="ml-auto flex items-center pr-2">
             <NotificationBell />

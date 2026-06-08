@@ -61,22 +61,22 @@ class EventService
     }
 
     /** @return Collection<int, Event> */
-    public static function upcoming(): Collection
+    public static function upcoming(int $limit = 5): Collection
     {
         return Event::with(['author:id,name', 'participants:id,name,phone,contacts'])
             ->where('starts_at', '>=', now())
             ->orderBy('starts_at')
-            ->limit(5)
+            ->limit($limit)
             ->get();
     }
 
     /** @return Collection<int, Event> */
-    public static function recent(): Collection
+    public static function recent(int $limit = 2): Collection
     {
         return Event::with(['author:id,name', 'participants:id,name,phone,contacts'])
             ->where('starts_at', '<', now())
             ->orderByDesc('starts_at')
-            ->limit(2)
+            ->limit($limit)
             ->get();
     }
 

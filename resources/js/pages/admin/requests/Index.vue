@@ -34,6 +34,7 @@ function formatDate(date: string): string {
         month: 'short',
         year: 'numeric',
     });
+
     return timePart && timePart !== '00:00' ? `${dateStr}, ${timePart}` : dateStr;
 }
 

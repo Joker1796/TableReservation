@@ -18,6 +18,7 @@ function formatDate(date: string): string {
         month: 'long',
         year: 'numeric',
     });
+
     return timePart && timePart !== '00:00' ? `${dateStr}, ${timePart}` : dateStr;
 }
 

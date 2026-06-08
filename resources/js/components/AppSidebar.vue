@@ -35,6 +35,11 @@ const mainNavItems: NavItem[] = [
         href: '/reservations',
         icon: CalendarDays,
     },
+    {
+        title: 'События',
+        href: '/events',
+        icon: CalendarCheck,
+    },
 ];
 
 const adminNavItems: NavItem[] = [
