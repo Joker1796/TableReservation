@@ -9,7 +9,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { login, register } from '@/routes';
+import { login } from '@/routes';
 import { edit as profileEdit } from '@/routes/profile';
 import { index as reservationsIndex } from '@/routes/reservations';
 
@@ -57,8 +57,7 @@ const user = computed(() => page.props.auth?.user);
             </template>
 
             <template v-else>
-                <Link :href="login()" class="link-nav">Войти</Link>
-                <Link v-if="canRegister" :href="register()" class="btn-nav hidden sm:inline">Регистрация</Link>
+                <Link :href="login()" class="btn-nav">Войти</Link>
             </template>
         </nav>
     </header>
