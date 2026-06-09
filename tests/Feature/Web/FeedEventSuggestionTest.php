@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Web;
 
+use App\Mail\NewEventSuggestionMail;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -138,7 +139,7 @@ class FeedEventSuggestionTest extends TestCase
 
         $this->post(route('feed.events.suggest'), $this->validData);
 
-        Mail::assertQueued(\App\Mail\NewEventSuggestionMail::class, function ($mail) use ($admin) {
+        Mail::assertQueued(NewEventSuggestionMail::class, function ($mail) use ($admin) {
             return $mail->hasTo($admin->email);
         });
     }

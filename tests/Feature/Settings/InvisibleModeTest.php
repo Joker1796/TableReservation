@@ -193,7 +193,7 @@ class InvisibleModeTest extends TestCase
 
     public function test_creating_booking_request_removes_invisible_status(): void
     {
-        $user = User::factory()->create(['is_invisible' => true]);
+        $user = User::factory()->create(['is_invisible' => true, 'contacts' => 'test']);
 
         $this->actingAs($user)
             ->post(route('booking-requests.store'), [
@@ -206,7 +206,7 @@ class InvisibleModeTest extends TestCase
 
     public function test_creating_booking_request_does_not_change_visible_user(): void
     {
-        $user = User::factory()->create(['is_invisible' => false]);
+        $user = User::factory()->create(['is_invisible' => false, 'contacts' => 'test']);
 
         $this->actingAs($user)
             ->post(route('booking-requests.store'), [

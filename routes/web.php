@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Web\BookingRequestWebController;
-use App\Http\Controllers\Web\FeedContentController;
 use App\Http\Controllers\Web\EventController;
 use App\Http\Controllers\Web\EventRegistrationController;
+use App\Http\Controllers\Web\FeedContentController;
 use App\Http\Controllers\Web\FeedController;
 use App\Http\Controllers\Web\InviteWebController;
 use App\Http\Controllers\Web\WorkshopController;

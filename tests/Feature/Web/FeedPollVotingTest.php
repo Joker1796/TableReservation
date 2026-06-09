@@ -3,7 +3,6 @@
 namespace Tests\Feature\Web;
 
 use App\Models\Poll;
-use App\Models\PollVote;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

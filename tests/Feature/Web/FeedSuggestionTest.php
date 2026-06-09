@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Web;
 
+use App\Mail\NewPostSuggestionMail;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -129,7 +130,7 @@ class FeedSuggestionTest extends TestCase
 
         $this->post(route('feed.suggest'), $this->validData);
 
-        Mail::assertQueued(\App\Mail\NewPostSuggestionMail::class, function ($mail) use ($admin) {
+        Mail::assertQueued(NewPostSuggestionMail::class, function ($mail) use ($admin) {
             return $mail->hasTo($admin->email);
         });
     }
