@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class AdminEventTest extends TestCase
@@ -77,6 +78,19 @@ class AdminEventTest extends TestCase
         $this->admin();
         $this->get(route('admin.events.index'))
             ->assertOk();
+    }
+
+    public function test_admin_events_index_includes_participant_email(): void
+    {
+        $this->admin();
+        $event = Event::factory()->create();
+        $participant = User::factory()->create(['email' => 'p@example.com']);
+        $event->participants()->attach($participant->id);
+
+        $this->get(route('admin.events.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('events.data.0.participants.0.email', 'p@example.com')
+            );
     }
 
     public function test_admin_can_view_create_form(): void

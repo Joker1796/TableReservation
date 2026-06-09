@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 defineProps<{
-    participant: { id: number; name?: string; phone?: string | null; contacts?: string | null };
+    participant: { id: number; name?: string; email?: string | null; phone?: string | null; contacts?: string | null };
 }>();
 </script>
 
@@ -13,11 +14,21 @@ defineProps<{
                 {{ participant.name }}
             </button>
         </PopoverTrigger>
-        <PopoverContent class="w-56 space-y-1.5 p-3 text-sm">
-            <p class="font-medium">{{ participant.name }}</p>
-            <p v-if="participant.phone" class="text-muted-foreground">{{ participant.phone }}</p>
-            <p v-if="participant.contacts" class="text-muted-foreground">{{ participant.contacts }}</p>
-            <p v-if="!participant.phone && !participant.contacts" class="text-muted-foreground">Контакты не указаны</p>
+        <PopoverContent class="w-56 p-3 text-sm">
+            <div class="mb-2 flex items-center gap-2.5">
+                <Avatar class="h-8 w-8">
+                    <AvatarFallback class="text-xs">{{ participant.name?.charAt(0).toUpperCase() ?? '?' }}</AvatarFallback>
+                </Avatar>
+                <div class="min-w-0">
+                    <p class="truncate font-medium">{{ participant.name }}</p>
+                    <p v-if="participant.email" class="truncate text-xs text-muted-foreground">{{ participant.email }}</p>
+                </div>
+            </div>
+            <div v-if="participant.phone || participant.contacts" class="space-y-1 border-t pt-2">
+                <p v-if="participant.phone" class="text-muted-foreground">{{ participant.phone }}</p>
+                <p v-if="participant.contacts" class="text-muted-foreground">{{ participant.contacts }}</p>
+            </div>
+            <p v-else class="border-t pt-2 text-muted-foreground">Контакты не указаны</p>
         </PopoverContent>
     </Popover>
 </template>

@@ -103,6 +103,19 @@ class FeedTest extends TestCase
             );
     }
 
+    public function test_feed_event_participants_include_email(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $event = Event::factory()->create(['starts_at' => now()->addDay()]);
+        $participant = User::factory()->create(['email' => 'p@example.com']);
+        $event->participants()->attach($participant->id);
+
+        $this->get(route('feed'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('upcomingEvents.0.participants.0.email', 'p@example.com')
+            );
+    }
+
     public function test_feed_cursor_pagination_loads_next_page(): void
     {
         $this->actingAs(User::factory()->create());

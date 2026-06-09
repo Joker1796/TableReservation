@@ -6,6 +6,7 @@ import { computed, ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import type { Reservation, ReservationUser } from '@/types/reservation';
 
 const props = defineProps<{
@@ -117,19 +118,34 @@ function deleteReservation(): void {
                         :key="user.id"
                         class="user-tag pl-0.5"
                         :class="isMine ? 'pr-1' : 'pr-2.5'"
-                        :title="user.email"
                     >
-                        <div
-                            class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold"
-                            :class="
-                                user.id === authUserId
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'bg-muted-foreground/20 text-foreground'
-                            "
-                        >
-                            {{ getInitial(user.name) }}
-                        </div>
-                        <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
+                        <Popover>
+                            <PopoverTrigger as-child>
+                                <button type="button" class="flex items-center gap-1">
+                                    <div
+                                        class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold"
+                                        :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
+                                    >
+                                        {{ getInitial(user.name) }}
+                                    </div>
+                                    <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
+                                </button>
+                            </PopoverTrigger>
+                            <PopoverContent class="w-56 p-3 text-sm">
+                                <div class="flex items-center gap-2.5">
+                                    <div
+                                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+                                        :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
+                                    >
+                                        {{ getInitial(user.name) }}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="truncate font-medium">{{ user.name }}</p>
+                                        <p class="truncate text-xs text-muted-foreground">{{ user.email }}</p>
+                                    </div>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
                         <button
                             v-if="isMine"
                             type="button"

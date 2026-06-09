@@ -3,6 +3,7 @@ import { CalendarDays, Table2, Users } from 'lucide-vue-next';
 import RequestStatusBadge from '@/components/RequestStatusBadge.vue';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import type { BookingRequest } from '@/types/reservation';
 
 defineProps<{
@@ -62,24 +63,33 @@ function getInitial(name: string): string {
                     Участники ({{ request.users.length }})
                 </p>
                 <div class="flex flex-wrap gap-1.5">
-                    <div
-                        v-for="user in request.users"
-                        :key="user.id"
-                        class="user-tag px-2.5"
-                        :title="user.email"
-                    >
-                        <div
-                            class="user-avatar-sm"
-                            :class="
-                                user.id === authUserId
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'bg-muted-foreground/20 text-foreground'
-                            "
-                        >
-                            {{ getInitial(user.name) }}
-                        </div>
-                        <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
-                    </div>
+                    <Popover v-for="user in request.users" :key="user.id">
+                        <PopoverTrigger as-child>
+                            <button type="button" class="user-tag px-2.5">
+                                <div
+                                    class="user-avatar-sm"
+                                    :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
+                                >
+                                    {{ getInitial(user.name) }}
+                                </div>
+                                <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
+                            </button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-56 p-3 text-sm">
+                            <div class="flex items-center gap-2.5">
+                                <div
+                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+                                    :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
+                                >
+                                    {{ getInitial(user.name) }}
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="truncate font-medium">{{ user.name }}</p>
+                                    <p class="truncate text-xs text-muted-foreground">{{ user.email }}</p>
+                                </div>
+                            </div>
+                        </PopoverContent>
+                    </Popover>
                 </div>
             </div>
         </CardContent>

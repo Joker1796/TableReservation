@@ -138,4 +138,17 @@ class EventsTest extends TestCase
                 ->has('upcomingEvents.0.participants', 1)
             );
     }
+
+    public function test_event_participants_include_email(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $event = Event::factory()->create(['starts_at' => now()->addDay()]);
+        $participant = User::factory()->create(['email' => 'participant@example.com']);
+        $event->participants()->attach($participant->id);
+
+        $this->get(route('events'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('upcomingEvents.0.participants.0.email', 'participant@example.com')
+            );
+    }
 }
