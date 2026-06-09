@@ -25,7 +25,7 @@ type Props = {
     bookingRequestsToday: number;
 };
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const loading = ref(false);
 
