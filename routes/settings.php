@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Settings\AvatarController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,11 @@ Route::middleware(['auth'])->group(function () {
         ->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
+
+    Route::post('settings/avatar', [AvatarController::class, 'store'])
+        ->name('settings.avatar.store');
+    Route::delete('settings/avatar', [AvatarController::class, 'destroy'])
+        ->name('settings.avatar.destroy');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

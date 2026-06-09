@@ -30,7 +30,7 @@ class ReservationWebController extends Controller
             ->latest()
             ->get();
 
-        $users = User::orderBy('name')->get(['id', 'name', 'email']);
+        $users = User::orderBy('name')->get(['id', 'name', 'email', 'avatar']);
 
         $myReservationDates = Reservation::whereHas('users', fn ($q) => $q->where('user_id', $userId))
             ->pluck('date')->map(fn ($d) => substr($d, 0, 10))->unique()->values();
@@ -71,7 +71,7 @@ class ReservationWebController extends Controller
     public function create(): Response
     {
         $tables = Table::where('status', TableStatus::READY)->get();
-        $users = User::where('id', '!=', auth()->id())->orderBy('name')->get(['id', 'name', 'email']);
+        $users = User::where('id', '!=', auth()->id())->orderBy('name')->get(['id', 'name', 'email', 'avatar']);
 
         return Inertia::render('reservations/Create', [
             'tables' => $tables,

@@ -8,7 +8,7 @@ export type Event = {
     is_suggestion: boolean;
     author_id: number;
     author: { id: number; name: string } | null;
-    participants: { id: number; name?: string; email?: string | null; phone?: string | null; contacts?: string | null }[];
+    participants: { id: number; name?: string; email?: string | null; avatar?: string | null; phone?: string | null; contacts?: string | null }[];
     created_at: string;
     updated_at: string;
 };

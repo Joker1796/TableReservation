@@ -14,7 +14,7 @@ class AdminEventController extends Controller
 {
     public function index(): Response
     {
-        $events = Event::with(['author:id,name', 'participants:id,name,email,phone,contacts'])->orderBy('starts_at')->paginate(15);
+        $events = Event::with(['author:id,name', 'participants:id,name,email,avatar,phone,contacts'])->orderBy('starts_at')->paginate(15);
 
         return Inertia::render('admin/events/Index', [
             'events' => $events,

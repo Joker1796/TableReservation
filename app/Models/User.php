@@ -12,10 +12,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password', 'is_admin', 'is_editor', 'is_api', 'is_invisible', 'phone', 'contacts'])]
+#[Fillable(['name', 'email', 'password', 'is_admin', 'is_editor', 'is_api', 'is_invisible', 'phone', 'contacts', 'avatar'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -38,6 +39,11 @@ class User extends Authenticatable
             'is_api' => 'boolean',
             'is_invisible' => 'boolean',
         ];
+    }
+
+    public function getAvatarAttribute(?string $value): ?string
+    {
+        return $value ? Storage::url($value) : null;
     }
 
     public function hasContacts(): bool

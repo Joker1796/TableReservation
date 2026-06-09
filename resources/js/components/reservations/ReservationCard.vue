@@ -3,6 +3,7 @@ import { useForm } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 import { CalendarDays, Table2, UserPlus, Users, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -122,23 +123,19 @@ function deleteReservation(): void {
                         <Popover>
                             <PopoverTrigger as-child>
                                 <button type="button" class="flex items-center gap-1">
-                                    <div
-                                        class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold"
-                                        :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
-                                    >
-                                        {{ getInitial(user.name) }}
-                                    </div>
+                                    <Avatar class="h-5 w-5">
+                                        <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
+                                        <AvatarFallback class="text-[10px] font-semibold" :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'">{{ getInitial(user.name) }}</AvatarFallback>
+                                    </Avatar>
                                     <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
                                 </button>
                             </PopoverTrigger>
                             <PopoverContent class="w-56 p-3 text-sm">
                                 <div class="flex items-center gap-2.5">
-                                    <div
-                                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
-                                        :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
-                                    >
-                                        {{ getInitial(user.name) }}
-                                    </div>
+                                    <Avatar class="h-8 w-8">
+                                        <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
+                                        <AvatarFallback class="text-sm font-semibold" :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'">{{ getInitial(user.name) }}</AvatarFallback>
+                                    </Avatar>
                                     <div class="min-w-0">
                                         <p class="truncate font-medium">{{ user.name }}</p>
                                         <p class="truncate text-xs text-muted-foreground">{{ user.email }}</p>

@@ -3,6 +3,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { CalendarDays, Edit, Table2, Trash2, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -114,12 +115,10 @@ function deleteReservation(): void {
                 <CardContent>
                     <ul class="space-y-3">
                         <li v-for="user in reservation.users" :key="user.id" class="flex items-center gap-3">
-                            <div
-                                class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium"
-                                :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted'"
-                            >
-                                {{ user.name.charAt(0).toUpperCase() }}
-                            </div>
+                            <Avatar class="h-8 w-8">
+                                <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
+                                <AvatarFallback class="text-sm font-medium" :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted'">{{ user.name.charAt(0).toUpperCase() }}</AvatarFallback>
+                            </Avatar>
                             <div>
                                 <p class="text-sm font-medium">
                                     {{ user.name }}

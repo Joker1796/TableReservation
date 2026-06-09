@@ -7,6 +7,7 @@ import { reservationBreadcrumbs } from '@/breadcrumbs/reservations';
 import DateTimePicker from '@/components/DateTimePicker.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -139,9 +140,10 @@ function submit(): void {
                         :key="user.id"
                         class="user-tag"
                     >
-                        <span class="user-avatar-sm bg-primary text-primary-foreground">
-                            {{ user.name.charAt(0).toUpperCase() }}
-                        </span>
+                        <Avatar class="h-5 w-5">
+                            <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
+                            <AvatarFallback class="text-[10px] font-semibold bg-primary text-primary-foreground">{{ user.name.charAt(0).toUpperCase() }}</AvatarFallback>
+                        </Avatar>
                         <span class="font-medium">{{ user.name }}</span>
                         <button
                             type="button"

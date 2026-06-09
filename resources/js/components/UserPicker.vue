@@ -2,6 +2,7 @@
 import { onClickOutside } from '@vueuse/core';
 import { Check, ChevronDown, Users, X } from 'lucide-vue-next';
 import { ref } from 'vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { ReservationUser } from '@/types/reservation';
 
 const props = defineProps<{
@@ -62,9 +63,10 @@ function toggleUser(id: number): void {
 
     <div v-if="modelValue.length > 0" class="flex flex-wrap gap-1.5">
         <span v-for="user in users.filter((u) => modelValue.includes(u.id))" :key="user.id" class="user-tag">
-            <span class="user-avatar-sm bg-primary text-primary-foreground">
-                {{ user.name.charAt(0).toUpperCase() }}
-            </span>
+            <Avatar class="h-5 w-5">
+                <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
+                <AvatarFallback class="text-[10px] font-semibold bg-primary text-primary-foreground">{{ user.name.charAt(0).toUpperCase() }}</AvatarFallback>
+            </Avatar>
             <span class="font-medium">{{ user.name }}</span>
             <button
                 type="button"

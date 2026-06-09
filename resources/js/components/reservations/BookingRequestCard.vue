@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CalendarDays, Table2, Users } from 'lucide-vue-next';
 import RequestStatusBadge from '@/components/RequestStatusBadge.vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -66,12 +67,10 @@ function getInitial(name: string): string {
                     <Popover v-for="user in request.users" :key="user.id">
                         <PopoverTrigger as-child>
                             <button type="button" class="user-tag px-2.5">
-                                <div
-                                    class="user-avatar-sm"
-                                    :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
-                                >
-                                    {{ getInitial(user.name) }}
-                                </div>
+                                <Avatar class="h-5 w-5">
+                                    <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
+                                    <AvatarFallback class="text-[10px] font-semibold" :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'">{{ getInitial(user.name) }}</AvatarFallback>
+                                </Avatar>
                                 <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
                             </button>
                         </PopoverTrigger>
