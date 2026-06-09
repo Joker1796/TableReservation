@@ -4,10 +4,11 @@ import RequestStatusBadge from '@/components/RequestStatusBadge.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import UserPopover from '@/components/UserPopover.vue';
+import { getInitials } from '@/composables/useInitials';
 import type { BookingRequest } from '@/types/reservation';
 
-defineProps<{
+const props = defineProps<{
     request: BookingRequest;
     authUserId: number;
 }>();
@@ -24,8 +25,8 @@ function formatDate(date: string): string {
     return timePart && timePart !== '00:00' ? `${dateStr}, ${timePart}` : dateStr;
 }
 
-function getInitial(name: string): string {
-    return name.charAt(0).toUpperCase();
+function triggerFallbackClass(userId: number): string {
+    return userId === props.authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground';
 }
 </script>
 
@@ -64,31 +65,25 @@ function getInitial(name: string): string {
                     Участники ({{ request.users.length }})
                 </p>
                 <div class="flex flex-wrap gap-1.5">
-                    <Popover v-for="user in request.users" :key="user.id">
-                        <PopoverTrigger as-child>
-                            <button type="button" class="user-tag px-2.5">
-                                <Avatar class="h-5 w-5">
-                                    <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
-                                    <AvatarFallback class="text-[10px] font-semibold" :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'">{{ getInitial(user.name) }}</AvatarFallback>
-                                </Avatar>
-                                <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
-                            </button>
-                        </PopoverTrigger>
-                        <PopoverContent class="w-56 p-3 text-sm">
-                            <div class="flex items-center gap-2.5">
-                                <div
-                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
-                                    :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'"
+                    <UserPopover
+                        v-for="user in request.users"
+                        :key="user.id"
+                        :user="user"
+                        :is-current-user="user.id === authUserId"
+                    >
+                        <button type="button" class="user-tag px-2.5">
+                            <Avatar class="h-5 w-5">
+                                <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
+                                <AvatarFallback
+                                    class="text-[10px] font-semibold"
+                                    :class="triggerFallbackClass(user.id)"
                                 >
-                                    {{ getInitial(user.name) }}
-                                </div>
-                                <div class="min-w-0">
-                                    <p class="truncate font-medium">{{ user.name }}</p>
-                                    <p class="truncate text-xs text-muted-foreground">{{ user.email }}</p>
-                                </div>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
+                                    {{ getInitials(user.name) }}
+                                </AvatarFallback>
+                            </Avatar>
+                            <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
+                        </button>
+                    </UserPopover>
                 </div>
             </div>
         </CardContent>

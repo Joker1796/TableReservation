@@ -7,7 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import UserPopover from '@/components/UserPopover.vue';
+import { getInitials } from '@/composables/useInitials';
 import type { Reservation, ReservationUser } from '@/types/reservation';
 
 const props = defineProps<{
@@ -40,8 +41,8 @@ function formatDate(date: string): string {
     return timePart && timePart !== '00:00' ? `${dateStr}, ${timePart}` : dateStr;
 }
 
-function getInitial(name: string): string {
-    return name.charAt(0).toUpperCase();
+function triggerFallbackClass(userId: number): string {
+    return userId === props.authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground';
 }
 
 function addParticipant(): void {
@@ -120,29 +121,20 @@ function deleteReservation(): void {
                         class="user-tag pl-0.5"
                         :class="isMine ? 'pr-1' : 'pr-2.5'"
                     >
-                        <Popover>
-                            <PopoverTrigger as-child>
-                                <button type="button" class="flex items-center gap-1">
-                                    <Avatar class="h-5 w-5">
-                                        <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
-                                        <AvatarFallback class="text-[10px] font-semibold" :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'">{{ getInitial(user.name) }}</AvatarFallback>
-                                    </Avatar>
-                                    <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
-                                </button>
-                            </PopoverTrigger>
-                            <PopoverContent class="w-56 p-3 text-sm">
-                                <div class="flex items-center gap-2.5">
-                                    <Avatar class="h-8 w-8">
-                                        <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
-                                        <AvatarFallback class="text-sm font-semibold" :class="user.id === authUserId ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-foreground'">{{ getInitial(user.name) }}</AvatarFallback>
-                                    </Avatar>
-                                    <div class="min-w-0">
-                                        <p class="truncate font-medium">{{ user.name }}</p>
-                                        <p class="truncate text-xs text-muted-foreground">{{ user.email }}</p>
-                                    </div>
-                                </div>
-                            </PopoverContent>
-                        </Popover>
+                        <UserPopover :user="user" :is-current-user="user.id === authUserId">
+                            <button type="button" class="flex items-center gap-1">
+                                <Avatar class="h-5 w-5">
+                                    <AvatarImage v-if="user.avatar" :src="user.avatar" :alt="user.name" />
+                                    <AvatarFallback
+                                        class="text-[10px] font-semibold"
+                                        :class="triggerFallbackClass(user.id)"
+                                    >
+                                        {{ getInitials(user.name) }}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <span class="max-w-[90px] truncate font-medium">{{ user.name }}</span>
+                            </button>
+                        </UserPopover>
                         <button
                             v-if="isMine"
                             type="button"

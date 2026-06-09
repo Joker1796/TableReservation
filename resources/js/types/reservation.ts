@@ -10,6 +10,8 @@ export type ReservationUser = {
     name: string;
     email: string;
     avatar?: string | null;
+    phone?: string | null;
+    contacts?: string | null;
 };
 
 export type Reservation = {
