@@ -72,8 +72,8 @@ function deleteReservation(): void {
 <template>
     <Card>
         <CardHeader class="pb-3">
-            <div class="flex items-start justify-between">
-                <div>
+            <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0">
                     <CardTitle class="text-base">
                         {{ reservation.table ? reservation.table.name : 'Стол не выбран' }}
                     </CardTitle>
@@ -161,18 +161,18 @@ function deleteReservation(): void {
                 </div>
             </div>
 
-            <div class="flex items-center gap-2 pt-2">
-                <Button variant="outline" size="sm" as-child class="flex-1">
+            <div class="flex flex-col gap-2 pt-2">
+                <Button variant="outline" size="sm" as-child class="w-full">
                     <Link :href="`/reservations/${reservation.id}`">Подробнее</Link>
                 </Button>
-                <template v-if="isAdmin">
-                    <Button variant="outline" size="sm" as-child>
+                <div v-if="isAdmin" class="flex gap-2">
+                    <Button variant="outline" size="sm" as-child class="flex-1">
                         <Link :href="`/reservations/${reservation.id}/edit`">Изменить</Link>
                     </Button>
-                    <Button variant="outline" size="sm" class="btn-danger" @click="deleteReservation">
+                    <Button variant="outline" size="sm" class="btn-danger flex-1" @click="deleteReservation">
                         Удалить
                     </Button>
-                </template>
+                </div>
             </div>
         </CardContent>
     </Card>

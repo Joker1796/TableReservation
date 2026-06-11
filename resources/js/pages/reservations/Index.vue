@@ -191,7 +191,7 @@ return;
                     <ClipboardList class="h-4 w-4 text-muted-foreground" />
                     Мои заявки
                 </h2>
-                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     <BookingRequestCard
                         v-for="request in myBookingRequests"
                         :key="request.id"
@@ -212,7 +212,7 @@ return;
             </div>
 
             <!-- Reservations grid -->
-            <div v-else class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <ReservationCard
                     v-for="reservation in reservations"
                     :key="reservation.id"

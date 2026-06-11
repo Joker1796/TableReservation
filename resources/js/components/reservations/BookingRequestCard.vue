@@ -33,8 +33,8 @@ function triggerFallbackClass(userId: number): string {
 <template>
     <Card>
         <CardHeader class="pb-3">
-            <div class="flex items-start justify-between">
-                <div>
+            <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0">
                     <CardTitle class="text-base">
                         {{ request.table ? request.table.name : 'Стол не выбран' }}
                     </CardTitle>
