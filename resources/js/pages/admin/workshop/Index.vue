@@ -2,6 +2,7 @@
 import { Head, router } from '@inertiajs/vue3';
 import { ImageUp, Trash2, X } from 'lucide-vue-next';
 import { ref } from 'vue';
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import { Button } from '@/components/ui/button';
 import type { WorkshopPhoto } from '@/types/workshop';
 
@@ -10,8 +11,6 @@ type Props = {
 };
 
 defineProps<Props>();
-
-import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 
 defineOptions({
     layout: {

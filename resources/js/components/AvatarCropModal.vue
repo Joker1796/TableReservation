@@ -7,7 +7,7 @@ const CONTAINER = 360;
 const CROP = 280;
 const MARGIN = (CONTAINER - CROP) / 2;
 
-const props = defineProps<{ src: string }>();
+defineProps<{ src: string }>();
 const emit = defineEmits<{ confirm: [blob: Blob]; cancel: [] }>();
 
 const imgEl = ref<HTMLImageElement | null>(null);
@@ -18,7 +18,10 @@ const offsetX = ref(0);
 const offsetY = ref(0);
 
 function onImgLoad(): void {
-    if (!imgEl.value) return;
+    if (!imgEl.value) {
+return;
+}
+
     naturalW.value = imgEl.value.naturalWidth;
     naturalH.value = imgEl.value.naturalHeight;
     zoom.value = 1;
@@ -35,6 +38,7 @@ function halfExcess(natural: number): number {
 
 function clampOffset(val: number, natural: number): number {
     const he = halfExcess(natural);
+
     return Math.max(-he, Math.min(he, val));
 }
 
@@ -63,7 +67,10 @@ function onPointerDown(e: PointerEvent): void {
 }
 
 function onPointerMove(e: PointerEvent): void {
-    if (!drag) return;
+    if (!drag) {
+return;
+}
+
     offsetX.value = clampOffset(drag.ox + e.clientX - drag.x, naturalW.value);
     offsetY.value = clampOffset(drag.oy + e.clientY - drag.y, naturalH.value);
 }
@@ -78,7 +85,10 @@ function onWheel(e: WheelEvent): void {
 
 function confirm(): void {
     const img = imgEl.value;
-    if (!img) return;
+
+    if (!img) {
+return;
+}
 
     const ds = displayScale.value;
     const imgLeft = CONTAINER / 2 - naturalW.value * ds / 2 + offsetX.value;
@@ -92,7 +102,9 @@ function confirm(): void {
     canvas.height = 512;
     canvas.getContext('2d')!.drawImage(img, srcX, srcY, srcSize, srcSize, 0, 0, 512, 512);
     canvas.toBlob((blob) => {
-        if (blob) emit('confirm', blob);
+        if (blob) {
+emit('confirm', blob);
+}
     }, 'image/jpeg', 0.9);
 }
 </script>

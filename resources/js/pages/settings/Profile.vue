@@ -45,7 +45,11 @@ const cropOpen = ref(false);
 
 function onFileChange(e: Event): void {
     const file = (e.target as HTMLInputElement).files?.[0];
-    if (!file) return;
+
+    if (!file) {
+return;
+}
+
     const reader = new FileReader();
     reader.onload = () => {
         cropSrc.value = reader.result as string;
@@ -62,16 +66,25 @@ function onCropConfirm(blob: Blob): void {
 
 function onCropCancel(): void {
     cropOpen.value = false;
-    if (fileInput.value) fileInput.value.value = '';
+
+    if (fileInput.value) {
+fileInput.value.value = '';
+}
 }
 
 function saveAvatar(): void {
-    if (!selectedFile.value) return;
+    if (!selectedFile.value) {
+return;
+}
+
     router.post('/settings/avatar', { avatar: selectedFile.value }, {
         onSuccess: () => {
             previewUrl.value = null;
             selectedFile.value = null;
-            if (fileInput.value) fileInput.value.value = '';
+
+            if (fileInput.value) {
+fileInput.value.value = '';
+}
         },
     });
 }
@@ -79,7 +92,10 @@ function saveAvatar(): void {
 function cancelAvatar(): void {
     previewUrl.value = null;
     selectedFile.value = null;
-    if (fileInput.value) fileInput.value.value = '';
+
+    if (fileInput.value) {
+fileInput.value.value = '';
+}
 }
 
 function deleteAvatar(): void {

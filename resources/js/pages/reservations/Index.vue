@@ -35,8 +35,14 @@ const hasContacts = useHasContacts();
 const bookingLimitReached = computed(() => !isAdmin.value && props.bookingRequestsToday >= 3);
 const isBookingDisabled = computed(() => !hasContacts.value || bookingLimitReached.value);
 const bookingDisabledReason = computed(() => {
-    if (!hasContacts.value) return 'Заполните контактные данные в профиле';
-    if (bookingLimitReached.value) return 'Лимит заявок на сегодня исчерпан (максимум 3)';
+    if (!hasContacts.value) {
+return 'Заполните контактные данные в профиле';
+}
+
+    if (bookingLimitReached.value) {
+return 'Лимит заявок на сегодня исчерпан (максимум 3)';
+}
+
     return null;
 });
 

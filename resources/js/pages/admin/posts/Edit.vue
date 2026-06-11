@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
+import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 import DateTimePicker from '@/components/DateTimePicker.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
@@ -14,8 +15,6 @@ type Props = {
 };
 
 const props = defineProps<Props>();
-
-import { adminBreadcrumbs } from '@/breadcrumbs/admin';
 
 defineOptions({
     layout: {
